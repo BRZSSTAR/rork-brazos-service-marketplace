@@ -193,7 +193,7 @@ export const resources = {
       },
       status: { pending: 'Pending', confirmed: 'Confirmed', inProgress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' }
     }
-  }
+  },
   es: {
     translation: {
       common: { appName: 'BRAZOS', back: 'Volver', soon: 'Próximamente', or: 'o', continue: 'Continuar' },
