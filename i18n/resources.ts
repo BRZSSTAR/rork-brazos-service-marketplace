@@ -116,7 +116,8 @@ export const resources = {
           recipientNamePlaceholder: 'Nome do destinatário', recipientPhonePlaceholder: 'Telefone do destinatário',
           addButton: 'Salvar endereço', saveChanges: 'Salvar alterações', addNew: 'Adicionar novo endereço',
           deleteTitle: 'Excluir endereço', deleteMessage: 'Tem certeza que deseja excluir este endereço?', deleteConfirm: 'Excluir',
-          gpsDetected: 'Localização detectada', gpsError: 'Não foi possível obter sua localização.', gpsPermission: 'Permissão de localização negada.'
+          gpsDetected: 'Localização detectada', gpsError: 'Não foi possível obter sua localização.', gpsPermission: 'Permissão de localização negada.',
+          default: 'Padrão', setAsDefault: 'Definir como endereço padrão'
         },
         payment: {
           title: 'Método de pagamento', subtitle: 'Como deseja pagar pelo serviço?',
@@ -255,7 +256,8 @@ export const resources = {
           recipientNamePlaceholder: 'Recipient name', recipientPhonePlaceholder: 'Recipient phone',
           addButton: 'Save address', saveChanges: 'Save changes', addNew: 'Add new address',
           deleteTitle: 'Delete address', deleteMessage: 'Are you sure you want to delete this address?', deleteConfirm: 'Delete',
-          gpsDetected: 'Location detected', gpsError: 'Could not get your location.', gpsPermission: 'Location permission denied.'
+          gpsDetected: 'Location detected', gpsError: 'Could not get your location.', gpsPermission: 'Location permission denied.',
+          default: 'Default', setAsDefault: 'Set as default address'
         },
         payment: {
           title: 'Payment method', subtitle: 'How would you like to pay for the service?',
@@ -394,7 +396,8 @@ export const resources = {
           recipientNamePlaceholder: 'Nombre del destinatario', recipientPhonePlaceholder: 'Teléfono del destinatario',
           addButton: 'Guardar dirección', saveChanges: 'Guardar cambios', addNew: 'Agregar nueva dirección',
           deleteTitle: 'Eliminar dirección', deleteMessage: '¿Estás seguro de que deseas eliminar esta dirección?', deleteConfirm: 'Eliminar',
-          gpsDetected: 'Ubicación detectada', gpsError: 'No se pudo obtener tu ubicación.', gpsPermission: 'Permiso de ubicación denegado.'
+          gpsDetected: 'Ubicación detectada', gpsError: 'No se pudo obtener tu ubicación.', gpsPermission: 'Permiso de ubicación denegado.',
+          default: 'Predeterminado', setAsDefault: 'Establecer como dirección predeterminada'
         },
         payment: {
           title: 'Método de pago', subtitle: '¿Cómo deseas pagar por el servicio?',

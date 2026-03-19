@@ -27,8 +27,10 @@ import {
   User,
   Phone,
   X,
+  Star,
 } from 'lucide-react-native';
 import { colors, spacing, typography, radius, shadow } from '@/constants/theme';
+import { useAddressStore } from '@/store/addressStore';
 import { useBookingStore } from '@/store/bookingStore';
 import type { SavedAddress, AddressLabel } from '@/types';
 
@@ -50,12 +52,14 @@ function AddressCard({
   onSelect,
   onEdit,
   onDelete,
+  onSetDefault,
 }: {
   address: SavedAddress;
   isSelected: boolean;
   onSelect: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  onSetDefault: () => void;
 }) {
   const { t } = useTranslation();
   const scale = useRef(new Animated.Value(1)).current;
@@ -77,11 +81,21 @@ function AddressCard({
         ]}
       >
         <View style={styles.addressCardHeader}>
-          <View style={[styles.labelBadge, isSelected && styles.labelBadgeSelected]}>
-            <LabelIcon size={14} color={isSelected ? colors.surface : colors.accent} />
-            <Text style={[styles.labelBadgeText, isSelected && styles.labelBadgeTextSelected]}>
-              {address.customLabel ?? t(`booking.address.labels.${labelKey}`)}
-            </Text>
+          <View style={styles.headerLeft}>
+            <View style={[styles.labelBadge, isSelected && styles.labelBadgeSelected]}>
+              <LabelIcon size={14} color={isSelected ? colors.surface : colors.accent} />
+              <Text style={[styles.labelBadgeText, isSelected && styles.labelBadgeTextSelected]}>
+                {address.customLabel ?? t(`booking.address.labels.${labelKey}`)}
+              </Text>
+            </View>
+            {address.isDefault && (
+              <View style={[styles.defaultBadge, isSelected && styles.defaultBadgeSelected]}>
+                <Star size={10} color={isSelected ? colors.surface : colors.accent} />
+                <Text style={[styles.defaultBadgeText, isSelected && styles.defaultBadgeTextSelected]}>
+                  {t('booking.address.default')}
+                </Text>
+              </View>
+            )}
           </View>
           {isSelected && (
             <View style={styles.selectedCheck}>
@@ -108,6 +122,11 @@ function AddressCard({
         ) : null}
 
         <View style={styles.addressActions}>
+          {!address.isDefault && (
+            <Pressable onPress={onSetDefault} style={styles.actionBtn} hitSlop={8}>
+              <Star size={14} color={isSelected ? 'rgba(255,255,255,0.8)' : colors.accent} />
+            </Pressable>
+          )}
           <Pressable onPress={onEdit} style={styles.actionBtn} hitSlop={8}>
             <Edit3 size={14} color={isSelected ? 'rgba(255,255,255,0.8)' : colors.textTertiary} />
           </Pressable>
@@ -132,6 +151,7 @@ interface AddressFormData {
   zipCode: string;
   recipientName: string;
   recipientPhone: string;
+  isDefault: boolean;
 }
 
 const EMPTY_FORM: AddressFormData = {
@@ -146,25 +166,32 @@ const EMPTY_FORM: AddressFormData = {
   zipCode: '',
   recipientName: '',
   recipientPhone: '',
+  isDefault: false,
 };
 
 export default function AddressStep({ onNext, onBack }: AddressStepProps) {
   const { t } = useTranslation();
-  const addresses = useBookingStore((s) => s.addresses);
-  const addAddress = useBookingStore((s) => s.addAddress);
-  const updateAddress = useBookingStore((s) => s.updateAddress);
-  const deleteAddress = useBookingStore((s) => s.deleteAddress);
+  const addresses = useAddressStore((s) => s.addresses);
+  const addAddress = useAddressStore((s) => s.addAddress);
+  const updateAddress = useAddressStore((s) => s.updateAddress);
+  const deleteAddress = useAddressStore((s) => s.deleteAddress);
+  const setDefault = useAddressStore((s) => s.setDefault);
+  const getDefaultAddress = useAddressStore((s) => s.getDefaultAddress);
+
   const draft = useBookingStore((s) => s.currentDraft);
   const updateDraft = useBookingStore((s) => s.updateDraft);
 
-  const [selectedId, setSelectedId] = useState<string>(draft?.addressId ?? addresses[0]?.id ?? '');
+  const defaultAddr = getDefaultAddress();
+  const [selectedId, setSelectedId] = useState<string>(
+    draft?.addressId ?? defaultAddr?.id ?? ''
+  );
   const [showForm, setShowForm] = useState<boolean>(addresses.length === 0);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<AddressFormData>(EMPTY_FORM);
   const [showRecipient, setShowRecipient] = useState<boolean>(false);
   const buttonScale = useRef(new Animated.Value(1)).current;
 
-  const updateField = useCallback((field: keyof AddressFormData, value: string) => {
+  const updateField = useCallback((field: keyof AddressFormData, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   }, []);
 
@@ -191,6 +218,7 @@ export default function AddressStep({ onNext, onBack }: AddressStepProps) {
       zipCode: form.zipCode.trim(),
       recipientName: form.recipientName.trim() || undefined,
       recipientPhone: form.recipientPhone.trim() || undefined,
+      isDefault: form.isDefault,
     };
 
     if (editingId) {
@@ -221,6 +249,7 @@ export default function AddressStep({ onNext, onBack }: AddressStepProps) {
         zipCode: address.zipCode,
         recipientName: address.recipientName ?? '',
         recipientPhone: address.recipientPhone ?? '',
+        isDefault: address.isDefault,
       });
       setEditingId(address.id);
       setShowForm(true);
@@ -240,7 +269,8 @@ export default function AddressStep({ onNext, onBack }: AddressStepProps) {
             await deleteAddress(id);
             if (selectedId === id) {
               const remaining = addresses.filter((a) => a.id !== id);
-              setSelectedId(remaining[0]?.id ?? '');
+              const newDefault = remaining.find((a) => a.isDefault) ?? remaining[0];
+              setSelectedId(newDefault?.id ?? '');
             }
           },
         },
@@ -249,9 +279,18 @@ export default function AddressStep({ onNext, onBack }: AddressStepProps) {
     [deleteAddress, selectedId, addresses, t]
   );
 
+  const handleSetDefault = useCallback(
+    async (id: string) => {
+      await setDefault(id);
+      console.log('[AddressStep] Set default address:', id);
+    },
+    [setDefault]
+  );
+
   const handleContinue = useCallback(() => {
     if (!selectedId) return;
     updateDraft({ addressId: selectedId });
+    console.log('[AddressStep] Selected address for booking:', selectedId);
     onNext();
   }, [selectedId, updateDraft, onNext]);
 
@@ -423,6 +462,16 @@ export default function AddressStep({ onNext, onBack }: AddressStepProps) {
           />
 
           <Pressable
+            onPress={() => updateField('isDefault', !form.isDefault)}
+            style={styles.defaultToggle}
+          >
+            <View style={[styles.defaultCheckbox, form.isDefault && styles.defaultCheckboxActive]}>
+              {form.isDefault && <Check size={12} color={colors.surface} strokeWidth={3} />}
+            </View>
+            <Text style={styles.defaultToggleText}>{t('booking.address.setAsDefault')}</Text>
+          </Pressable>
+
+          <Pressable
             onPress={() => setShowRecipient(!showRecipient)}
             style={styles.recipientToggle}
           >
@@ -500,6 +549,7 @@ export default function AddressStep({ onNext, onBack }: AddressStepProps) {
             onSelect={() => setSelectedId(addr.id)}
             onEdit={() => handleEdit(addr)}
             onDelete={() => handleDelete(addr.id)}
+            onSetDefault={() => handleSetDefault(addr.id)}
           />
         ))}
 
@@ -592,6 +642,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    flex: 1,
+  },
   labelBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -610,6 +666,25 @@ const styles = StyleSheet.create({
   },
   labelBadgeTextSelected: {
     color: colors.accent,
+  },
+  defaultBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    backgroundColor: '#FFF3D0',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+    borderRadius: radius.full,
+  },
+  defaultBadgeSelected: {
+    backgroundColor: 'rgba(201,168,76,0.2)',
+  },
+  defaultBadgeText: {
+    ...typography.small,
+    color: colors.accent,
+  },
+  defaultBadgeTextSelected: {
+    color: colors.surface,
   },
   selectedCheck: {
     width: 22,
@@ -734,11 +809,36 @@ const styles = StyleSheet.create({
   },
   rowInputSmall: { flex: 1 },
   rowInputLarge: { flex: 2 },
+  defaultToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+    paddingVertical: spacing.sm,
+  },
+  defaultCheckbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+  },
+  defaultCheckboxActive: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
+  },
+  defaultToggleText: {
+    ...typography.captionMedium,
+    color: colors.text,
+  },
   recipientToggle: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
     paddingVertical: spacing.sm,
   },
   recipientToggleText: {

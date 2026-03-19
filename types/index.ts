@@ -75,6 +75,7 @@ export interface SavedAddress {
   recipientPhone?: string;
   latitude?: number;
   longitude?: number;
+  isDefault: boolean;
   createdAt: string;
 }
 

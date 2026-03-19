@@ -20,6 +20,7 @@ import {
 } from 'lucide-react-native';
 import { colors, spacing, typography, radius, shadow } from '@/constants/theme';
 import { useBookingStore } from '@/store/bookingStore';
+import { useAddressStore } from '@/store/addressStore';
 
 interface SummaryStepProps {
   onBack: () => void;
@@ -58,7 +59,7 @@ function SummaryRow({
 export default function SummaryStep({ onBack, onConfirm }: SummaryStepProps) {
   const { t } = useTranslation();
   const draft = useBookingStore((s) => s.currentDraft);
-  const addresses = useBookingStore((s) => s.addresses);
+  const addresses = useAddressStore((s) => s.addresses);
   const paymentMethods = useBookingStore((s) => s.paymentMethods);
   const updateDraft = useBookingStore((s) => s.updateDraft);
   const buttonScale = useRef(new Animated.Value(1)).current;

@@ -4,6 +4,7 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { colors } from '@/constants/theme';
 import { useBookingStore } from '@/store/bookingStore';
+import { useAddressStore } from '@/store/addressStore';
 import StepIndicator from '@/components/booking/StepIndicator';
 import CpfStep from '@/components/booking/CpfStep';
 import AddressStep from '@/components/booking/AddressStep';
@@ -28,16 +29,22 @@ export default function BookingFlowScreen() {
   const hydrate = useBookingStore((s) => s.hydrate);
   const isHydrated = useBookingStore((s) => s.isHydrated);
 
+  const hydrateAddresses = useAddressStore((s) => s.hydrate);
+  const isAddressHydrated = useAddressStore((s) => s.isHydrated);
+
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   useEffect(() => {
     if (!isHydrated) {
       void hydrate();
     }
-  }, [isHydrated, hydrate]);
+    if (!isAddressHydrated) {
+      void hydrateAddresses();
+    }
+  }, [isHydrated, hydrate, isAddressHydrated, hydrateAddresses]);
 
   useEffect(() => {
-    if (!isHydrated) return;
+    if (!isHydrated || !isAddressHydrated) return;
 
     const initial = getInitialStep();
     console.log('[BookingFlow] Initial step:', initial, 'from params:', params);
@@ -53,7 +60,7 @@ export default function BookingFlowScreen() {
       totalCents: params.totalCents ? parseInt(params.totalCents, 10) : 15000,
       notes: '',
     });
-  }, [isHydrated, getInitialStep, setDraft, params, t]);
+  }, [isHydrated, isAddressHydrated, getInitialStep, setDraft, params, t]);
 
   const stepLabels = [
     t('booking.steps.cpf'),

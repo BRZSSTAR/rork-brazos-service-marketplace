@@ -2,16 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 import type {
-  SavedAddress,
   SavedPaymentMethod,
   BookingDraft,
 } from '@/types';
+import { useAddressStore } from '@/store/addressStore';
 
 const BOOKING_DATA_KEY = 'brazos_booking_data';
 
 interface BookingPersistedData {
   cpf: string | null;
-  addresses: SavedAddress[];
   paymentMethods: SavedPaymentMethod[];
 }
 
@@ -54,7 +53,6 @@ function validateCpfValue(cpf: string): boolean {
 
 const initialState = {
   cpf: null as string | null,
-  addresses: [] as SavedAddress[],
   paymentMethods: [] as SavedPaymentMethod[],
   currentDraft: null as BookingDraft | null,
   isHydrated: false,
@@ -70,13 +68,11 @@ export const useBookingStore = create(
           const data: BookingPersistedData = JSON.parse(raw);
           set({
             cpf: data.cpf ?? null,
-            addresses: data.addresses ?? [],
             paymentMethods: data.paymentMethods ?? [],
             isHydrated: true,
           });
           console.log('[Booking] Hydrated:', {
             hasCpf: !!data.cpf,
-            addressCount: data.addresses?.length ?? 0,
             paymentCount: data.paymentMethods?.length ?? 0,
           });
         } else {
@@ -90,8 +86,8 @@ export const useBookingStore = create(
     },
 
     persist: async () => {
-      const { cpf, addresses, paymentMethods } = get();
-      const data: BookingPersistedData = { cpf, addresses, paymentMethods };
+      const { cpf, paymentMethods } = get();
+      const data: BookingPersistedData = { cpf, paymentMethods };
       await AsyncStorage.setItem(BOOKING_DATA_KEY, JSON.stringify(data));
       console.log('[Booking] Persisted booking data');
     },
@@ -99,49 +95,10 @@ export const useBookingStore = create(
     saveCpf: async (cpf: string) => {
       console.log('[Booking] Saving CPF');
       set({ cpf });
-      const { cpf: c, addresses, paymentMethods } = get();
+      const { cpf: c, paymentMethods } = get();
       await AsyncStorage.setItem(
         BOOKING_DATA_KEY,
-        JSON.stringify({ cpf: c, addresses, paymentMethods })
-      );
-    },
-
-    addAddress: async (address: Omit<SavedAddress, 'id' | 'createdAt'>) => {
-      const newAddress: SavedAddress = {
-        ...address,
-        id: generateId(),
-        createdAt: new Date().toISOString(),
-      };
-      console.log('[Booking] Adding address:', newAddress.label);
-      const updated = [...get().addresses, newAddress];
-      set({ addresses: updated });
-      const { cpf, paymentMethods } = get();
-      await AsyncStorage.setItem(
-        BOOKING_DATA_KEY,
-        JSON.stringify({ cpf, addresses: updated, paymentMethods })
-      );
-      return newAddress;
-    },
-
-    updateAddress: async (id: string, updates: Partial<SavedAddress>) => {
-      const updated = get().addresses.map((a) =>
-        a.id === id ? { ...a, ...updates } : a
-      );
-      set({ addresses: updated });
-      const { cpf, paymentMethods } = get();
-      await AsyncStorage.setItem(
-        BOOKING_DATA_KEY,
-        JSON.stringify({ cpf, addresses: updated, paymentMethods })
-      );
-    },
-
-    deleteAddress: async (id: string) => {
-      const updated = get().addresses.filter((a) => a.id !== id);
-      set({ addresses: updated });
-      const { cpf, paymentMethods } = get();
-      await AsyncStorage.setItem(
-        BOOKING_DATA_KEY,
-        JSON.stringify({ cpf, addresses: updated, paymentMethods })
+        JSON.stringify({ cpf: c, paymentMethods })
       );
     },
 
@@ -161,10 +118,10 @@ export const useBookingStore = create(
         );
       }
       set({ paymentMethods: updated });
-      const { cpf, addresses } = get();
+      const { cpf } = get();
       await AsyncStorage.setItem(
         BOOKING_DATA_KEY,
-        JSON.stringify({ cpf, addresses, paymentMethods: updated })
+        JSON.stringify({ cpf, paymentMethods: updated })
       );
       return newMethod;
     },
@@ -172,10 +129,10 @@ export const useBookingStore = create(
     deletePaymentMethod: async (id: string) => {
       const updated = get().paymentMethods.filter((m) => m.id !== id);
       set({ paymentMethods: updated });
-      const { cpf, addresses } = get();
+      const { cpf } = get();
       await AsyncStorage.setItem(
         BOOKING_DATA_KEY,
-        JSON.stringify({ cpf, addresses, paymentMethods: updated })
+        JSON.stringify({ cpf, paymentMethods: updated })
       );
     },
 
@@ -189,9 +146,10 @@ export const useBookingStore = create(
     },
 
     getInitialStep: (): number => {
-      const { cpf, addresses, paymentMethods } = get();
+      const { cpf, paymentMethods } = get();
+      const addressCount = useAddressStore.getState().addresses.length;
       if (!cpf) return 0;
-      if (addresses.length === 0) return 1;
+      if (addressCount === 0) return 1;
       if (paymentMethods.length === 0) return 2;
       return 3;
     },
