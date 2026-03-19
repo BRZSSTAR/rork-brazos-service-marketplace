@@ -2,7 +2,7 @@ export const resources = {
   'pt-BR': {
     translation: {
       common: { appName: 'BRAZOS', back: 'Voltar', soon: 'Em breve', or: 'ou', continue: 'Continuar' },
-      locale: { portuguese: 'Português (BR)', english: 'English' },
+      locale: { portuguese: 'Português (BR)', english: 'English', spanish: 'Español' },
       auth: {
         tagline: 'Seu serviço, do seu jeito',
         login: {
@@ -101,7 +101,7 @@ export const resources = {
   en: {
     translation: {
       common: { appName: 'BRAZOS', back: 'Back', soon: 'Coming soon', or: 'or', continue: 'Continue' },
-      locale: { portuguese: 'Português (BR)', english: 'English' },
+      locale: { portuguese: 'Português (BR)', english: 'English', spanish: 'Español' },
       auth: {
         tagline: 'Your service, your way',
         login: {
@@ -192,6 +192,102 @@ export const resources = {
         providerOrders: { root: 'Orders', activeBooking: 'Active Service' }, providerProfile: { root: 'Profile' }, providerSchedule: { root: 'Schedule' }
       },
       status: { pending: 'Pending', confirmed: 'Confirmed', inProgress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' }
+    }
+  }
+  es: {
+    translation: {
+      common: { appName: 'BRAZOS', back: 'Volver', soon: 'Próximamente', or: 'o', continue: 'Continuar' },
+      locale: { portuguese: 'Português (BR)', english: 'English', spanish: 'Español' },
+      auth: {
+        tagline: 'Tu servicio, a tu manera',
+        login: {
+          title: 'Iniciar sesión', subtitle: '¡Bienvenido de nuevo! Inicia sesión en tu cuenta.', email: 'Correo electrónico', password: 'Contraseña',
+          forgotPassword: '¿Olvidaste tu contraseña?', submit: 'Iniciar sesión', noAccount: '¿No tienes una cuenta?', createAccount: 'Crear cuenta',
+          errorTitle: 'Error', fillAllFields: 'Por favor, completa todos los campos.', failure: 'No se pudo iniciar sesión. Inténtalo de nuevo.'
+        },
+        register: {
+          headerSubtitle: 'Crear tu cuenta', roleTitle: '¿Cómo deseas usar BRAZOS?', roleSubtitle: 'Elige tu perfil. No se puede cambiar después.',
+          customerTitle: 'Estoy buscando servicios', customerDescription: 'Encuentra y contrata profesionales calificados',
+          providerTitle: 'Estoy ofreciendo servicios', providerDescription: 'Ofrece tus servicios y consigue nuevos clientes', continue: 'Continuar',
+          detailsTitle: 'Tus datos', detailsSubtitleCustomer: 'Crea tu cuenta para encontrar profesionales.', detailsSubtitleProvider: 'Crea tu cuenta para ofrecer tus servicios.',
+          fullName: 'Nombre completo', fullNamePlaceholder: 'Juan Pérez', email: 'Correo electrónico', emailPlaceholder: 'tu@correo.com', password: 'Contraseña',
+          passwordPlaceholder: 'Mínimo 8 caracteres', submit: 'Crear cuenta', hasAccount: '¿Ya tienes una cuenta?', login: 'Iniciar sesión',
+          errorTitle: 'Error', fillAllFields: 'Por favor, completa todos los campos.', failure: 'No se pudo crear tu cuenta. Inténtalo de nuevo.'
+        }
+      },
+      bootstrap: { tagline: 'Tu servicio, a tu manera' },
+      languageSelection: {
+        title: 'Elige tu idioma',
+        subtitle: 'Selecciona tu idioma preferido para continuar',
+        confirm: 'Continuar'
+      },
+      notFound: { title: 'Página no encontrada', subtitle: 'Esta pantalla no existe.', backHome: 'Volver al inicio' },
+      tabs: {
+        customer: { home: 'Inicio', explore: 'Explorar', bookings: 'Reservas', profile: 'Perfil' },
+        provider: { home: 'Inicio', orders: 'Pedidos', schedule: 'Agenda', earnings: 'Ingresos', profile: 'Perfil' }
+      },
+      customer: {
+        home: {
+          greeting: 'Hola, {{name}}', title: '¿Qué necesitas\nhoy?', highlights: 'Destacados', featuredBadge: 'Nuevo',
+          featuredTitle: 'Encuentra profesionales cerca de ti', featuredDescription: 'Explora servicios de calidad con precios transparentes y pago seguro.',
+          nextBookings: 'Próximas reservas', noBookings: 'Sin reservas programadas', noBookingsDescription: 'Explora profesionales para reservar tu primer servicio', fallbackName: 'Hola',
+          categories: {
+            home: { label: 'Hogar', subtitle: 'Limpieza, reparaciones y más' }, beauty: { label: 'Belleza', subtitle: 'Cabello, uñas y estética' },
+            health: { label: 'Salud', subtitle: 'Bienestar y cuidados' }, chef: { label: 'Chef', subtitle: 'Cocina y eventos' }
+          }
+        },
+        explore: { searchPlaceholder: 'Buscar servicios, profesionales...', title: 'Explorar profesionales', subtitle: 'Busca por servicio o profesional en tu zona.' },
+        bookings: { tabs: { active: 'Activas', completed: 'Completadas', cancelled: 'Canceladas' }, emptyTitle: 'Sin reservas', emptySubtitle: 'Tus reservas {{tab}} aparecerán aquí.' },
+        profile: {
+          fallbackName: 'Usuario', logout: 'Cerrar sesión', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
+          menu: { settings: 'Configuración', paymentMethods: 'Métodos de pago', notifications: 'Notificaciones', support: 'Ayuda y soporte' }
+        }
+      },
+      provider: {
+        home: {
+          fallbackName: 'Profesional', greeting: 'Hola, {{name}}', title: 'Panel del\nProfesional', nextBookings: 'Próximas citas', noSchedule: 'Sin citas',
+          noScheduleDescription: 'Los nuevos pedidos aparecerán aquí.', recentActivity: 'Actividad reciente', noRecentActivity: 'Sin actividad reciente',
+          noRecentActivityDescription: 'Completa tus primeros servicios para ver tu historial.', stats: { earningsMonth: 'Ingresos (mes)', rating: 'Calificación', bookings: 'Reservas', hours: 'Horas' }
+        },
+        orders: { tabs: { new: 'Nuevos', accepted: 'Aceptados', completed: 'Completados' }, emptyTitle: 'Sin pedidos', emptySubtitle: 'Los pedidos {{tab}} aparecerán aquí.' },
+        earnings: {
+          balanceLabel: 'Saldo disponible', received: 'R$ 0,00 recibido', withdrawn: 'R$ 0,00 retirado', transactions: 'Transacciones',
+          emptyTitle: 'Sin transacciones', emptySubtitle: 'Tus ingresos y retiros aparecerán aquí.'
+        },
+        profile: {
+          fallbackName: 'Profesional', roleLabel: 'Profesional', logout: 'Cerrar sesión', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
+          menu: {
+            professionalProfile: 'Perfil profesional', reviews: 'Reseñas', settings: 'Configuración', bankData: 'Datos bancarios',
+            notifications: 'Notificaciones', support: 'Ayuda y soporte'
+          }
+        }
+      },
+      placeholders: {
+        chat: { title: 'Chat', subtitle: 'Habla con tu profesional o cliente en tiempo real.' },
+        customer: {
+          activeBooking: { title: 'Reserva Activa', subtitle: 'Sigue el estado de tu reserva en tiempo real.' },
+          tracking: { title: 'Seguimiento', subtitle: 'Sigue la ubicación del profesional en el mapa.' },
+          history: { title: 'Historial', subtitle: 'Ve todas tus reservas anteriores.' },
+          review: { title: 'Reseña', subtitle: 'Califica al profesional y comparte tu experiencia.' },
+          categoryBrowse: { title: 'Explorar Categoría', subtitle: 'Busca profesionales disponibles en esta categoría.' },
+          providerDetail: { title: 'Perfil del Profesional', subtitle: 'Ve calificaciones, precios y disponibilidad del profesional.' },
+          bookingFlow: { title: 'Reservar Servicio', subtitle: 'Elige fecha, hora y confirma tu reserva.' }
+        },
+        provider: {
+          activeBooking: { title: 'Servicio Activo', subtitle: 'Gestiona el servicio en curso y actualiza el estado.' },
+          schedule: { title: 'Agenda', subtitle: 'Gestiona tus horarios disponibles y citas confirmadas.' },
+          approvalPending: { title: 'Aprobación Pendiente', subtitle: 'Tu perfil está siendo revisado. Te avisaremos cuando sea aprobado.' },
+          onboardingWizard: { title: 'Registro Profesional', subtitle: 'Completa tu perfil profesional para empezar a recibir pedidos.' }
+        }
+      },
+      navigation: {
+        chatTitle: 'Chat',
+        customerBookings: { root: 'Reservas', activeBooking: 'Reserva Activa', tracking: 'Seguimiento', history: 'Historial', review: 'Reseña' },
+        customerExplore: { root: 'Explorar' }, customerHome: { categoryBrowse: 'Categoría', providerDetail: 'Profesional', bookingFlow: 'Reservar' },
+        customerProfile: { root: 'Perfil' }, providerEarnings: { root: 'Ingresos' }, providerHome: { onboardingWizard: 'Registro Profesional', approvalPending: 'Aprobación' },
+        providerOrders: { root: 'Pedidos', activeBooking: 'Servicio Activo' }, providerProfile: { root: 'Perfil' }, providerSchedule: { root: 'Agenda' }
+      },
+      status: { pending: 'Pendiente', confirmed: 'Confirmado', inProgress: 'En curso', completed: 'Completado', cancelled: 'Cancelado' }
     }
   }
 } as const;

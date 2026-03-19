@@ -1,5 +1,5 @@
 export type UserRole = 'CUSTOMER' | 'PROVIDER';
-export type Locale = 'pt-BR' | 'en';
+export type Locale = 'pt-BR' | 'en' | 'es';
 
 export interface User {
   id: string;

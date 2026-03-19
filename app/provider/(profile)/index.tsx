@@ -20,7 +20,7 @@ import { colors, spacing, radius, typography, shadow } from '@/constants/theme';
 import type { Locale } from '@/types';
 
 const menuIcons = [Shield, Star, Settings, CreditCard, Bell, HelpCircle] as const;
-const localeOptions: Locale[] = ['pt-BR', 'en'];
+const localeOptions: Locale[] = ['en', 'pt-BR', 'es'];
 
 export default function ProviderProfileScreen() {
   const router = useRouter();
@@ -90,7 +90,7 @@ export default function ProviderProfileScreen() {
         <View style={styles.localeRow}>
           {localeOptions.map((locale) => {
             const isActive = currentLocale === locale;
-            const label = locale === 'pt-BR' ? t('locale.portuguese') : t('locale.english');
+            const label = locale === 'pt-BR' ? t('locale.portuguese') : locale === 'es' ? t('locale.spanish') : t('locale.english');
             return (
               <Pressable
                 key={locale}
@@ -178,14 +178,16 @@ const styles = StyleSheet.create({
   },
   languageTitleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   languageTitle: { ...typography.bodyMedium, color: colors.text },
-  localeRow: { flexDirection: 'row', gap: spacing.sm },
+  localeRow: { flexDirection: 'row', gap: spacing.xs + 2, flexWrap: 'wrap' },
   localeButton: {
     flex: 1,
+    minWidth: 90,
     backgroundColor: colors.background,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radius.sm,
     paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xs,
     alignItems: 'center',
   },
   localeButtonActive: { backgroundColor: colors.primary, borderColor: colors.primary },

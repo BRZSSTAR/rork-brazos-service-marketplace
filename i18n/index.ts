@@ -15,6 +15,8 @@ void i18n.use(initReactI18next).init({
   compatibilityJSON: 'v4',
 });
 
+export const supportedLocales: Locale[] = ['en', 'pt-BR', 'es'];
+
 export async function applyAppLanguage(locale: Locale) {
   if (i18n.language === locale) {
     return;

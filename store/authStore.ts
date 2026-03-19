@@ -30,6 +30,10 @@ function detectDeviceLocale(): Locale {
     return 'pt-BR';
   }
 
+  if (normalizedLocale.startsWith('es')) {
+    return 'es';
+  }
+
   return 'en';
 }
 
@@ -38,7 +42,9 @@ function normalizeLocale(locale: string | null | undefined): Locale {
     return detectDeviceLocale();
   }
 
-  return locale === 'pt-BR' ? 'pt-BR' : 'en';
+  if (locale === 'pt-BR') return 'pt-BR';
+  if (locale === 'es') return 'es';
+  return 'en';
 }
 
 function normalizeRole(role: string | null | undefined): UserRole {
