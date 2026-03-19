@@ -95,6 +95,49 @@ export const resources = {
         customerProfile: { root: 'Perfil' }, providerEarnings: { root: 'Ganhos' }, providerHome: { onboardingWizard: 'Cadastro Profissional', approvalPending: 'Aprovação' },
         providerOrders: { root: 'Pedidos', activeBooking: 'Serviço Ativo' }, providerProfile: { root: 'Perfil' }, providerSchedule: { root: 'Agenda' }
       },
+      booking: {
+        steps: { cpf: 'CPF', address: 'Endereço', payment: 'Pagamento', summary: 'Resumo' },
+        flow: { demoService: 'Limpeza residencial' },
+        cpf: {
+          title: 'Informe seu CPF', subtitle: 'Precisamos do seu CPF para emitir notas fiscais e garantir sua segurança.',
+          invalid: 'CPF inválido. Verifique os números.', incomplete: 'CPF incompleto.',
+          hint: 'Seu CPF é armazenado com segurança e usado apenas para fins fiscais.'
+        },
+        address: {
+          title: 'Endereço do serviço', subtitle: 'Onde o serviço será realizado?',
+          addTitle: 'Novo endereço', editTitle: 'Editar endereço',
+          labelField: 'Tipo de endereço', labels: { home: 'Casa', work: 'Trabalho', travel: 'Viagem', other: 'Outro' },
+          customLabelPlaceholder: 'Nome personalizado', useGps: 'Usar minha localização atual',
+          streetField: 'Rua', streetPlaceholder: 'Nome da rua',
+          numberField: 'Número', complementField: 'Complemento', complementPlaceholder: 'Apto, bloco...',
+          neighborhoodField: 'Bairro', neighborhoodPlaceholder: 'Nome do bairro',
+          cityField: 'Cidade', cityPlaceholder: 'Nome da cidade', stateField: 'UF', zipField: 'CEP',
+          recipientToggle: 'Serviço para outra pessoa?',
+          recipientNamePlaceholder: 'Nome do destinatário', recipientPhonePlaceholder: 'Telefone do destinatário',
+          addButton: 'Salvar endereço', saveChanges: 'Salvar alterações', addNew: 'Adicionar novo endereço',
+          deleteTitle: 'Excluir endereço', deleteMessage: 'Tem certeza que deseja excluir este endereço?', deleteConfirm: 'Excluir',
+          gpsDetected: 'Localização detectada', gpsError: 'Não foi possível obter sua localização.', gpsPermission: 'Permissão de localização negada.'
+        },
+        payment: {
+          title: 'Método de pagamento', subtitle: 'Como deseja pagar pelo serviço?',
+          addTitle: 'Adicionar pagamento', typeLabel: 'Tipo de pagamento', card: 'Cartão',
+          pixKeyLabel: 'Chave Pix', pixKeyPlaceholder: 'CPF, e-mail, telefone ou chave aleatória',
+          pixHint: 'Insira sua chave Pix para pagamentos instantâneos.',
+          cardLabelField: 'Nome do cartão', cardLabelPlaceholder: 'Ex: Nubank, Itaú...',
+          lastFourField: 'Últimos 4 dígitos', cardHint: 'A integração completa com gateway será adicionada em breve.',
+          setDefault: 'Definir como pagamento padrão', addButton: 'Salvar método', addNew: 'Adicionar novo método',
+          deleteTitle: 'Excluir método', deleteMessage: 'Tem certeza que deseja excluir este método de pagamento?', deleteConfirm: 'Excluir'
+        },
+        summary: {
+          title: 'Resumo da reserva', subtitle: 'Confira os detalhes antes de confirmar.',
+          provider: 'Profissional', dateTime: 'Data e horário', address: 'Endereço', payment: 'Pagamento',
+          noProvider: 'Nenhum profissional selecionado', noDate: 'Data não selecionada',
+          noAddress: 'Nenhum endereço selecionado', noPayment: 'Nenhum pagamento selecionado',
+          notesLabel: 'Observações', notesPlaceholder: 'Informações adicionais para o profissional...',
+          total: 'Total', confirmTitle: 'Confirmar reserva?', confirmMessage: 'Deseja confirmar esta reserva?',
+          confirmButton: 'Confirmar reserva', successTitle: 'Reserva confirmada!', successMessage: 'Sua reserva foi realizada com sucesso.'
+        }
+      },
       status: { pending: 'Pendente', confirmed: 'Confirmado', inProgress: 'Em andamento', completed: 'Concluído', cancelled: 'Cancelado' }
     }
   },
@@ -191,6 +234,49 @@ export const resources = {
         customerProfile: { root: 'Profile' }, providerEarnings: { root: 'Earnings' }, providerHome: { onboardingWizard: 'Professional Onboarding', approvalPending: 'Approval' },
         providerOrders: { root: 'Orders', activeBooking: 'Active Service' }, providerProfile: { root: 'Profile' }, providerSchedule: { root: 'Schedule' }
       },
+      booking: {
+        steps: { cpf: 'CPF', address: 'Address', payment: 'Payment', summary: 'Summary' },
+        flow: { demoService: 'House cleaning' },
+        cpf: {
+          title: 'Enter your CPF', subtitle: 'We need your CPF to issue invoices and ensure your safety.',
+          invalid: 'Invalid CPF. Please check the numbers.', incomplete: 'Incomplete CPF.',
+          hint: 'Your CPF is stored securely and used only for tax purposes.'
+        },
+        address: {
+          title: 'Service address', subtitle: 'Where will the service take place?',
+          addTitle: 'New address', editTitle: 'Edit address',
+          labelField: 'Address type', labels: { home: 'Home', work: 'Work', travel: 'Travel', other: 'Other' },
+          customLabelPlaceholder: 'Custom name', useGps: 'Use my current location',
+          streetField: 'Street', streetPlaceholder: 'Street name',
+          numberField: 'Number', complementField: 'Unit/Apt', complementPlaceholder: 'Apt, suite...',
+          neighborhoodField: 'Neighborhood', neighborhoodPlaceholder: 'Neighborhood name',
+          cityField: 'City', cityPlaceholder: 'City name', stateField: 'State', zipField: 'Zip code',
+          recipientToggle: 'Service for someone else?',
+          recipientNamePlaceholder: 'Recipient name', recipientPhonePlaceholder: 'Recipient phone',
+          addButton: 'Save address', saveChanges: 'Save changes', addNew: 'Add new address',
+          deleteTitle: 'Delete address', deleteMessage: 'Are you sure you want to delete this address?', deleteConfirm: 'Delete',
+          gpsDetected: 'Location detected', gpsError: 'Could not get your location.', gpsPermission: 'Location permission denied.'
+        },
+        payment: {
+          title: 'Payment method', subtitle: 'How would you like to pay for the service?',
+          addTitle: 'Add payment', typeLabel: 'Payment type', card: 'Card',
+          pixKeyLabel: 'Pix key', pixKeyPlaceholder: 'CPF, email, phone, or random key',
+          pixHint: 'Enter your Pix key for instant payments.',
+          cardLabelField: 'Card name', cardLabelPlaceholder: 'E.g.: Visa, Mastercard...',
+          lastFourField: 'Last 4 digits', cardHint: 'Full payment gateway integration coming soon.',
+          setDefault: 'Set as default payment', addButton: 'Save method', addNew: 'Add new method',
+          deleteTitle: 'Delete method', deleteMessage: 'Are you sure you want to delete this payment method?', deleteConfirm: 'Delete'
+        },
+        summary: {
+          title: 'Booking summary', subtitle: 'Review the details before confirming.',
+          provider: 'Professional', dateTime: 'Date & time', address: 'Address', payment: 'Payment',
+          noProvider: 'No professional selected', noDate: 'Date not selected',
+          noAddress: 'No address selected', noPayment: 'No payment selected',
+          notesLabel: 'Notes', notesPlaceholder: 'Additional information for the professional...',
+          total: 'Total', confirmTitle: 'Confirm booking?', confirmMessage: 'Do you want to confirm this booking?',
+          confirmButton: 'Confirm booking', successTitle: 'Booking confirmed!', successMessage: 'Your booking has been successfully placed.'
+        }
+      },
       status: { pending: 'Pending', confirmed: 'Confirmed', inProgress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' }
     }
   },
@@ -286,6 +372,49 @@ export const resources = {
         customerExplore: { root: 'Explorar' }, customerHome: { categoryBrowse: 'Categoría', providerDetail: 'Profesional', bookingFlow: 'Reservar' },
         customerProfile: { root: 'Perfil' }, providerEarnings: { root: 'Ingresos' }, providerHome: { onboardingWizard: 'Registro Profesional', approvalPending: 'Aprobación' },
         providerOrders: { root: 'Pedidos', activeBooking: 'Servicio Activo' }, providerProfile: { root: 'Perfil' }, providerSchedule: { root: 'Agenda' }
+      },
+      booking: {
+        steps: { cpf: 'CPF', address: 'Dirección', payment: 'Pago', summary: 'Resumen' },
+        flow: { demoService: 'Limpieza del hogar' },
+        cpf: {
+          title: 'Ingresa tu CPF', subtitle: 'Necesitamos tu CPF para emitir facturas y garantizar tu seguridad.',
+          invalid: 'CPF inválido. Verifica los números.', incomplete: 'CPF incompleto.',
+          hint: 'Tu CPF se almacena de forma segura y se usa solo con fines fiscales.'
+        },
+        address: {
+          title: 'Dirección del servicio', subtitle: '¿Dónde se realizará el servicio?',
+          addTitle: 'Nueva dirección', editTitle: 'Editar dirección',
+          labelField: 'Tipo de dirección', labels: { home: 'Casa', work: 'Trabajo', travel: 'Viaje', other: 'Otro' },
+          customLabelPlaceholder: 'Nombre personalizado', useGps: 'Usar mi ubicación actual',
+          streetField: 'Calle', streetPlaceholder: 'Nombre de la calle',
+          numberField: 'Número', complementField: 'Complemento', complementPlaceholder: 'Apto, bloque...',
+          neighborhoodField: 'Barrio', neighborhoodPlaceholder: 'Nombre del barrio',
+          cityField: 'Ciudad', cityPlaceholder: 'Nombre de la ciudad', stateField: 'Estado', zipField: 'Código postal',
+          recipientToggle: '¿Servicio para otra persona?',
+          recipientNamePlaceholder: 'Nombre del destinatario', recipientPhonePlaceholder: 'Teléfono del destinatario',
+          addButton: 'Guardar dirección', saveChanges: 'Guardar cambios', addNew: 'Agregar nueva dirección',
+          deleteTitle: 'Eliminar dirección', deleteMessage: '¿Estás seguro de que deseas eliminar esta dirección?', deleteConfirm: 'Eliminar',
+          gpsDetected: 'Ubicación detectada', gpsError: 'No se pudo obtener tu ubicación.', gpsPermission: 'Permiso de ubicación denegado.'
+        },
+        payment: {
+          title: 'Método de pago', subtitle: '¿Cómo deseas pagar por el servicio?',
+          addTitle: 'Agregar pago', typeLabel: 'Tipo de pago', card: 'Tarjeta',
+          pixKeyLabel: 'Clave Pix', pixKeyPlaceholder: 'CPF, correo, teléfono o clave aleatoria',
+          pixHint: 'Ingresa tu clave Pix para pagos instantáneos.',
+          cardLabelField: 'Nombre de la tarjeta', cardLabelPlaceholder: 'Ej: Visa, Mastercard...',
+          lastFourField: 'Últimos 4 dígitos', cardHint: 'La integración completa con pasarela de pago se agregará pronto.',
+          setDefault: 'Establecer como pago predeterminado', addButton: 'Guardar método', addNew: 'Agregar nuevo método',
+          deleteTitle: 'Eliminar método', deleteMessage: '¿Estás seguro de que deseas eliminar este método de pago?', deleteConfirm: 'Eliminar'
+        },
+        summary: {
+          title: 'Resumen de la reserva', subtitle: 'Revisa los detalles antes de confirmar.',
+          provider: 'Profesional', dateTime: 'Fecha y hora', address: 'Dirección', payment: 'Pago',
+          noProvider: 'Ningún profesional seleccionado', noDate: 'Fecha no seleccionada',
+          noAddress: 'Ninguna dirección seleccionada', noPayment: 'Ningún pago seleccionado',
+          notesLabel: 'Observaciones', notesPlaceholder: 'Información adicional para el profesional...',
+          total: 'Total', confirmTitle: '¿Confirmar reserva?', confirmMessage: '¿Deseas confirmar esta reserva?',
+          confirmButton: 'Confirmar reserva', successTitle: '¡Reserva confirmada!', successMessage: 'Tu reserva se ha realizado con éxito.'
+        }
       },
       status: { pending: 'Pendiente', confirmed: 'Confirmado', inProgress: 'En curso', completed: 'Completado', cancelled: 'Cancelado' }
     }

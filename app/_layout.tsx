@@ -13,6 +13,7 @@ import {
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { useAuthStore } from "@/store/authStore";
+import { useBookingStore } from "@/store/bookingStore";
 import { colors } from "@/constants/theme";
 
 void SplashScreen.preventAutoHideAsync();
@@ -53,6 +54,7 @@ export default function RootLayout() {
   const loadStoredAuth = useAuthStore((s) => s.loadStoredAuth);
   const appLocale = useAuthStore((s) => s.appLocale);
   const isLoading = useAuthStore((s) => s.isLoading);
+  const hydrateBooking = useBookingStore((s) => s.hydrate);
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -63,7 +65,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     void loadStoredAuth();
-  }, [loadStoredAuth]);
+    void hydrateBooking();
+  }, [loadStoredAuth, hydrateBooking]);
 
   useEffect(() => {
     if (!fontsLoaded || isLoading) {

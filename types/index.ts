@@ -57,3 +57,49 @@ export interface Booking {
   notes?: string;
   createdAt: string;
 }
+
+export type AddressLabel = 'HOME' | 'WORK' | 'TRAVEL' | 'OTHER';
+
+export interface SavedAddress {
+  id: string;
+  label: AddressLabel;
+  customLabel?: string;
+  street: string;
+  number: string;
+  complement?: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  recipientName?: string;
+  recipientPhone?: string;
+  latitude?: number;
+  longitude?: number;
+  createdAt: string;
+}
+
+export type PaymentMethodType = 'PIX' | 'CARD';
+
+export interface SavedPaymentMethod {
+  id: string;
+  type: PaymentMethodType;
+  label: string;
+  lastFour?: string;
+  pixKey?: string;
+  isDefault: boolean;
+  createdAt: string;
+}
+
+export interface BookingDraft {
+  providerId?: string;
+  providerName?: string;
+  providerAvatar?: string;
+  serviceName?: string;
+  serviceCategory?: ServiceCategory;
+  scheduledAt?: string;
+  durationMinutes?: number;
+  totalCents?: number;
+  notes?: string;
+  addressId?: string;
+  paymentMethodId?: string;
+}
