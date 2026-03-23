@@ -9,6 +9,9 @@ import {
   ChevronRight,
   Bell,
   Languages,
+  Briefcase,
+  ArrowRightLeft,
+  Clock,
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +30,7 @@ export default function CustomerProfileScreen() {
   const logout = useAuthStore((s) => s.logout);
   const setLocale = useAuthStore((s) => s.setLocale);
   const appLocale = useAuthStore((s) => s.appLocale);
+  const setActiveMode = useAuthStore((s) => s.setActiveMode);
 
   const currentLocale: Locale = appLocale;
   const menuLabels = [
@@ -35,6 +39,11 @@ export default function CustomerProfileScreen() {
     t('customer.profile.menu.notifications'),
     t('customer.profile.menu.support'),
   ];
+
+  const providerStatus = user?.providerStatus ?? 'NONE';
+  const isApprovedProvider = providerStatus === 'APPROVED';
+  const isPendingApproval = providerStatus === 'PENDING_APPROVAL';
+  const isOnboarding = providerStatus === 'ONBOARDING';
 
   const handleLocaleChange = async (locale: Locale) => {
     if (locale === currentLocale) return;
@@ -48,6 +57,17 @@ export default function CustomerProfileScreen() {
     router.replace('/login');
   };
 
+  const handleProviderAction = async () => {
+    if (isApprovedProvider) {
+      await setActiveMode('provider');
+      router.replace('/provider/(home)');
+    } else if (isPendingApproval) {
+      router.push('/provider/(home)/approval-pending');
+    } else {
+      router.push('/provider/(home)/onboarding-wizard');
+    }
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <View style={styles.profileCard}>
@@ -59,6 +79,43 @@ export default function CustomerProfileScreen() {
           <Text style={styles.profileEmail}>{user?.email ?? ''}</Text>
         </View>
       </View>
+
+      <Pressable
+        style={styles.providerCard}
+        onPress={handleProviderAction}
+        testID="become-provider-button"
+      >
+        <View style={styles.providerCardLeft}>
+          <View style={styles.providerIconWrap}>
+            {isApprovedProvider ? (
+              <ArrowRightLeft size={22} color={colors.surface} />
+            ) : isPendingApproval ? (
+              <Clock size={22} color={colors.surface} />
+            ) : (
+              <Briefcase size={22} color={colors.surface} />
+            )}
+          </View>
+          <View style={styles.providerCardText}>
+            <Text style={styles.providerCardTitle}>
+              {isApprovedProvider
+                ? t('customer.profile.switchToProvider')
+                : isPendingApproval
+                  ? t('customer.profile.approvalPending')
+                  : isOnboarding
+                    ? t('customer.profile.continueOnboarding')
+                    : t('customer.profile.becomeProvider')}
+            </Text>
+            <Text style={styles.providerCardSubtitle}>
+              {isApprovedProvider
+                ? t('customer.profile.switchToProviderDesc')
+                : isPendingApproval
+                  ? t('customer.profile.approvalPendingDesc')
+                  : t('customer.profile.becomeProviderDesc')}
+            </Text>
+          </View>
+        </View>
+        <ChevronRight size={20} color={colors.accent} />
+      </Pressable>
 
       <View style={styles.menuSection}>
         {menuLabels.map((label, index) => {
@@ -116,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.md,
     marginHorizontal: spacing.lg,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
     padding: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
@@ -133,6 +190,40 @@ const styles = StyleSheet.create({
   profileInfo: { flex: 1, gap: spacing.xs - 2 },
   profileName: { ...typography.h3, color: colors.text },
   profileEmail: { ...typography.caption, color: colors.textSecondary },
+  providerCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+    padding: spacing.md,
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    ...shadow.md,
+  },
+  providerCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    flex: 1,
+  },
+  providerIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  providerCardText: { flex: 1, gap: 2 },
+  providerCardTitle: {
+    ...typography.bodyMedium,
+    color: colors.textInverse,
+  },
+  providerCardSubtitle: {
+    ...typography.small,
+    color: 'rgba(255,255,255,0.6)',
+  },
   menuSection: {
     marginHorizontal: spacing.lg,
     backgroundColor: colors.surface,

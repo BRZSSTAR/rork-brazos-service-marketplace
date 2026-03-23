@@ -25,7 +25,8 @@ export default function IndexScreen() {
       return;
     }
 
-    if (user?.role === 'PROVIDER') {
+    const { activeMode } = useAuthStore.getState();
+    if (activeMode === 'provider' && user?.providerStatus === 'APPROVED') {
       router.replace('/provider/(home)');
     } else {
       router.replace('/customer/(home)');

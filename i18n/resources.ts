@@ -47,7 +47,11 @@ export const resources = {
         bookings: { tabs: { active: 'Ativas', completed: 'Concluídas', cancelled: 'Canceladas' }, emptyTitle: 'Nenhuma reserva', emptySubtitle: 'Suas reservas {{tab}} aparecerão aqui.' },
         profile: {
           fallbackName: 'Usuário', logout: 'Sair da conta', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
-          menu: { settings: 'Configurações', paymentMethods: 'Métodos de pagamento', notifications: 'Notificações', support: 'Ajuda e suporte' }
+          menu: { settings: 'Configurações', paymentMethods: 'Métodos de pagamento', notifications: 'Notificações', support: 'Ajuda e suporte' },
+          becomeProvider: 'Torne-se um Profissional', becomeProviderDesc: 'Comece a ganhar dinheiro com Brazos',
+          switchToProvider: 'Mudar para modo Profissional', switchToProviderDesc: 'Acessar seu painel de profissional',
+          approvalPending: 'Aprovação Pendente', approvalPendingDesc: 'Seu perfil está em análise',
+          continueOnboarding: 'Completar Cadastro Profissional'
         }
       },
       provider: {
@@ -64,10 +68,50 @@ export const resources = {
         },
         profile: {
           fallbackName: 'Profissional', roleLabel: 'Profissional', logout: 'Sair da conta', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
+          switchToCustomer: 'Mudar para modo Cliente', switchToCustomerDesc: 'Acessar como cliente',
           menu: {
             professionalProfile: 'Perfil profissional', reviews: 'Avaliações', settings: 'Configurações', bankData: 'Dados bancários',
             notifications: 'Notificações', support: 'Ajuda e suporte'
           }
+        }
+      },
+      onboarding: {
+        title: 'Cadastro Profissional',
+        steps: { category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão' },
+        category: {
+          title: 'Qual serviço você oferece?', subtitle: 'Selecione a categoria do seu serviço.',
+          home: 'Casa', homeDesc: 'Limpeza, reparos, manutenção',
+          beauty: 'Beleza', beautyDesc: 'Cabelo, unhas, estética',
+          health: 'Saúde', healthDesc: 'Bem-estar, massagem, cuidados',
+          chef: 'Chef', chefDesc: 'Culinária, eventos, refeições'
+        },
+        details: {
+          title: 'Descreva seu serviço', subtitle: 'Conte aos clientes sobre você.',
+          serviceTitleLabel: 'Título do serviço', serviceTitlePlaceholder: 'Ex: Limpeza residencial profissional',
+          descriptionLabel: 'Descrição', descriptionPlaceholder: 'Descreva sua experiência e o que você oferece...',
+          serviceAreaLabel: 'Área de atendimento', serviceAreaPlaceholder: 'Ex: São Paulo - Zona Sul',
+          experienceLabel: 'Anos de experiência'
+        },
+        pricing: {
+          title: 'Defina seu preço', subtitle: 'Quanto você cobra por hora?',
+          priceLabel: 'Preço por hora (R$)', pricePlaceholder: '0,00',
+          hint: 'Você pode alterar o preço a qualquer momento.'
+        },
+        availability: {
+          title: 'Sua disponibilidade', subtitle: 'Quais dias e horários você trabalha?',
+          days: { monday: 'Segunda', tuesday: 'Terça', wednesday: 'Quarta', thursday: 'Quinta', friday: 'Sexta', saturday: 'Sábado', sunday: 'Domingo' },
+          start: 'Início', end: 'Fim'
+        },
+        review: {
+          title: 'Revise seu perfil', subtitle: 'Confira os dados antes de enviar.',
+          categoryLabel: 'Categoria', serviceLabel: 'Serviço', descriptionLabel: 'Descrição',
+          areaLabel: 'Área', experienceLabel: 'Experiência', priceLabel: 'Preço/hora',
+          availabilityLabel: 'Disponibilidade', yearsUnit: 'anos',
+          submit: 'Enviar para aprovação', editing: 'Editar'
+        },
+        submitted: {
+          title: 'Cadastro enviado!', subtitle: 'Seu perfil profissional foi enviado para análise. Você será notificado quando for aprovado.',
+          backToHome: 'Voltar ao início'
         }
       },
       placeholders: {
@@ -188,7 +232,11 @@ export const resources = {
         bookings: { tabs: { active: 'Active', completed: 'Completed', cancelled: 'Cancelled' }, emptyTitle: 'No bookings', emptySubtitle: 'Your {{tab}} bookings will appear here.' },
         profile: {
           fallbackName: 'User', logout: 'Sign out', version: 'BRAZOS v1.0.0', languageSection: 'Language',
-          menu: { settings: 'Settings', paymentMethods: 'Payment methods', notifications: 'Notifications', support: 'Help & support' }
+          menu: { settings: 'Settings', paymentMethods: 'Payment methods', notifications: 'Notifications', support: 'Help & support' },
+          becomeProvider: 'Become a Service Provider', becomeProviderDesc: 'Start earning money with Brazos',
+          switchToProvider: 'Switch to Provider Mode', switchToProviderDesc: 'Access your professional dashboard',
+          approvalPending: 'Approval Pending', approvalPendingDesc: 'Your profile is under review',
+          continueOnboarding: 'Complete Professional Signup'
         }
       },
       provider: {
@@ -204,10 +252,50 @@ export const resources = {
         },
         profile: {
           fallbackName: 'Professional', roleLabel: 'Professional', logout: 'Sign out', version: 'BRAZOS v1.0.0', languageSection: 'Language',
+          switchToCustomer: 'Switch to Customer Mode', switchToCustomerDesc: 'Access as a customer',
           menu: {
             professionalProfile: 'Professional profile', reviews: 'Reviews', settings: 'Settings', bankData: 'Bank details',
             notifications: 'Notifications', support: 'Help & support'
           }
+        }
+      },
+      onboarding: {
+        title: 'Professional Onboarding',
+        steps: { category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review' },
+        category: {
+          title: 'What service do you offer?', subtitle: 'Select your service category.',
+          home: 'Home', homeDesc: 'Cleaning, repairs, maintenance',
+          beauty: 'Beauty', beautyDesc: 'Hair, nails, aesthetics',
+          health: 'Health', healthDesc: 'Wellness, massage, care',
+          chef: 'Chef', chefDesc: 'Cuisine, events, meals'
+        },
+        details: {
+          title: 'Describe your service', subtitle: 'Tell clients about yourself.',
+          serviceTitleLabel: 'Service title', serviceTitlePlaceholder: 'E.g.: Professional house cleaning',
+          descriptionLabel: 'Description', descriptionPlaceholder: 'Describe your experience and what you offer...',
+          serviceAreaLabel: 'Service area', serviceAreaPlaceholder: 'E.g.: Downtown Manhattan',
+          experienceLabel: 'Years of experience'
+        },
+        pricing: {
+          title: 'Set your price', subtitle: 'How much do you charge per hour?',
+          priceLabel: 'Price per hour (R$)', pricePlaceholder: '0.00',
+          hint: 'You can change your price at any time.'
+        },
+        availability: {
+          title: 'Your availability', subtitle: 'Which days and hours do you work?',
+          days: { monday: 'Monday', tuesday: 'Tuesday', wednesday: 'Wednesday', thursday: 'Thursday', friday: 'Friday', saturday: 'Saturday', sunday: 'Sunday' },
+          start: 'Start', end: 'End'
+        },
+        review: {
+          title: 'Review your profile', subtitle: 'Check your details before submitting.',
+          categoryLabel: 'Category', serviceLabel: 'Service', descriptionLabel: 'Description',
+          areaLabel: 'Area', experienceLabel: 'Experience', priceLabel: 'Price/hour',
+          availabilityLabel: 'Availability', yearsUnit: 'years',
+          submit: 'Submit for approval', editing: 'Edit'
+        },
+        submitted: {
+          title: 'Application submitted!', subtitle: 'Your professional profile has been submitted for review. You will be notified when approved.',
+          backToHome: 'Back to home'
         }
       },
       placeholders: {
@@ -328,7 +416,11 @@ export const resources = {
         bookings: { tabs: { active: 'Activas', completed: 'Completadas', cancelled: 'Canceladas' }, emptyTitle: 'Sin reservas', emptySubtitle: 'Tus reservas {{tab}} aparecerán aquí.' },
         profile: {
           fallbackName: 'Usuario', logout: 'Cerrar sesión', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
-          menu: { settings: 'Configuración', paymentMethods: 'Métodos de pago', notifications: 'Notificaciones', support: 'Ayuda y soporte' }
+          menu: { settings: 'Configuración', paymentMethods: 'Métodos de pago', notifications: 'Notificaciones', support: 'Ayuda y soporte' },
+          becomeProvider: 'Conviértete en Profesional', becomeProviderDesc: 'Empieza a ganar dinero con Brazos',
+          switchToProvider: 'Cambiar a modo Profesional', switchToProviderDesc: 'Accede a tu panel profesional',
+          approvalPending: 'Aprobación Pendiente', approvalPendingDesc: 'Tu perfil está en revisión',
+          continueOnboarding: 'Completar Registro Profesional'
         }
       },
       provider: {
@@ -344,10 +436,50 @@ export const resources = {
         },
         profile: {
           fallbackName: 'Profesional', roleLabel: 'Profesional', logout: 'Cerrar sesión', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
+          switchToCustomer: 'Cambiar a modo Cliente', switchToCustomerDesc: 'Acceder como cliente',
           menu: {
             professionalProfile: 'Perfil profesional', reviews: 'Reseñas', settings: 'Configuración', bankData: 'Datos bancarios',
             notifications: 'Notificaciones', support: 'Ayuda y soporte'
           }
+        }
+      },
+      onboarding: {
+        title: 'Registro Profesional',
+        steps: { category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión' },
+        category: {
+          title: '¿Qué servicio ofreces?', subtitle: 'Selecciona la categoría de tu servicio.',
+          home: 'Hogar', homeDesc: 'Limpieza, reparaciones, mantenimiento',
+          beauty: 'Belleza', beautyDesc: 'Cabello, uñas, estética',
+          health: 'Salud', healthDesc: 'Bienestar, masaje, cuidados',
+          chef: 'Chef', chefDesc: 'Cocina, eventos, comidas'
+        },
+        details: {
+          title: 'Describe tu servicio', subtitle: 'Cuéntale a los clientes sobre ti.',
+          serviceTitleLabel: 'Título del servicio', serviceTitlePlaceholder: 'Ej: Limpieza profesional del hogar',
+          descriptionLabel: 'Descripción', descriptionPlaceholder: 'Describe tu experiencia y lo que ofreces...',
+          serviceAreaLabel: 'Área de servicio', serviceAreaPlaceholder: 'Ej: Ciudad de México - Centro',
+          experienceLabel: 'Años de experiencia'
+        },
+        pricing: {
+          title: 'Define tu precio', subtitle: '¿Cuánto cobras por hora?',
+          priceLabel: 'Precio por hora (R$)', pricePlaceholder: '0,00',
+          hint: 'Puedes cambiar tu precio en cualquier momento.'
+        },
+        availability: {
+          title: 'Tu disponibilidad', subtitle: '¿Qué días y horarios trabajas?',
+          days: { monday: 'Lunes', tuesday: 'Martes', wednesday: 'Miércoles', thursday: 'Jueves', friday: 'Viernes', saturday: 'Sábado', sunday: 'Domingo' },
+          start: 'Inicio', end: 'Fin'
+        },
+        review: {
+          title: 'Revisa tu perfil', subtitle: 'Verifica los datos antes de enviar.',
+          categoryLabel: 'Categoría', serviceLabel: 'Servicio', descriptionLabel: 'Descripción',
+          areaLabel: 'Área', experienceLabel: 'Experiencia', priceLabel: 'Precio/hora',
+          availabilityLabel: 'Disponibilidad', yearsUnit: 'años',
+          submit: 'Enviar para aprobación', editing: 'Editar'
+        },
+        submitted: {
+          title: '¡Solicitud enviada!', subtitle: 'Tu perfil profesional ha sido enviado para revisión. Serás notificado cuando sea aprobado.',
+          backToHome: 'Volver al inicio'
         }
       },
       placeholders: {

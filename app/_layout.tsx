@@ -14,6 +14,10 @@ import {
 } from "@expo-google-fonts/inter";
 import { useAuthStore } from "@/store/authStore";
 import { useBookingStore } from "@/store/bookingStore";
+import { useProviderStore } from "@/store/providerStore";
+import { useOrderStore } from "@/store/orderStore";
+import { useNotificationStore } from "@/store/notificationStore";
+import { useChatStore } from "@/store/chatStore";
 import { colors } from "@/constants/theme";
 
 void SplashScreen.preventAutoHideAsync();
@@ -46,6 +50,13 @@ function RootLayoutNav() {
           headerStyle: { backgroundColor: colors.surface },
         }}
       />
+      <Stack.Screen
+        name="notifications"
+        options={{
+          presentation: "modal",
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
@@ -55,6 +66,10 @@ export default function RootLayout() {
   const appLocale = useAuthStore((s) => s.appLocale);
   const isLoading = useAuthStore((s) => s.isLoading);
   const hydrateBooking = useBookingStore((s) => s.hydrate);
+  const hydrateProvider = useProviderStore((s) => s.hydrate);
+  const hydrateOrders = useOrderStore((s) => s.hydrate);
+  const hydrateNotifications = useNotificationStore((s) => s.hydrate);
+  const hydrateChats = useChatStore((s) => s.hydrate);
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -66,7 +81,11 @@ export default function RootLayout() {
   useEffect(() => {
     void loadStoredAuth();
     void hydrateBooking();
-  }, [loadStoredAuth, hydrateBooking]);
+    void hydrateProvider();
+    void hydrateOrders();
+    void hydrateNotifications();
+    void hydrateChats();
+  }, [loadStoredAuth, hydrateBooking, hydrateProvider, hydrateOrders, hydrateNotifications, hydrateChats]);
 
   useEffect(() => {
     if (!fontsLoaded || isLoading) {

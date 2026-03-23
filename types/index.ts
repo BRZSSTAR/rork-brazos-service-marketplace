@@ -1,5 +1,7 @@
 export type UserRole = 'CUSTOMER' | 'PROVIDER';
+export type ActiveMode = 'customer' | 'provider';
 export type Locale = 'pt-BR' | 'en' | 'es';
+export type ProviderOnboardingStatus = 'NONE' | 'ONBOARDING' | 'PENDING_APPROVAL' | 'APPROVED' | 'SUSPENDED';
 
 export interface User {
   id: string;
@@ -10,6 +12,8 @@ export interface User {
   phone?: string;
   createdAt: string;
   locale: Locale;
+  isProvider: boolean;
+  providerStatus: ProviderOnboardingStatus;
 }
 
 export type BookingStatus =
@@ -43,6 +47,46 @@ export interface ServiceProvider {
     longitude: number;
     address: string;
   };
+}
+
+export interface ProviderProfile {
+  id: string;
+  userId: string;
+  category: ServiceCategory;
+  serviceTitle: string;
+  description: string;
+  pricePerHourCents: number;
+  serviceArea: string;
+  yearsExperience: number;
+  availability: WeeklyAvailability;
+  status: ProviderOnboardingStatus;
+  createdAt: string;
+}
+
+export interface DayAvailability {
+  enabled: boolean;
+  startTime: string;
+  endTime: string;
+}
+
+export interface WeeklyAvailability {
+  monday: DayAvailability;
+  tuesday: DayAvailability;
+  wednesday: DayAvailability;
+  thursday: DayAvailability;
+  friday: DayAvailability;
+  saturday: DayAvailability;
+  sunday: DayAvailability;
+}
+
+export interface ProviderOnboardingDraft {
+  category?: ServiceCategory;
+  serviceTitle?: string;
+  description?: string;
+  pricePerHourCents?: number;
+  serviceArea?: string;
+  yearsExperience?: number;
+  availability?: WeeklyAvailability;
 }
 
 export interface Booking {

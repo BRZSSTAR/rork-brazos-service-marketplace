@@ -11,6 +11,7 @@ import {
   Bell,
   Shield,
   Languages,
+  ArrowRightLeft,
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +30,7 @@ export default function ProviderProfileScreen() {
   const logout = useAuthStore((s) => s.logout);
   const setLocale = useAuthStore((s) => s.setLocale);
   const appLocale = useAuthStore((s) => s.appLocale);
+  const setActiveMode = useAuthStore((s) => s.setActiveMode);
 
   const currentLocale: Locale = appLocale;
   const menuLabels = [
@@ -52,6 +54,11 @@ export default function ProviderProfileScreen() {
     router.replace('/login');
   };
 
+  const handleSwitchToCustomer = async () => {
+    await setActiveMode('customer');
+    router.replace('/customer/(home)');
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <View style={styles.profileCard}>
@@ -66,6 +73,23 @@ export default function ProviderProfileScreen() {
           </View>
         </View>
       </View>
+
+      <Pressable
+        style={styles.switchCard}
+        onPress={handleSwitchToCustomer}
+        testID="switch-to-customer-button"
+      >
+        <View style={styles.switchCardLeft}>
+          <View style={styles.switchIconWrap}>
+            <ArrowRightLeft size={20} color={colors.primary} />
+          </View>
+          <View style={styles.switchCardText}>
+            <Text style={styles.switchCardTitle}>{t('provider.profile.switchToCustomer')}</Text>
+            <Text style={styles.switchCardSubtitle}>{t('provider.profile.switchToCustomerDesc')}</Text>
+          </View>
+        </View>
+        <ChevronRight size={18} color={colors.textTertiary} />
+      </Pressable>
 
       <View style={styles.menuSection}>
         {menuLabels.map((label, index) => {
@@ -123,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.md,
     marginHorizontal: spacing.lg,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
     padding: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
@@ -149,6 +173,36 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs - 2,
   },
   roleBadgeText: { ...typography.smallMedium, color: colors.accentDark },
+  switchCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+    padding: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...shadow.sm,
+  },
+  switchCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    flex: 1,
+  },
+  switchIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.accent + '20',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  switchCardText: { flex: 1, gap: 2 },
+  switchCardTitle: { ...typography.bodyMedium, color: colors.text },
+  switchCardSubtitle: { ...typography.small, color: colors.textSecondary },
   menuSection: {
     marginHorizontal: spacing.lg,
     backgroundColor: colors.surface,

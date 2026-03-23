@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import type { Href } from 'expo-router';
+
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/store/authStore';
 import { colors, spacing, radius, typography } from '@/constants/theme';
@@ -35,9 +35,9 @@ export default function LoginScreen() {
 
     try {
       await login(email.trim(), password);
-      const authenticatedUser = useAuthStore.getState().user;
-      const destination: Href = authenticatedUser?.role === 'PROVIDER' ? '/provider/(home)' : '/customer/(home)';
-      console.log('[Login] Success, navigating to:', destination, 'role:', authenticatedUser?.role);
+      const { activeMode } = useAuthStore.getState();
+      const destination = activeMode === 'provider' ? '/provider/(home)' : '/customer/(home)';
+      console.log('[Login] Success, navigating to:', destination);
       router.replace(destination);
     } catch (error) {
       console.error('[Login] Error:', error);

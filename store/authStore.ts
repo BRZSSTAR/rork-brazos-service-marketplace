@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/utils/supabase';
-import type { Locale, User, UserRole } from '@/types';
+import type { ActiveMode, Locale, ProviderOnboardingStatus, User, UserRole } from '@/types';
 
 const APP_LOCALE_KEY = 'brazos_app_locale';
 const LANGUAGE_SELECTED_KEY = 'brazos_language_selected';
@@ -18,6 +18,8 @@ interface SupabaseUserMetadata {
   full_name?: string;
   role?: UserRole;
   locale?: Locale;
+  is_provider?: boolean;
+  provider_status?: ProviderOnboardingStatus;
 }
 
 function detectDeviceLocale(): Locale {
@@ -59,12 +61,22 @@ function getFirstNameFromEmail(email: string | undefined): string {
   return email.split('@')[0] ?? 'BRAZOS';
 }
 
+function normalizeProviderStatus(status: string | null | undefined): ProviderOnboardingStatus {
+  const valid: ProviderOnboardingStatus[] = ['NONE', 'ONBOARDING', 'PENDING_APPROVAL', 'APPROVED', 'SUSPENDED'];
+  if (status && valid.includes(status as ProviderOnboardingStatus)) {
+    return status as ProviderOnboardingStatus;
+  }
+  return 'NONE';
+}
+
 function buildAppUser(session: Session, fallbackLocale: Locale): User {
   const authUser = session.user;
   const metadata = (authUser.user_metadata ?? {}) as SupabaseUserMetadata;
   const locale = normalizeLocale(metadata.locale ?? fallbackLocale);
   const name = metadata.full_name ?? metadata.name ?? getFirstNameFromEmail(authUser.email);
   const role = normalizeRole(metadata.role);
+  const isProvider = metadata.is_provider === true;
+  const providerStatus = normalizeProviderStatus(metadata.provider_status);
 
   const appUser: User = {
     id: authUser.id,
@@ -73,6 +85,8 @@ function buildAppUser(session: Session, fallbackLocale: Locale): User {
     role,
     createdAt: authUser.created_at,
     locale,
+    isProvider,
+    providerStatus,
   };
 
   console.log('[Auth] Built app user from Supabase session:', {
@@ -109,6 +123,8 @@ async function loadPersistedSession(): Promise<PersistedSession> {
   return { storedLocale, storedLanguageSelected };
 }
 
+const ACTIVE_MODE_KEY = 'brazos_active_mode';
+
 const initialState = {
   user: null as User | null,
   accessToken: null as string | null,
@@ -116,6 +132,7 @@ const initialState = {
   isAuthenticated: false,
   appLocale: detectDeviceLocale() as Locale,
   hasSelectedLanguage: false,
+  activeMode: 'customer' as ActiveMode,
 };
 
 export const useAuthStore = create(
@@ -142,10 +159,12 @@ export const useAuthStore = create(
 
         if (session?.user) {
           const user = buildAppUser(session, appLocale);
+          const storedMode = await secureGet(ACTIVE_MODE_KEY);
+          const activeMode: ActiveMode = storedMode === 'provider' && user.providerStatus === 'APPROVED' ? 'provider' : 'customer';
 
           await persistLocaleSelection(user.locale, hasSelectedLanguage || true);
 
-          console.log('[Auth] Restored Supabase session for:', user.email, 'role:', user.role);
+          console.log('[Auth] Restored Supabase session for:', user.email, 'mode:', activeMode, 'providerStatus:', user.providerStatus);
           set({
             user,
             accessToken: session.access_token,
@@ -153,6 +172,7 @@ export const useAuthStore = create(
             isLoading: false,
             appLocale: user.locale,
             hasSelectedLanguage: true,
+            activeMode,
           });
           return;
         }
@@ -223,8 +243,8 @@ export const useAuthStore = create(
       }
     },
 
-    register: async (name: string, email: string, password: string, role: UserRole) => {
-      console.log('[Auth] Register attempt:', email, 'role:', role);
+    register: async (name: string, email: string, password: string) => {
+      console.log('[Auth] Register attempt:', email);
       set({ isLoading: true });
 
       try {
@@ -242,8 +262,10 @@ export const useAuthStore = create(
             data: {
               name: trimmedName,
               full_name: trimmedName,
-              role,
+              role: 'CUSTOMER',
               locale,
+              is_provider: false,
+              provider_status: 'NONE',
             },
           },
         });
@@ -331,6 +353,36 @@ export const useAuthStore = create(
       set({ appLocale: normalizedLocale, hasSelectedLanguage: true });
     },
 
+    setActiveMode: async (mode: ActiveMode) => {
+      console.log('[Auth] Switching active mode to:', mode);
+      await secureSet(ACTIVE_MODE_KEY, mode);
+      set({ activeMode: mode });
+    },
+
+    setProviderStatus: async (status: ProviderOnboardingStatus) => {
+      console.log('[Auth] Updating provider status:', status);
+      const currentUser = get().user;
+      if (!currentUser) return;
+
+      const isProvider = status === 'APPROVED' || status === 'PENDING_APPROVAL' || status === 'ONBOARDING';
+
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          is_provider: isProvider,
+          provider_status: status,
+        },
+      });
+
+      if (error) {
+        console.error('[Auth] Supabase provider status update error:', error);
+        throw error;
+      }
+
+      set({
+        user: { ...currentUser, isProvider: isProvider, providerStatus: status },
+      });
+    },
+
     logout: async () => {
       console.log('[Auth] Logging out...');
       try {
@@ -347,6 +399,7 @@ export const useAuthStore = create(
         accessToken: null,
         isAuthenticated: false,
         isLoading: false,
+        activeMode: 'customer',
       });
     },
   }))

@@ -11,14 +11,12 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
-import type { Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Home, Briefcase, ChevronLeft } from 'lucide-react-native';
+import { ChevronLeft } from 'lucide-react-native';
 import { useAuthStore } from '@/store/authStore';
 import { colors, spacing, radius, typography } from '@/constants/theme';
 import PrimaryButton from '@/components/PrimaryButton';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
-import type { UserRole } from '@/types';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -26,24 +24,20 @@ export default function RegisterScreen() {
   const register = useAuthStore((s) => s.register);
   const isLoading = useAuthStore((s) => s.isLoading);
 
-  const [step, setStep] = useState<'role' | 'details'>('role');
-  const [role, setRole] = useState<UserRole | null>(null);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const handleRegister = async () => {
-    if (!name.trim() || !email.trim() || !password.trim() || !role) {
+    if (!name.trim() || !email.trim() || !password.trim()) {
       Alert.alert(t('auth.register.errorTitle'), t('auth.register.fillAllFields'));
       return;
     }
 
     try {
-      await register(name.trim(), email.trim(), password, role);
-      const authenticatedUser = useAuthStore.getState().user;
-      const destination: Href = authenticatedUser?.role === 'PROVIDER' ? '/provider/(home)' : '/customer/(home)';
-      console.log('[Register] Success, navigating to:', destination, 'role:', authenticatedUser?.role);
-      router.replace(destination);
+      await register(name.trim(), email.trim(), password);
+      console.log('[Register] Success, navigating to customer home');
+      router.replace('/customer/(home)');
     } catch (error) {
       console.error('[Register] Error:', error);
       Alert.alert(t('auth.register.errorTitle'), t('auth.register.failure'));
@@ -65,119 +59,66 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.formCard}>
-              {step === 'role' ? (
-                <>
-                  <Text style={styles.formTitle}>{t('auth.register.roleTitle')}</Text>
-                  <Text style={styles.formSubtitle}>{t('auth.register.roleSubtitle')}</Text>
+              <Text style={styles.formTitle}>{t('auth.register.detailsTitle')}</Text>
+              <Text style={styles.formSubtitle}>{t('auth.register.detailsSubtitleCustomer')}</Text>
 
-                  <Pressable
-                    style={[styles.roleCard, role === 'CUSTOMER' && styles.roleCardActive]}
-                    onPress={() => setRole('CUSTOMER')}
-                    testID="register-role-customer"
-                  >
-                    <View style={[styles.roleIcon, role === 'CUSTOMER' && styles.roleIconActive]}>
-                      <Home size={24} color={role === 'CUSTOMER' ? colors.primary : colors.textSecondary} />
-                    </View>
-                    <View style={styles.roleInfo}>
-                      <Text style={[styles.roleTitle, role === 'CUSTOMER' && styles.roleTitleActive]}>{t('auth.register.customerTitle')}</Text>
-                      <Text style={styles.roleDesc}>{t('auth.register.customerDescription')}</Text>
-                    </View>
-                  </Pressable>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>{t('auth.register.fullName')}</Text>
+                <TextInput
+                  style={styles.input}
+                  value={name}
+                  onChangeText={setName}
+                  placeholder={t('auth.register.fullNamePlaceholder')}
+                  placeholderTextColor={colors.textTertiary}
+                  autoCapitalize="words"
+                  testID="register-name-input"
+                />
+              </View>
 
-                  <Pressable
-                    style={[styles.roleCard, role === 'PROVIDER' && styles.roleCardActive]}
-                    onPress={() => setRole('PROVIDER')}
-                    testID="register-role-provider"
-                  >
-                    <View style={[styles.roleIcon, role === 'PROVIDER' && styles.roleIconActive]}>
-                      <Briefcase size={24} color={role === 'PROVIDER' ? colors.primary : colors.textSecondary} />
-                    </View>
-                    <View style={styles.roleInfo}>
-                      <Text style={[styles.roleTitle, role === 'PROVIDER' && styles.roleTitleActive]}>{t('auth.register.providerTitle')}</Text>
-                      <Text style={styles.roleDesc}>{t('auth.register.providerDescription')}</Text>
-                    </View>
-                  </Pressable>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>{t('auth.register.email')}</Text>
+                <TextInput
+                  style={styles.input}
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder={t('auth.register.emailPlaceholder')}
+                  placeholderTextColor={colors.textTertiary}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  testID="register-email-input"
+                />
+              </View>
 
-                  <View style={styles.spacer} />
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>{t('auth.register.password')}</Text>
+                <TextInput
+                  style={styles.input}
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder={t('auth.register.passwordPlaceholder')}
+                  placeholderTextColor={colors.textTertiary}
+                  secureTextEntry
+                  testID="register-password-input"
+                />
+              </View>
 
-                  <PrimaryButton
-                    title={t('auth.register.continue')}
-                    onPress={() => setStep('details')}
-                    disabled={!role}
-                    testID="register-continue-button"
-                  />
-                </>
-              ) : (
-                <>
-                  <Pressable onPress={() => setStep('role')} style={styles.stepBack}>
-                    <ChevronLeft size={20} color={colors.textSecondary} />
-                    <Text style={styles.stepBackText}>{t('common.back')}</Text>
-                  </Pressable>
+              <View style={styles.spacer} />
 
-                  <Text style={styles.formTitle}>{t('auth.register.detailsTitle')}</Text>
-                  <Text style={styles.formSubtitle}>
-                    {role === 'CUSTOMER' ? t('auth.register.detailsSubtitleCustomer') : t('auth.register.detailsSubtitleProvider')}
-                  </Text>
+              <PrimaryButton
+                title={t('auth.register.submit')}
+                onPress={handleRegister}
+                loading={isLoading}
+                disabled={!name.trim() || !email.trim() || !password.trim()}
+                testID="register-submit-button"
+              />
 
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>{t('auth.register.fullName')}</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={name}
-                      onChangeText={setName}
-                      placeholder={t('auth.register.fullNamePlaceholder')}
-                      placeholderTextColor={colors.textTertiary}
-                      autoCapitalize="words"
-                      testID="register-name-input"
-                    />
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>{t('auth.register.email')}</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={email}
-                      onChangeText={setEmail}
-                      placeholder={t('auth.register.emailPlaceholder')}
-                      placeholderTextColor={colors.textTertiary}
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      testID="register-email-input"
-                    />
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>{t('auth.register.password')}</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={password}
-                      onChangeText={setPassword}
-                      placeholder={t('auth.register.passwordPlaceholder')}
-                      placeholderTextColor={colors.textTertiary}
-                      secureTextEntry
-                      testID="register-password-input"
-                    />
-                  </View>
-
-                  <View style={styles.spacer} />
-
-                  <PrimaryButton
-                    title={t('auth.register.submit')}
-                    onPress={handleRegister}
-                    loading={isLoading}
-                    disabled={!name.trim() || !email.trim() || !password.trim()}
-                    testID="register-submit-button"
-                  />
-
-                  <Pressable style={styles.loginLink} onPress={() => router.back()}>
-                    <Text style={styles.loginLinkText}>
-                      {t('auth.register.hasAccount')}{' '}
-                      <Text style={styles.loginLinkAccent}>{t('auth.register.login')}</Text>
-                    </Text>
-                  </Pressable>
-                </>
-              )}
+              <Pressable style={styles.loginLink} onPress={() => router.back()}>
+                <Text style={styles.loginLinkText}>
+                  {t('auth.register.hasAccount')}{' '}
+                  <Text style={styles.loginLinkAccent}>{t('auth.register.login')}</Text>
+                </Text>
+              </Pressable>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -223,35 +164,8 @@ const styles = StyleSheet.create({
     paddingTop: spacing.lg,
     paddingBottom: spacing.xxl,
   },
-  stepBack: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.md },
-  stepBackText: { ...typography.captionMedium, color: colors.textSecondary },
   formTitle: { ...typography.h2, color: colors.text, marginBottom: spacing.xs },
   formSubtitle: { ...typography.body, color: colors.textSecondary, marginBottom: spacing.lg },
-  roleCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    marginBottom: spacing.md,
-    backgroundColor: colors.surface,
-  },
-  roleCardActive: { borderColor: colors.accent, backgroundColor: '#F0FAF9' },
-  roleIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  roleIconActive: { backgroundColor: colors.accent },
-  roleInfo: { flex: 1, gap: spacing.xs - 2 },
-  roleTitle: { ...typography.bodyMedium, color: colors.text },
-  roleTitleActive: { color: colors.primary, fontFamily: 'Inter_600SemiBold', fontWeight: '600' as const },
-  roleDesc: { ...typography.caption, color: colors.textSecondary },
   inputGroup: { marginBottom: spacing.md },
   label: { ...typography.captionMedium, color: colors.text, marginBottom: spacing.xs + 2 },
   input: {
