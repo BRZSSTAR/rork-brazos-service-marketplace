@@ -1,6 +1,6 @@
 export const colors = {
-  primary: '#1B2E3C',
-  primaryLight: '#2A4457',
+  primary: '#0E4B52',
+  primaryLight: '#1A6B6F',
   accent: '#C9A84C',
   accentLight: '#D4BA6A',
   accentDark: '#A8893D',
@@ -11,7 +11,7 @@ export const colors = {
   errorLight: '#F5E0E0',
   success: '#2E7D54',
   successLight: '#E0F0E8',
-  text: '#1A2632',
+  text: '#0E2E32',
   textSecondary: '#6B7280',
   textTertiary: '#9CA3AF',
   textInverse: '#FFFFFF',
