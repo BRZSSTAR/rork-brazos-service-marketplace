@@ -66,41 +66,60 @@ export default function CustomerHomeScreen() {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const [cityName, setCityName] = useState<string>('');
+  const [locationLoading, setLocationLoading] = useState<boolean>(true);
+  const [locationError, setLocationError] = useState<string>('');
 
   useEffect(() => {
     let mounted = true;
+
+    async function reverseGeocodeWithNominatim(latitude: number, longitude: number) {
+      console.log('[Home] Reverse geocoding coords:', latitude, longitude);
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`,
+        { headers: { 'Accept-Language': 'pt-BR,pt,en' } }
+      );
+      const data = await response.json();
+      console.log('[Home] Nominatim response:', JSON.stringify(data?.address));
+      const city = data?.address?.city || data?.address?.town || data?.address?.municipality || data?.address?.village || '';
+      const state = data?.address?.state || '';
+      return city && state ? `${city}, ${state}` : city || state || '';
+    }
+
     async function detectCity() {
       try {
         if (Platform.OS === 'web') {
-          if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-              async (position) => {
-                try {
-                  const { latitude, longitude } = position.coords;
-                  const response = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`,
-                    { headers: { 'User-Agent': 'BrazosApp/1.0' } }
-                  );
-                  const data = await response.json();
-                  if (mounted) {
-                    const city = data?.address?.city || data?.address?.town || data?.address?.municipality || '';
-                    const state = data?.address?.state || '';
-                    setCityName(city && state ? `${city}, ${state}` : city || state);
-                    console.log('[Home] City detected (web):', city);
-                  }
-                } catch (e) {
-                  console.log('[Home] Reverse geocode error:', e);
-                }
-              },
-              (err) => console.log('[Home] Web geolocation error:', err),
-              { timeout: 8000 }
-            );
+          if (!('geolocation' in navigator)) {
+            console.log('[Home] Geolocation API not available');
+            if (mounted) { setLocationLoading(false); setLocationError('noapi'); }
+            return;
           }
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              try {
+                const { latitude, longitude } = position.coords;
+                const name = await reverseGeocodeWithNominatim(latitude, longitude);
+                if (mounted) {
+                  setCityName(name);
+                  setLocationLoading(false);
+                  console.log('[Home] City detected (web):', name);
+                }
+              } catch (e) {
+                console.log('[Home] Reverse geocode error:', e);
+                if (mounted) { setLocationLoading(false); setLocationError('geocode'); }
+              }
+            },
+            (err) => {
+              console.log('[Home] Web geolocation error:', err.code, err.message);
+              if (mounted) { setLocationLoading(false); setLocationError('denied'); }
+            },
+            { timeout: 10000, enableHighAccuracy: false, maximumAge: 300000 }
+          );
         } else {
           const Location = await import('expo-location');
           const { status } = await Location.requestForegroundPermissionsAsync();
           if (status !== 'granted') {
             console.log('[Home] Location permission denied');
+            if (mounted) { setLocationLoading(false); setLocationError('denied'); }
             return;
           }
           const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low });
@@ -111,12 +130,19 @@ export default function CustomerHomeScreen() {
           if (mounted && geo) {
             const city = geo.city || geo.subregion || '';
             const state = geo.region || '';
-            setCityName(city && state ? `${city}, ${state}` : city || state);
-            console.log('[Home] City detected (native):', city);
+            const name = city && state ? `${city}, ${state}` : city || state;
+            setCityName(name);
+            setLocationLoading(false);
+            console.log('[Home] City detected (native):', name);
+          } else if (mounted) {
+            const name = await reverseGeocodeWithNominatim(loc.coords.latitude, loc.coords.longitude);
+            setCityName(name);
+            setLocationLoading(false);
           }
         }
       } catch (e) {
         console.log('[Home] Location detection error:', e);
+        if (mounted) { setLocationLoading(false); setLocationError('error'); }
       }
     }
     void detectCity();
@@ -131,12 +157,20 @@ export default function CustomerHomeScreen() {
         <View style={styles.heroSection}>
           <Text style={styles.greeting}>{t('customer.home.greeting', { name: firstName })}</Text>
           <Text style={styles.heroTitle}>{t('customer.home.title')}</Text>
-          {cityName ? (
-            <View style={styles.locationRow}>
-              <MapPin size={14} color={colors.accent} />
+          <View style={styles.locationRow}>
+            <MapPin size={14} color={colors.accent} />
+            {cityName ? (
               <Text style={styles.locationText}>{cityName}</Text>
-            </View>
-          ) : null}
+            ) : locationLoading ? (
+              <Text style={styles.locationText}>{t('customer.home.detectingLocation', { defaultValue: 'Detecting location...' })}</Text>
+            ) : locationError === 'denied' ? (
+              <Pressable onPress={() => { setLocationLoading(true); setLocationError(''); }}>
+                <Text style={styles.locationTextTap}>{t('customer.home.enableLocation', { defaultValue: 'Tap to enable location' })}</Text>
+              </Pressable>
+            ) : (
+              <Text style={styles.locationText}>{t('customer.home.locationUnavailable', { defaultValue: 'Location unavailable' })}</Text>
+            )}
+          </View>
         </View>
 
         <View style={styles.gridContainer}>
@@ -267,5 +301,10 @@ const styles = StyleSheet.create({
   locationText: {
     ...typography.small,
     color: 'rgba(255,255,255,0.7)',
+  },
+  locationTextTap: {
+    ...typography.small,
+    color: colors.accent,
+    textDecorationLine: 'underline' as const,
   },
 });
