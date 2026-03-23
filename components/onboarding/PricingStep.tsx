@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Info } from 'lucide-react-native';
@@ -11,26 +11,32 @@ interface PricingStepProps {
   onNext: () => void;
 }
 
-function formatCentsToDisplay(cents: number): string {
+function centsToInitialText(cents: number): string {
   if (cents === 0) return '';
   return (cents / 100).toFixed(2).replace('.', ',');
 }
 
-function parsePriceInput(text: string): number {
-  const cleaned = text.replace(/[^\d,.]/g, '').replace(',', '.');
-  const num = parseFloat(cleaned);
-  if (isNaN(num)) return 0;
-  return Math.round(num * 100);
-}
-
 export default function PricingStep({ pricePerHourCents, onChangePrice, onNext }: PricingStepProps) {
   const { t } = useTranslation();
+  const [rawText, setRawText] = useState<string>(() => centsToInitialText(pricePerHourCents));
   const canContinue = pricePerHourCents >= 1000;
 
-  const handleTextChange = (text: string) => {
-    const cents = parsePriceInput(text);
-    onChangePrice(cents);
-  };
+  const handleTextChange = useCallback((text: string) => {
+    const digitsOnly = text.replace(/[^\d]/g, '');
+    if (digitsOnly === '') {
+      setRawText('');
+      onChangePrice(0);
+      return;
+    }
+
+    const totalCents = parseInt(digitsOnly, 10);
+    const reais = Math.floor(totalCents / 100);
+    const centavos = totalCents % 100;
+    const formatted = `${reais},${centavos.toString().padStart(2, '0')}`;
+
+    setRawText(formatted);
+    onChangePrice(totalCents);
+  }, [onChangePrice]);
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={120}>
@@ -42,7 +48,7 @@ export default function PricingStep({ pricePerHourCents, onChangePrice, onNext }
           <Text style={styles.currency}>R$</Text>
           <TextInput
             style={styles.priceInput}
-            value={formatCentsToDisplay(pricePerHourCents)}
+            value={rawText}
             onChangeText={handleTextChange}
             placeholder={t('onboarding.pricing.pricePlaceholder')}
             placeholderTextColor={colors.textTertiary}
