@@ -154,6 +154,7 @@ export const useBookingStore = create(
       return 3;
     },
 
+
     formatCpf: formatCpfValue,
     validateCpf: validateCpfValue,
   }))

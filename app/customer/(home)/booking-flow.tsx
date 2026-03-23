@@ -9,6 +9,7 @@ import StepIndicator from '@/components/booking/StepIndicator';
 import CpfStep from '@/components/booking/CpfStep';
 import AddressStep from '@/components/booking/AddressStep';
 import PaymentStep from '@/components/booking/PaymentStep';
+import AddOnsStep from '@/components/booking/AddOnsStep';
 import SummaryStep from '@/components/booking/SummaryStep';
 
 export default function BookingFlowScreen() {
@@ -66,11 +67,12 @@ export default function BookingFlowScreen() {
     t('booking.steps.cpf'),
     t('booking.steps.address'),
     t('booking.steps.payment'),
+    t('booking.steps.addOns'),
     t('booking.steps.summary'),
   ];
 
   const goNext = useCallback(() => {
-    setCurrentStep((prev) => Math.min(prev + 1, 3));
+    setCurrentStep((prev) => Math.min(prev + 1, 4));
   }, []);
 
   const goBack = useCallback(() => {
@@ -105,6 +107,8 @@ export default function BookingFlowScreen() {
       case 2:
         return <PaymentStep onNext={goNext} onBack={goBack} />;
       case 3:
+        return <AddOnsStep onNext={goNext} onBack={goBack} />;
+      case 4:
         return <SummaryStep onBack={goBack} onConfirm={handleConfirm} />;
       default:
         return null;

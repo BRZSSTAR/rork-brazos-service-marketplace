@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import {
   CheckCircle,
   QrCode,
   CreditCard,
+  Sparkles,
 } from 'lucide-react-native';
 import { colors, spacing, typography, radius, shadow } from '@/constants/theme';
 import { useBookingStore } from '@/store/bookingStore';
@@ -63,6 +64,10 @@ export default function SummaryStep({ onBack, onConfirm }: SummaryStepProps) {
   const paymentMethods = useBookingStore((s) => s.paymentMethods);
   const updateDraft = useBookingStore((s) => s.updateDraft);
   const buttonScale = useRef(new Animated.Value(1)).current;
+
+  const addOnsTotal = useMemo(() => {
+    return (draft?.selectedAddOns ?? []).reduce((sum, a) => sum + a.priceCents, 0);
+  }, [draft?.selectedAddOns]);
 
   const selectedAddress = addresses.find((a) => a.id === draft?.addressId);
   const selectedPayment = paymentMethods.find((m) => m.id === draft?.paymentMethodId);
@@ -176,6 +181,25 @@ export default function SummaryStep({ onBack, onConfirm }: SummaryStepProps) {
           />
         </View>
 
+        {(draft?.selectedAddOns ?? []).length > 0 && (
+          <View style={styles.addOnsSection}>
+            <View style={styles.addOnsHeader}>
+              <Sparkles size={16} color={colors.accent} />
+              <Text style={styles.addOnsTitle}>{t('booking.addOns.title')}</Text>
+            </View>
+            {(draft?.selectedAddOns ?? []).map((addOn) => (
+              <View key={addOn.id} style={styles.addOnRow}>
+                <Text style={styles.addOnName}>{addOn.name}</Text>
+                <Text style={styles.addOnPrice}>
+                  {addOn.priceCents > 0
+                    ? `+R$ ${(addOn.priceCents / 100).toFixed(2).replace('.', ',')}`
+                    : '—'}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
+
         <View style={styles.notesSection}>
           <Text style={styles.notesLabel}>{t('booking.summary.notesLabel')}</Text>
           <TextInput
@@ -192,10 +216,25 @@ export default function SummaryStep({ onBack, onConfirm }: SummaryStepProps) {
         </View>
 
         <View style={styles.priceCard}>
+          {addOnsTotal > 0 && (
+            <>
+              <View style={styles.priceRow}>
+                <Text style={styles.priceSubLabel}>{t('booking.summary.service')}</Text>
+                <Text style={styles.priceSubValue}>
+                  {draft?.totalCents ? formatPrice(draft.totalCents) : 'R$ 0,00'}
+                </Text>
+              </View>
+              <View style={styles.priceRow}>
+                <Text style={styles.priceSubLabel}>{t('booking.addOns.title')}</Text>
+                <Text style={styles.priceSubValue}>+{formatPrice(addOnsTotal)}</Text>
+              </View>
+              <View style={styles.priceDivider} />
+            </>
+          )}
           <View style={styles.priceRow}>
             <Text style={styles.priceLabel}>{t('booking.summary.total')}</Text>
             <Text style={styles.priceValue}>
-              {draft?.totalCents ? formatPrice(draft.totalCents) : 'R$ 0,00'}
+              {formatPrice((draft?.totalCents ?? 0) + addOnsTotal)}
             </Text>
           </View>
         </View>
@@ -369,5 +408,50 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     ...typography.button,
     color: colors.surface,
+  },
+  addOnsSection: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    padding: spacing.lg,
+    marginTop: spacing.md,
+    ...shadow.sm,
+  },
+  addOnsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  addOnsTitle: {
+    ...typography.captionMedium,
+    color: colors.text,
+  },
+  addOnRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: spacing.xs + 2,
+  },
+  addOnName: {
+    ...typography.caption,
+    color: colors.textSecondary,
+    flex: 1,
+  },
+  addOnPrice: {
+    ...typography.captionMedium,
+    color: colors.accent,
+  },
+  priceSubLabel: {
+    ...typography.caption,
+    color: 'rgba(255,255,255,0.5)',
+  },
+  priceSubValue: {
+    ...typography.captionMedium,
+    color: 'rgba(255,255,255,0.6)',
+  },
+  priceDivider: {
+    height: 1,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    marginVertical: spacing.sm,
   },
 });

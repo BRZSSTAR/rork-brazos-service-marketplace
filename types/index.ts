@@ -52,6 +52,7 @@ export interface ServiceProvider {
 export interface ProviderProfile {
   id: string;
   userId: string;
+  cpf: string;
   category: ServiceCategory;
   subcategory: string;
   selectedServices: string[];
@@ -61,6 +62,7 @@ export interface ProviderProfile {
   serviceArea: string;
   yearsExperience: number;
   availability: WeeklyAvailability;
+  addOns: ServiceAddOn[];
   status: ProviderOnboardingStatus;
   createdAt: string;
 }
@@ -82,6 +84,7 @@ export interface WeeklyAvailability {
 }
 
 export interface ProviderOnboardingDraft {
+  cpf?: string;
   category?: ServiceCategory;
   subcategory?: string;
   selectedServices?: string[];
@@ -91,6 +94,17 @@ export interface ProviderOnboardingDraft {
   serviceArea?: string;
   yearsExperience?: number;
   availability?: WeeklyAvailability;
+}
+
+export type PricingType = 'hourly' | 'fixed' | 'per_job' | 'per_session' | 'per_unit';
+
+export interface ServiceAddOn {
+  id: string;
+  name: string;
+  description?: string;
+  priceCents: number;
+  pricingType: PricingType;
+  isSelected?: boolean;
 }
 
 export interface Booking {
@@ -151,4 +165,5 @@ export interface BookingDraft {
   notes?: string;
   addressId?: string;
   paymentMethodId?: string;
+  selectedAddOns?: ServiceAddOn[];
 }

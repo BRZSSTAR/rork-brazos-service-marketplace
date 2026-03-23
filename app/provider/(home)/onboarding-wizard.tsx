@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useProviderStore, DEFAULT_AVAILABILITY } from '@/store/providerStore';
 import { colors, spacing, typography } from '@/constants/theme';
 import OnboardingStepIndicator from '@/components/onboarding/OnboardingStepIndicator';
+import ProviderCpfStep from '@/components/onboarding/CpfStep';
 import CategoryStep from '@/components/onboarding/CategoryStep';
 import DetailsStep from '@/components/onboarding/DetailsStep';
 import PricingStep from '@/components/onboarding/PricingStep';
@@ -18,7 +19,7 @@ import type { ServiceCategory, WeeklyAvailability, DayAvailability } from '@/typ
 
 type DayKey = keyof WeeklyAvailability;
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 export default function OnboardingWizardScreen() {
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function OnboardingWizardScreen() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
+  const [cpf, setCpf] = useState<string>(onboardingDraft?.cpf ?? '');
   const [category, setCategory] = useState<ServiceCategory | undefined>(onboardingDraft?.category);
   const [subcategory, setSubcategory] = useState<string | undefined>(onboardingDraft?.subcategory);
   const [selectedServices, setSelectedServices] = useState<string[]>(onboardingDraft?.selectedServices ?? []);
@@ -44,6 +46,7 @@ export default function OnboardingWizardScreen() {
   const [availability, setAvailability] = useState<WeeklyAvailability>(onboardingDraft?.availability ?? DEFAULT_AVAILABILITY);
 
   const stepLabels = [
+    'CPF',
     t('onboarding.steps.category'),
     t('onboarding.steps.details'),
     t('onboarding.steps.pricing'),
@@ -87,6 +90,11 @@ export default function OnboardingWizardScreen() {
     });
   }, [updateOnboardingDraft]);
 
+  const handleCpfNext = useCallback(() => {
+    void updateOnboardingDraft({ cpf });
+    goNext();
+  }, [cpf, updateOnboardingDraft, goNext]);
+
   const handleCategoryNext = useCallback(() => {
     if (category && subcategory && selectedServices.length > 0) {
       void updateOnboardingDraft({ category, subcategory, selectedServices });
@@ -126,6 +134,7 @@ export default function OnboardingWizardScreen() {
     setIsSubmitting(true);
     try {
       await updateOnboardingDraft({
+        cpf,
         category,
         subcategory,
         selectedServices,
@@ -146,7 +155,7 @@ export default function OnboardingWizardScreen() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [user, category, subcategory, selectedServices, serviceTitle, description, serviceArea, yearsExperience, pricePerHourCents, availability, updateOnboardingDraft, submitOnboarding, setProviderStatus]);
+  }, [user, cpf, category, subcategory, selectedServices, serviceTitle, description, serviceArea, yearsExperience, pricePerHourCents, availability, updateOnboardingDraft, submitOnboarding, setProviderStatus]);
 
   if (isSubmitted) {
     return (
@@ -188,6 +197,13 @@ export default function OnboardingWizardScreen() {
 
         <View style={styles.stepContainer}>
           {currentStep === 0 && (
+            <ProviderCpfStep
+              cpf={cpf}
+              onChangeCpf={setCpf}
+              onNext={handleCpfNext}
+            />
+          )}
+          {currentStep === 1 && (
             <CategoryStep
               selected={category}
               selectedSubcategory={subcategory}
@@ -198,7 +214,7 @@ export default function OnboardingWizardScreen() {
               onNext={handleCategoryNext}
             />
           )}
-          {currentStep === 1 && (
+          {currentStep === 2 && (
             <DetailsStep
               serviceTitle={serviceTitle}
               description={description}
@@ -211,22 +227,23 @@ export default function OnboardingWizardScreen() {
               onNext={handleDetailsNext}
             />
           )}
-          {currentStep === 2 && (
+          {currentStep === 3 && (
             <PricingStep
               pricePerHourCents={pricePerHourCents}
               onChangePrice={setPricePerHourCents}
               onNext={handlePricingNext}
             />
           )}
-          {currentStep === 3 && (
+          {currentStep === 4 && (
             <AvailabilityStep
               availability={availability}
               onUpdate={handleAvailabilityUpdate}
               onNext={handleAvailabilityNext}
             />
           )}
-          {currentStep === 4 && category && (
+          {currentStep === 5 && category && (
             <ReviewStep
+              cpf={cpf}
               category={category}
               subcategory={subcategory}
               selectedServices={selectedServices}

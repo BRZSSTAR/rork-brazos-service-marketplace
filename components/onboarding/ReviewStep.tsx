@@ -24,6 +24,7 @@ const categoryColors: Record<ServiceCategory, string> = {
 };
 
 interface ReviewStepProps {
+  cpf?: string;
   category: ServiceCategory;
   subcategory?: string;
   selectedServices?: string[];
@@ -53,6 +54,7 @@ function ReviewRow({ label, value, stepIndex, onEdit }: { label: string; value: 
 }
 
 export default function ReviewStep({
+  cpf,
   category,
   subcategory,
   selectedServices,
@@ -96,24 +98,31 @@ export default function ReviewStep({
           </View>
         </View>
 
+        {!!cpf && (
+          <>
+            <View style={styles.divider} />
+            <ReviewRow label="CPF" value={cpf} stepIndex={0} onEdit={onEdit} />
+          </>
+        )}
+
         {(!!subName || !!servicesDisplay) && (
           <>
             <View style={styles.divider} />
             {!!subName && (
-              <ReviewRow label={t('onboarding.review.subcategoryLabel')} value={subName} stepIndex={0} onEdit={onEdit} />
+              <ReviewRow label={t('onboarding.review.subcategoryLabel')} value={subName} stepIndex={1} onEdit={onEdit} />
             )}
             {!!servicesDisplay && (
-              <ReviewRow label={t('onboarding.review.servicesLabel')} value={servicesDisplay} stepIndex={0} onEdit={onEdit} />
+              <ReviewRow label={t('onboarding.review.servicesLabel')} value={servicesDisplay} stepIndex={1} onEdit={onEdit} />
             )}
           </>
         )}
 
         <View style={styles.divider} />
 
-        <ReviewRow label={t('onboarding.review.descriptionLabel')} value={description} stepIndex={1} onEdit={onEdit} />
-        <ReviewRow label={t('onboarding.review.areaLabel')} value={serviceArea || '\u2014'} stepIndex={1} onEdit={onEdit} />
-        <ReviewRow label={t('onboarding.review.experienceLabel')} value={`${yearsExperience} ${t('onboarding.review.yearsUnit')}`} stepIndex={1} onEdit={onEdit} />
-        <ReviewRow label={t('onboarding.review.priceLabel')} value={priceDisplay} stepIndex={2} onEdit={onEdit} />
+        <ReviewRow label={t('onboarding.review.descriptionLabel')} value={description} stepIndex={2} onEdit={onEdit} />
+        <ReviewRow label={t('onboarding.review.areaLabel')} value={serviceArea || '\u2014'} stepIndex={2} onEdit={onEdit} />
+        <ReviewRow label={t('onboarding.review.experienceLabel')} value={`${yearsExperience} ${t('onboarding.review.yearsUnit')}`} stepIndex={2} onEdit={onEdit} />
+        <ReviewRow label={t('onboarding.review.priceLabel')} value={priceDisplay} stepIndex={3} onEdit={onEdit} />
 
         <View style={styles.divider} />
 
@@ -122,7 +131,7 @@ export default function ReviewStep({
             <Text style={styles.rowLabel}>{t('onboarding.review.availabilityLabel')}</Text>
             <Text style={styles.rowValue}>{enabledDays || '\u2014'}</Text>
           </View>
-          <Pressable onPress={() => onEdit(3)} style={styles.editButton} hitSlop={8}>
+          <Pressable onPress={() => onEdit(4)} style={styles.editButton} hitSlop={8}>
             <Edit3 size={16} color={colors.accent} />
           </Pressable>
         </View>

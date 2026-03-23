@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, Animated, Dimensions } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, Pressable, Animated, Dimensions, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Home, Scissors, Heart, ChefHat } from 'lucide-react-native';
+import { Home, Scissors, Heart, ChefHat, MapPin } from 'lucide-react-native';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
 import { useAuthStore } from '@/store/authStore';
 import { colors, spacing, radius, typography, shadow } from '@/constants/theme';
@@ -65,6 +65,63 @@ export default function CustomerHomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
+  const [cityName, setCityName] = useState<string>('');
+
+  useEffect(() => {
+    let mounted = true;
+    async function detectCity() {
+      try {
+        if (Platform.OS === 'web') {
+          if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                try {
+                  const { latitude, longitude } = position.coords;
+                  const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`,
+                    { headers: { 'User-Agent': 'BrazosApp/1.0' } }
+                  );
+                  const data = await response.json();
+                  if (mounted) {
+                    const city = data?.address?.city || data?.address?.town || data?.address?.municipality || '';
+                    const state = data?.address?.state || '';
+                    setCityName(city && state ? `${city}, ${state}` : city || state);
+                    console.log('[Home] City detected (web):', city);
+                  }
+                } catch (e) {
+                  console.log('[Home] Reverse geocode error:', e);
+                }
+              },
+              (err) => console.log('[Home] Web geolocation error:', err),
+              { timeout: 8000 }
+            );
+          }
+        } else {
+          const Location = await import('expo-location');
+          const { status } = await Location.requestForegroundPermissionsAsync();
+          if (status !== 'granted') {
+            console.log('[Home] Location permission denied');
+            return;
+          }
+          const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low });
+          const [geo] = await Location.reverseGeocodeAsync({
+            latitude: loc.coords.latitude,
+            longitude: loc.coords.longitude,
+          });
+          if (mounted && geo) {
+            const city = geo.city || geo.subregion || '';
+            const state = geo.region || '';
+            setCityName(city && state ? `${city}, ${state}` : city || state);
+            console.log('[Home] City detected (native):', city);
+          }
+        }
+      } catch (e) {
+        console.log('[Home] Location detection error:', e);
+      }
+    }
+    void detectCity();
+    return () => { mounted = false; };
+  }, []);
 
   const firstName = user?.name?.trim().split(/\s+/)[0] ?? t('customer.home.fallbackName');
 
@@ -74,6 +131,12 @@ export default function CustomerHomeScreen() {
         <View style={styles.heroSection}>
           <Text style={styles.greeting}>{t('customer.home.greeting', { name: firstName })}</Text>
           <Text style={styles.heroTitle}>{t('customer.home.title')}</Text>
+          {cityName ? (
+            <View style={styles.locationRow}>
+              <MapPin size={14} color={colors.accent} />
+              <Text style={styles.locationText}>{cityName}</Text>
+            </View>
+          ) : null}
         </View>
 
         <View style={styles.gridContainer}>
@@ -195,4 +258,14 @@ const styles = StyleSheet.create({
   },
   emptyText: { ...typography.bodyMedium, color: colors.text },
   emptySubtext: { ...typography.caption, color: colors.textSecondary, textAlign: 'center' },
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginTop: spacing.xs,
+  },
+  locationText: {
+    ...typography.small,
+    color: 'rgba(255,255,255,0.7)',
+  },
 });

@@ -79,7 +79,11 @@ export const resources = {
       },
       onboarding: {
         title: 'Cadastro Profissional',
-        steps: { category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão' },
+        steps: { cpf: 'CPF', category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão' },
+        cpf: {
+          title: 'Informe seu CPF', subtitle: 'Precisamos do seu CPF para cadastro profissional e emissão de notas fiscais.',
+          hint: 'Seu CPF é armazenado com segurança e usado apenas para fins fiscais e regulatórios.'
+        },
         category: {
           title: 'Qual serviço você oferece?', subtitle: 'Selecione a categoria do seu serviço.',
           selectSubcategory: 'Escolha sua especialidade', selectServices: 'Selecione os serviços que você oferece.',
@@ -144,7 +148,7 @@ export const resources = {
         providerOrders: { root: 'Pedidos', activeBooking: 'Serviço Ativo' }, providerProfile: { root: 'Perfil' }, providerSchedule: { root: 'Agenda' }
       },
       booking: {
-        steps: { cpf: 'CPF', address: 'Endereço', payment: 'Pagamento', summary: 'Resumo' },
+        steps: { cpf: 'CPF', address: 'Endereço', payment: 'Pagamento', addOns: 'Adicionais', summary: 'Resumo' },
         flow: { demoService: 'Limpeza residencial' },
         cpf: {
           title: 'Informe seu CPF', subtitle: 'Precisamos do seu CPF para emitir notas fiscais e garantir sua segurança.',
@@ -184,7 +188,49 @@ export const resources = {
           noAddress: 'Nenhum endereço selecionado', noPayment: 'Nenhum pagamento selecionado',
           notesLabel: 'Observações', notesPlaceholder: 'Informações adicionais para o profissional...',
           total: 'Total', confirmTitle: 'Confirmar reserva?', confirmMessage: 'Deseja confirmar esta reserva?',
-          confirmButton: 'Confirmar reserva', successTitle: 'Reserva confirmada!', successMessage: 'Sua reserva foi realizada com sucesso.'
+          confirmButton: 'Confirmar reserva', successTitle: 'Reserva confirmada!', successMessage: 'Sua reserva foi realizada com sucesso.',
+          service: 'Serviço'
+        },
+        addOns: {
+          title: 'Adicionais', subtitle: 'Personalize seu serviço com extras opcionais.',
+          perHour: 'Por hora', fixed: 'Valor fixo', perJob: 'Por serviço', perSession: 'Por sessão', perUnit: 'Por unidade',
+          addOnsTotal: 'Total dos adicionais', quoteOnRequest: 'Sob consulta',
+          continueWith: 'Continuar com {{count}} extra(s)', skip: 'Pular extras',
+          items: {
+            cleaning_supplies: { name: 'Produtos de limpeza', desc: 'Produtos profissionais inclusos' },
+            inside_fridge: { name: 'Limpeza interna da geladeira', desc: 'Limpeza completa do interior' },
+            inside_oven: { name: 'Limpeza interna do forno', desc: 'Remoção de gordura e sujeira' },
+            laundry_fold: { name: 'Lavar e dobrar roupas', desc: 'Lavagem e organização de roupas' },
+            ironing: { name: 'Passar roupas', desc: 'Serviço de passar roupas' },
+            organize_closets: { name: 'Organizar armários', desc: 'Organização completa de armários' },
+            emergency_surcharge: { name: 'Taxa de emergência', desc: 'Atendimento urgente/emergencial' },
+            materials_included: { name: 'Materiais inclusos', desc: 'Peças e materiais necessários' },
+            warranty_extension: { name: 'Garantia estendida', desc: 'Garantia adicional do serviço' },
+            debris_removal: { name: 'Remoção de entulho', desc: 'Limpeza e descarte de resíduos' },
+            weekend_surcharge: { name: 'Taxa de fim de semana', desc: 'Atendimento aos sábados e domingos' },
+            holiday_surcharge: { name: 'Taxa de feriado', desc: 'Atendimento em feriados' },
+            premium_products: { name: 'Produtos premium', desc: 'Uso de produtos de alta qualidade' },
+            deep_conditioning: { name: 'Hidratação profunda', desc: 'Tratamento capilar intensivo' },
+            scalp_massage: { name: 'Massagem no couro cabeludo', desc: 'Relaxamento e estímulo capilar' },
+            blowout_addon: { name: 'Escova adicional', desc: 'Escova profissional' },
+            nail_art_addon: { name: 'Nail art', desc: 'Decoração artística nas unhas' },
+            gel_removal: { name: 'Remoção de gel', desc: 'Remoção segura de esmalte em gel' },
+            hand_massage: { name: 'Massagem nas mãos', desc: 'Relaxamento e hidratação' },
+            paraffin_treatment: { name: 'Tratamento de parafina', desc: 'Hidratação intensa com parafina' },
+            travel_fee: { name: 'Taxa de deslocamento', desc: 'Custo de transporte até o local' },
+            night_shift: { name: 'Plantão noturno', desc: 'Atendimento no período noturno' },
+            medical_report: { name: 'Relatório médico', desc: 'Relatório detalhado do atendimento' },
+            equipment_rental: { name: 'Aluguel de equipamentos', desc: 'Equipamentos especializados' },
+            progress_report: { name: 'Relatório de progresso', desc: 'Acompanhamento da evolução' },
+            home_exercise_plan: { name: 'Plano de exercícios', desc: 'Exercícios para fazer em casa' },
+            grocery_shopping: { name: 'Compra de ingredientes', desc: 'Seleção e compra no mercado' },
+            kitchen_cleanup: { name: 'Limpeza da cozinha', desc: 'Limpeza completa após o serviço' },
+            meal_storage: { name: 'Armazenamento de refeições', desc: 'Porcionamento e armazenamento' },
+            dietary_consultation: { name: 'Consultoria alimentar', desc: 'Orientação nutricional personalizada' },
+            table_setup: { name: 'Montagem de mesa', desc: 'Decoração e organização da mesa' },
+            waitstaff: { name: 'Garçom/Garçonete', desc: 'Serviço de mesa profissional' },
+            dishwashing: { name: 'Lavagem de louça', desc: 'Limpeza completa da louça' }
+          }
         }
       },
       status: { pending: 'Pendente', confirmed: 'Confirmado', inProgress: 'Em andamento', completed: 'Concluído', cancelled: 'Cancelado' },
@@ -266,7 +312,11 @@ export const resources = {
       },
       onboarding: {
         title: 'Professional Onboarding',
-        steps: { category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review' },
+        steps: { cpf: 'CPF', category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review' },
+        cpf: {
+          title: 'Enter your CPF', subtitle: 'We need your CPF for professional registration and invoice issuance.',
+          hint: 'Your CPF is stored securely and used only for tax and regulatory purposes.'
+        },
         category: {
           title: 'What service do you offer?', subtitle: 'Select your service category.',
           selectSubcategory: 'Choose your specialty', selectServices: 'Select the services you offer.',
@@ -331,7 +381,7 @@ export const resources = {
         providerOrders: { root: 'Orders', activeBooking: 'Active Service' }, providerProfile: { root: 'Profile' }, providerSchedule: { root: 'Schedule' }
       },
       booking: {
-        steps: { cpf: 'CPF', address: 'Address', payment: 'Payment', summary: 'Summary' },
+        steps: { cpf: 'CPF', address: 'Address', payment: 'Payment', addOns: 'Add-ons', summary: 'Summary' },
         flow: { demoService: 'House cleaning' },
         cpf: {
           title: 'Enter your CPF', subtitle: 'We need your CPF to issue invoices and ensure your safety.',
@@ -371,7 +421,49 @@ export const resources = {
           noAddress: 'No address selected', noPayment: 'No payment selected',
           notesLabel: 'Notes', notesPlaceholder: 'Additional information for the professional...',
           total: 'Total', confirmTitle: 'Confirm booking?', confirmMessage: 'Do you want to confirm this booking?',
-          confirmButton: 'Confirm booking', successTitle: 'Booking confirmed!', successMessage: 'Your booking has been successfully placed.'
+          confirmButton: 'Confirm booking', successTitle: 'Booking confirmed!', successMessage: 'Your booking has been successfully placed.',
+          service: 'Service'
+        },
+        addOns: {
+          title: 'Add-ons', subtitle: 'Customize your service with optional extras.',
+          perHour: 'Per hour', fixed: 'Fixed', perJob: 'Per job', perSession: 'Per session', perUnit: 'Per unit',
+          addOnsTotal: 'Add-ons total', quoteOnRequest: 'Quote on request',
+          continueWith: 'Continue with {{count}} extra(s)', skip: 'Skip extras',
+          items: {
+            cleaning_supplies: { name: 'Cleaning supplies', desc: 'Professional products included' },
+            inside_fridge: { name: 'Inside fridge cleaning', desc: 'Complete interior cleaning' },
+            inside_oven: { name: 'Inside oven cleaning', desc: 'Grease and dirt removal' },
+            laundry_fold: { name: 'Laundry & fold', desc: 'Wash and organize clothes' },
+            ironing: { name: 'Ironing', desc: 'Clothes ironing service' },
+            organize_closets: { name: 'Organize closets', desc: 'Full closet organization' },
+            emergency_surcharge: { name: 'Emergency surcharge', desc: 'Urgent/emergency service' },
+            materials_included: { name: 'Materials included', desc: 'Necessary parts and materials' },
+            warranty_extension: { name: 'Extended warranty', desc: 'Additional service warranty' },
+            debris_removal: { name: 'Debris removal', desc: 'Cleanup and waste disposal' },
+            weekend_surcharge: { name: 'Weekend surcharge', desc: 'Saturday and Sunday service' },
+            holiday_surcharge: { name: 'Holiday surcharge', desc: 'Service on holidays' },
+            premium_products: { name: 'Premium products', desc: 'High-quality product usage' },
+            deep_conditioning: { name: 'Deep conditioning', desc: 'Intensive hair treatment' },
+            scalp_massage: { name: 'Scalp massage', desc: 'Relaxation and hair stimulation' },
+            blowout_addon: { name: 'Blowout add-on', desc: 'Professional blowout' },
+            nail_art_addon: { name: 'Nail art', desc: 'Artistic nail decoration' },
+            gel_removal: { name: 'Gel removal', desc: 'Safe gel polish removal' },
+            hand_massage: { name: 'Hand massage', desc: 'Relaxation and hydration' },
+            paraffin_treatment: { name: 'Paraffin treatment', desc: 'Intense paraffin hydration' },
+            travel_fee: { name: 'Travel fee', desc: 'Transport cost to location' },
+            night_shift: { name: 'Night shift', desc: 'Nighttime service' },
+            medical_report: { name: 'Medical report', desc: 'Detailed service report' },
+            equipment_rental: { name: 'Equipment rental', desc: 'Specialized equipment' },
+            progress_report: { name: 'Progress report', desc: 'Evolution tracking' },
+            home_exercise_plan: { name: 'Exercise plan', desc: 'Home exercise program' },
+            grocery_shopping: { name: 'Grocery shopping', desc: 'Ingredient selection and purchase' },
+            kitchen_cleanup: { name: 'Kitchen cleanup', desc: 'Full cleanup after service' },
+            meal_storage: { name: 'Meal storage', desc: 'Portioning and storage' },
+            dietary_consultation: { name: 'Dietary consultation', desc: 'Personalized nutrition guidance' },
+            table_setup: { name: 'Table setup', desc: 'Table decoration and arrangement' },
+            waitstaff: { name: 'Waitstaff', desc: 'Professional table service' },
+            dishwashing: { name: 'Dishwashing', desc: 'Complete dishwashing' }
+          }
         }
       },
       status: { pending: 'Pending', confirmed: 'Confirmed', inProgress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' },
@@ -453,7 +545,11 @@ export const resources = {
       },
       onboarding: {
         title: 'Registro Profesional',
-        steps: { category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión' },
+        steps: { cpf: 'CPF', category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión' },
+        cpf: {
+          title: 'Ingresa tu CPF', subtitle: 'Necesitamos tu CPF para el registro profesional y la emisión de facturas.',
+          hint: 'Tu CPF se almacena de forma segura y se usa solo con fines fiscales y regulatorios.'
+        },
         category: {
           title: '¿Qué servicio ofreces?', subtitle: 'Selecciona la categoría de tu servicio.',
           selectSubcategory: 'Elige tu especialidad', selectServices: 'Selecciona los servicios que ofreces.',
@@ -518,7 +614,7 @@ export const resources = {
         providerOrders: { root: 'Pedidos', activeBooking: 'Servicio Activo' }, providerProfile: { root: 'Perfil' }, providerSchedule: { root: 'Agenda' }
       },
       booking: {
-        steps: { cpf: 'CPF', address: 'Dirección', payment: 'Pago', summary: 'Resumen' },
+        steps: { cpf: 'CPF', address: 'Dirección', payment: 'Pago', addOns: 'Adicionales', summary: 'Resumen' },
         flow: { demoService: 'Limpieza del hogar' },
         cpf: {
           title: 'Ingresa tu CPF', subtitle: 'Necesitamos tu CPF para emitir facturas y garantizar tu seguridad.',
@@ -558,7 +654,49 @@ export const resources = {
           noAddress: 'Ninguna dirección seleccionada', noPayment: 'Ningún pago seleccionado',
           notesLabel: 'Observaciones', notesPlaceholder: 'Información adicional para el profesional...',
           total: 'Total', confirmTitle: '¿Confirmar reserva?', confirmMessage: '¿Deseas confirmar esta reserva?',
-          confirmButton: 'Confirmar reserva', successTitle: '¡Reserva confirmada!', successMessage: 'Tu reserva se ha realizado con éxito.'
+          confirmButton: 'Confirmar reserva', successTitle: '¡Reserva confirmada!', successMessage: 'Tu reserva se ha realizado con éxito.',
+          service: 'Servicio'
+        },
+        addOns: {
+          title: 'Adicionales', subtitle: 'Personaliza tu servicio con extras opcionales.',
+          perHour: 'Por hora', fixed: 'Fijo', perJob: 'Por trabajo', perSession: 'Por sesión', perUnit: 'Por unidad',
+          addOnsTotal: 'Total de adicionales', quoteOnRequest: 'Bajo consulta',
+          continueWith: 'Continuar con {{count}} extra(s)', skip: 'Omitir extras',
+          items: {
+            cleaning_supplies: { name: 'Productos de limpieza', desc: 'Productos profesionales incluidos' },
+            inside_fridge: { name: 'Limpieza interior del refrigerador', desc: 'Limpieza completa del interior' },
+            inside_oven: { name: 'Limpieza interior del horno', desc: 'Eliminación de grasa y suciedad' },
+            laundry_fold: { name: 'Lavar y doblar ropa', desc: 'Lavado y organización de ropa' },
+            ironing: { name: 'Planchar ropa', desc: 'Servicio de planchado' },
+            organize_closets: { name: 'Organizar armarios', desc: 'Organización completa de armarios' },
+            emergency_surcharge: { name: 'Recargo de emergencia', desc: 'Servicio urgente/emergencia' },
+            materials_included: { name: 'Materiales incluidos', desc: 'Piezas y materiales necesarios' },
+            warranty_extension: { name: 'Garantía extendida', desc: 'Garantía adicional del servicio' },
+            debris_removal: { name: 'Remoción de escombros', desc: 'Limpieza y eliminación de residuos' },
+            weekend_surcharge: { name: 'Recargo de fin de semana', desc: 'Servicio sábados y domingos' },
+            holiday_surcharge: { name: 'Recargo de feriado', desc: 'Servicio en feriados' },
+            premium_products: { name: 'Productos premium', desc: 'Uso de productos de alta calidad' },
+            deep_conditioning: { name: 'Hidratación profunda', desc: 'Tratamiento capilar intensivo' },
+            scalp_massage: { name: 'Masaje del cuero cabelludo', desc: 'Relajación y estímulo capilar' },
+            blowout_addon: { name: 'Secado adicional', desc: 'Secado profesional' },
+            nail_art_addon: { name: 'Nail art', desc: 'Decoración artística de uñas' },
+            gel_removal: { name: 'Remoción de gel', desc: 'Remoción segura de esmalte en gel' },
+            hand_massage: { name: 'Masaje de manos', desc: 'Relajación e hidratación' },
+            paraffin_treatment: { name: 'Tratamiento de parafina', desc: 'Hidratación intensa con parafina' },
+            travel_fee: { name: 'Tarifa de desplazamiento', desc: 'Costo de transporte al lugar' },
+            night_shift: { name: 'Turno nocturno', desc: 'Servicio en horario nocturno' },
+            medical_report: { name: 'Informe médico', desc: 'Informe detallado del servicio' },
+            equipment_rental: { name: 'Alquiler de equipos', desc: 'Equipos especializados' },
+            progress_report: { name: 'Informe de progreso', desc: 'Seguimiento de la evolución' },
+            home_exercise_plan: { name: 'Plan de ejercicios', desc: 'Ejercicios para hacer en casa' },
+            grocery_shopping: { name: 'Compra de ingredientes', desc: 'Selección y compra en el mercado' },
+            kitchen_cleanup: { name: 'Limpieza de cocina', desc: 'Limpieza completa después del servicio' },
+            meal_storage: { name: 'Almacenamiento de comidas', desc: 'Porcionado y almacenamiento' },
+            dietary_consultation: { name: 'Consulta alimentaria', desc: 'Orientación nutricional personalizada' },
+            table_setup: { name: 'Montaje de mesa', desc: 'Decoración y organización de mesa' },
+            waitstaff: { name: 'Mesero/Mesera', desc: 'Servicio de mesa profesional' },
+            dishwashing: { name: 'Lavado de platos', desc: 'Lavado completo de vajilla' }
+          }
         }
       },
       status: { pending: 'Pendiente', confirmed: 'Confirmado', inProgress: 'En curso', completed: 'Completado', cancelled: 'Cancelado' },

@@ -74,13 +74,14 @@ export const useProviderStore = create(
 
     submitOnboarding: async (userId: string) => {
       const draft = get().onboardingDraft;
-      if (!draft?.category || !draft?.serviceTitle || !draft?.description || !draft?.pricePerHourCents) {
+      if (!draft?.cpf || !draft?.category || !draft?.serviceTitle || !draft?.description || !draft?.pricePerHourCents) {
         throw new Error('Incomplete onboarding data');
       }
 
       const profile: ProviderProfile = {
         id: generateId(),
         userId,
+        cpf: draft.cpf,
         category: draft.category,
         subcategory: draft.subcategory ?? '',
         selectedServices: draft.selectedServices ?? [],
@@ -90,6 +91,7 @@ export const useProviderStore = create(
         serviceArea: draft.serviceArea ?? '',
         yearsExperience: draft.yearsExperience ?? 0,
         availability: draft.availability ?? DEFAULT_AVAILABILITY,
+        addOns: [],
         status: 'PENDING_APPROVAL',
         createdAt: new Date().toISOString(),
       };
@@ -117,11 +119,12 @@ export const useProviderStore = create(
     getOnboardingStep: (): number => {
       const draft = get().onboardingDraft;
       if (!draft) return 0;
-      if (!draft.category) return 0;
-      if (!draft.serviceTitle || !draft.description) return 1;
-      if (!draft.pricePerHourCents) return 2;
-      if (!draft.availability) return 3;
-      return 4;
+      if (!draft.cpf) return 0;
+      if (!draft.category) return 1;
+      if (!draft.serviceTitle || !draft.description) return 2;
+      if (!draft.pricePerHourCents) return 3;
+      if (!draft.availability) return 4;
+      return 5;
     },
   }))
 );
