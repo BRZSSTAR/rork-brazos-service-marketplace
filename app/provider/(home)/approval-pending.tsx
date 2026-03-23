@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Animated, Pressable, Alert } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Clock, ShieldCheck } from 'lucide-react-native';
+import { Clock, ShieldCheck, CheckCircle } from 'lucide-react-native';
 import { useAuthStore } from '@/store/authStore';
+import { useProviderStore } from '@/store/providerStore';
 import { colors, spacing, typography } from '@/constants/theme';
 import PrimaryButton from '@/components/PrimaryButton';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
@@ -12,6 +13,10 @@ export default function ApprovalPendingScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
+  const setProviderStatus = useAuthStore((s) => s.setProviderStatus);
+  const setActiveMode = useAuthStore((s) => s.setActiveMode);
+  const updateProfile = useProviderStore((s) => s.updateProfile);
+  const [approving, setApproving] = useState(false);
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -45,6 +50,31 @@ export default function ApprovalPendingScreen() {
                 : t('customer.profile.approvalPendingDesc')}
             </Text>
           </View>
+
+          <Pressable
+            style={[styles.approveButton, approving && styles.approveButtonDisabled]}
+            onPress={async () => {
+              try {
+                setApproving(true);
+                console.log('[Approval] Manually approving provider...');
+                await setProviderStatus('APPROVED');
+                await updateProfile({ status: 'APPROVED' });
+                await setActiveMode('provider');
+                console.log('[Approval] Provider approved, redirecting...');
+                router.replace('/provider/(home)');
+              } catch (err) {
+                console.error('[Approval] Error:', err);
+                Alert.alert('Error', 'Failed to approve. Try again.');
+                setApproving(false);
+              }
+            }}
+            disabled={approving}
+          >
+            <CheckCircle size={20} color="#fff" />
+            <Text style={styles.approveButtonText}>
+              {approving ? 'Approving...' : 'Dev: Approve Now'}
+            </Text>
+          </Pressable>
 
           <View style={styles.footer}>
             <PrimaryButton
@@ -105,6 +135,26 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: '100%',
+    marginTop: spacing.md,
+  },
+  approveButton: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    gap: spacing.sm,
+    backgroundColor: '#10B981',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: 14,
+    borderRadius: 12,
+    width: '100%',
     marginTop: spacing.xl,
+  },
+  approveButtonDisabled: {
+    opacity: 0.6,
+  },
+  approveButtonText: {
+    ...typography.bodyMedium,
+    color: '#fff',
+    fontWeight: '600' as const,
   },
 });
