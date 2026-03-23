@@ -53,6 +53,8 @@ export interface ProviderProfile {
   id: string;
   userId: string;
   category: ServiceCategory;
+  subcategory: string;
+  selectedServices: string[];
   serviceTitle: string;
   description: string;
   pricePerHourCents: number;
@@ -81,6 +83,8 @@ export interface WeeklyAvailability {
 
 export interface ProviderOnboardingDraft {
   category?: ServiceCategory;
+  subcategory?: string;
+  selectedServices?: string[];
   serviceTitle?: string;
   description?: string;
   pricePerHourCents?: number;

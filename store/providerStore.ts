@@ -82,6 +82,8 @@ export const useProviderStore = create(
         id: generateId(),
         userId,
         category: draft.category,
+        subcategory: draft.subcategory ?? '',
+        selectedServices: draft.selectedServices ?? [],
         serviceTitle: draft.serviceTitle,
         description: draft.description,
         pricePerHourCents: draft.pricePerHourCents,

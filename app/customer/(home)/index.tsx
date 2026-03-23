@@ -84,7 +84,7 @@ export default function CustomerHomeScreen() {
               IconComp={categoryMeta[0].icon}
               color={categoryMeta[0].color}
               bg={categoryMeta[0].bg}
-              onPress={() => router.push('/customer/category-browse')}
+              onPress={() => router.push({ pathname: '/customer/category-browse', params: { categoryId: 'HOME' } })}
               testID="category-home"
             />
             <CategoryTile
@@ -93,7 +93,7 @@ export default function CustomerHomeScreen() {
               IconComp={categoryMeta[1].icon}
               color={categoryMeta[1].color}
               bg={categoryMeta[1].bg}
-              onPress={() => router.push('/customer/category-browse')}
+              onPress={() => router.push({ pathname: '/customer/category-browse', params: { categoryId: 'BEAUTY' } })}
               testID="category-beauty"
             />
           </View>
@@ -104,7 +104,7 @@ export default function CustomerHomeScreen() {
               IconComp={categoryMeta[2].icon}
               color={categoryMeta[2].color}
               bg={categoryMeta[2].bg}
-              onPress={() => router.push('/customer/category-browse')}
+              onPress={() => router.push({ pathname: '/customer/category-browse', params: { categoryId: 'HEALTH' } })}
               testID="category-health"
             />
             <CategoryTile
@@ -113,7 +113,7 @@ export default function CustomerHomeScreen() {
               IconComp={categoryMeta[3].icon}
               color={categoryMeta[3].color}
               bg={categoryMeta[3].bg}
-              onPress={() => router.push('/customer/category-browse')}
+              onPress={() => router.push({ pathname: '/customer/category-browse', params: { categoryId: 'CHEF' } })}
               testID="category-chef"
             />
           </View>

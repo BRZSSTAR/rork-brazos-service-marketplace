@@ -1,3 +1,5 @@
+import { catalogPtBR, catalogEn, catalogEs } from './catalogTranslations';
+
 export const resources = {
   'pt-BR': {
     translation: {
@@ -80,6 +82,7 @@ export const resources = {
         steps: { category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão' },
         category: {
           title: 'Qual serviço você oferece?', subtitle: 'Selecione a categoria do seu serviço.',
+          selectSubcategory: 'Escolha sua especialidade', selectServices: 'Selecione os serviços que você oferece.',
           home: 'Casa', homeDesc: 'Limpeza, reparos, manutenção',
           beauty: 'Beleza', beautyDesc: 'Cabelo, unhas, estética',
           health: 'Saúde', healthDesc: 'Bem-estar, massagem, cuidados',
@@ -105,6 +108,7 @@ export const resources = {
         review: {
           title: 'Revise seu perfil', subtitle: 'Confira os dados antes de enviar.',
           categoryLabel: 'Categoria', serviceLabel: 'Serviço', descriptionLabel: 'Descrição',
+          subcategoryLabel: 'Especialidade', servicesLabel: 'Serviços oferecidos',
           areaLabel: 'Área', experienceLabel: 'Experiência', priceLabel: 'Preço/hora',
           availabilityLabel: 'Disponibilidade', yearsUnit: 'anos',
           submit: 'Enviar para aprovação', editing: 'Editar'
@@ -183,7 +187,8 @@ export const resources = {
           confirmButton: 'Confirmar reserva', successTitle: 'Reserva confirmada!', successMessage: 'Sua reserva foi realizada com sucesso.'
         }
       },
-      status: { pending: 'Pendente', confirmed: 'Confirmado', inProgress: 'Em andamento', completed: 'Concluído', cancelled: 'Cancelado' }
+      status: { pending: 'Pendente', confirmed: 'Confirmado', inProgress: 'Em andamento', completed: 'Concluído', cancelled: 'Cancelado' },
+      catalog: catalogPtBR
     }
   },
   en: {
@@ -264,6 +269,7 @@ export const resources = {
         steps: { category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review' },
         category: {
           title: 'What service do you offer?', subtitle: 'Select your service category.',
+          selectSubcategory: 'Choose your specialty', selectServices: 'Select the services you offer.',
           home: 'Home', homeDesc: 'Cleaning, repairs, maintenance',
           beauty: 'Beauty', beautyDesc: 'Hair, nails, aesthetics',
           health: 'Health', healthDesc: 'Wellness, massage, care',
@@ -289,6 +295,7 @@ export const resources = {
         review: {
           title: 'Review your profile', subtitle: 'Check your details before submitting.',
           categoryLabel: 'Category', serviceLabel: 'Service', descriptionLabel: 'Description',
+          subcategoryLabel: 'Specialty', servicesLabel: 'Services offered',
           areaLabel: 'Area', experienceLabel: 'Experience', priceLabel: 'Price/hour',
           availabilityLabel: 'Availability', yearsUnit: 'years',
           submit: 'Submit for approval', editing: 'Edit'
@@ -367,7 +374,8 @@ export const resources = {
           confirmButton: 'Confirm booking', successTitle: 'Booking confirmed!', successMessage: 'Your booking has been successfully placed.'
         }
       },
-      status: { pending: 'Pending', confirmed: 'Confirmed', inProgress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' }
+      status: { pending: 'Pending', confirmed: 'Confirmed', inProgress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' },
+      catalog: catalogEn
     }
   },
   es: {
@@ -448,6 +456,7 @@ export const resources = {
         steps: { category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión' },
         category: {
           title: '¿Qué servicio ofreces?', subtitle: 'Selecciona la categoría de tu servicio.',
+          selectSubcategory: 'Elige tu especialidad', selectServices: 'Selecciona los servicios que ofreces.',
           home: 'Hogar', homeDesc: 'Limpieza, reparaciones, mantenimiento',
           beauty: 'Belleza', beautyDesc: 'Cabello, uñas, estética',
           health: 'Salud', healthDesc: 'Bienestar, masaje, cuidados',
@@ -473,6 +482,7 @@ export const resources = {
         review: {
           title: 'Revisa tu perfil', subtitle: 'Verifica los datos antes de enviar.',
           categoryLabel: 'Categoría', serviceLabel: 'Servicio', descriptionLabel: 'Descripción',
+          subcategoryLabel: 'Especialidad', servicesLabel: 'Servicios ofrecidos',
           areaLabel: 'Área', experienceLabel: 'Experiencia', priceLabel: 'Precio/hora',
           availabilityLabel: 'Disponibilidad', yearsUnit: 'años',
           submit: 'Enviar para aprobación', editing: 'Editar'
@@ -551,7 +561,8 @@ export const resources = {
           confirmButton: 'Confirmar reserva', successTitle: '¡Reserva confirmada!', successMessage: 'Tu reserva se ha realizado con éxito.'
         }
       },
-      status: { pending: 'Pendiente', confirmed: 'Confirmado', inProgress: 'En curso', completed: 'Completado', cancelled: 'Cancelado' }
+      status: { pending: 'Pendiente', confirmed: 'Confirmado', inProgress: 'En curso', completed: 'Completado', cancelled: 'Cancelado' },
+      catalog: catalogEs
     }
   }
 } as const;

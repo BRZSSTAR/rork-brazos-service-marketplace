@@ -34,6 +34,8 @@ export default function OnboardingWizardScreen() {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const [category, setCategory] = useState<ServiceCategory | undefined>(onboardingDraft?.category);
+  const [subcategory, setSubcategory] = useState<string | undefined>(onboardingDraft?.subcategory);
+  const [selectedServices, setSelectedServices] = useState<string[]>(onboardingDraft?.selectedServices ?? []);
   const [serviceTitle, setServiceTitle] = useState<string>(onboardingDraft?.serviceTitle ?? '');
   const [description, setDescription] = useState<string>(onboardingDraft?.description ?? '');
   const [serviceArea, setServiceArea] = useState<string>(onboardingDraft?.serviceArea ?? '');
@@ -65,15 +67,32 @@ export default function OnboardingWizardScreen() {
 
   const handleCategorySelect = useCallback((cat: ServiceCategory) => {
     setCategory(cat);
-    void updateOnboardingDraft({ category: cat });
+    setSubcategory(undefined);
+    setSelectedServices([]);
+    void updateOnboardingDraft({ category: cat, subcategory: undefined, selectedServices: [] });
+  }, [updateOnboardingDraft]);
+
+  const handleSubcategorySelect = useCallback((subId: string) => {
+    setSubcategory(subId);
+    void updateOnboardingDraft({ subcategory: subId });
+  }, [updateOnboardingDraft]);
+
+  const handleToggleService = useCallback((serviceId: string) => {
+    setSelectedServices((prev) => {
+      const next = prev.includes(serviceId)
+        ? prev.filter((s) => s !== serviceId)
+        : [...prev, serviceId];
+      void updateOnboardingDraft({ selectedServices: next });
+      return next;
+    });
   }, [updateOnboardingDraft]);
 
   const handleCategoryNext = useCallback(() => {
-    if (category) {
-      void updateOnboardingDraft({ category });
+    if (category && subcategory && selectedServices.length > 0) {
+      void updateOnboardingDraft({ category, subcategory, selectedServices });
       goNext();
     }
-  }, [category, updateOnboardingDraft, goNext]);
+  }, [category, subcategory, selectedServices, updateOnboardingDraft, goNext]);
 
   const handleDetailsNext = useCallback(() => {
     void updateOnboardingDraft({ serviceTitle, description, serviceArea, yearsExperience });
@@ -108,6 +127,8 @@ export default function OnboardingWizardScreen() {
     try {
       await updateOnboardingDraft({
         category,
+        subcategory,
+        selectedServices,
         serviceTitle,
         description,
         serviceArea,
@@ -125,7 +146,7 @@ export default function OnboardingWizardScreen() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [user, category, serviceTitle, description, serviceArea, yearsExperience, pricePerHourCents, availability, updateOnboardingDraft, submitOnboarding, setProviderStatus]);
+  }, [user, category, subcategory, selectedServices, serviceTitle, description, serviceArea, yearsExperience, pricePerHourCents, availability, updateOnboardingDraft, submitOnboarding, setProviderStatus]);
 
   if (isSubmitted) {
     return (
@@ -169,7 +190,11 @@ export default function OnboardingWizardScreen() {
           {currentStep === 0 && (
             <CategoryStep
               selected={category}
+              selectedSubcategory={subcategory}
+              selectedServices={selectedServices}
               onSelect={handleCategorySelect}
+              onSelectSubcategory={handleSubcategorySelect}
+              onToggleService={handleToggleService}
               onNext={handleCategoryNext}
             />
           )}
@@ -203,6 +228,8 @@ export default function OnboardingWizardScreen() {
           {currentStep === 4 && category && (
             <ReviewStep
               category={category}
+              subcategory={subcategory}
+              selectedServices={selectedServices}
               serviceTitle={serviceTitle}
               description={description}
               serviceArea={serviceArea}
