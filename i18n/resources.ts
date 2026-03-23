@@ -45,7 +45,19 @@ export const resources = {
             health: { label: 'Saúde', subtitle: 'Bem-estar & cuidados' }, chef: { label: 'Chef', subtitle: 'Culinária & eventos' }
           }
         },
-        explore: { searchPlaceholder: 'Buscar serviços, profissionais...', title: 'Explore profissionais', subtitle: 'Pesquise por serviço ou profissional na sua região.' },
+        explore: {
+          searchPlaceholder: 'Buscar serviços, profissionais...', title: 'Explore profissionais', subtitle: 'Pesquise por serviço ou profissional na sua região.',
+          popularServices: 'Serviços Populares', trending: 'Em alta', results: 'resultados', noResults: 'Nenhum resultado encontrado', noResultsHint: 'Tente buscar por um serviço diferente',
+          filters: {
+            title: 'Filtros', reset: 'Limpar', apply: 'Aplicar filtros',
+            sortBy: 'Ordenar por', sortRelevance: 'Relevância', sortRatingHigh: 'Melhor avaliação', sortPriceLow: 'Menor preço', sortPriceHigh: 'Maior preço', sortDistance: 'Mais perto', sortNewest: 'Mais recentes',
+            availability: 'Disponibilidade', availAny: 'Qualquer', availNow: 'Disponível agora', availToday: 'Hoje', availWeek: 'Esta semana',
+            rating: 'Avaliação', ratingAny: 'Qualquer', topRated: 'Melhor avaliados',
+            priceRange: 'Faixa de preço', priceAny: 'Qualquer', priceBudget: 'Econômico', priceMid: 'Intermediário', pricePremium: 'Premium',
+            category: 'Categoria', catAll: 'Todas',
+            lowestPrice: 'Menor preço', nearby: 'Perto de mim'
+          }
+        },
         bookings: { tabs: { active: 'Ativas', completed: 'Concluídas', cancelled: 'Canceladas' }, emptyTitle: 'Nenhuma reserva', emptySubtitle: 'Suas reservas {{tab}} aparecerão aqui.' },
         profile: {
           fallbackName: 'Usuário', logout: 'Sair da conta', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
@@ -279,7 +291,19 @@ export const resources = {
             health: { label: 'Health', subtitle: 'Wellness & care' }, chef: { label: 'Chef', subtitle: 'Cuisine & events' }
           }
         },
-        explore: { searchPlaceholder: 'Search services, professionals...', title: 'Explore professionals', subtitle: 'Search by service or professional in your area.' },
+        explore: {
+          searchPlaceholder: 'Search services, professionals...', title: 'Explore professionals', subtitle: 'Search by service or professional in your area.',
+          popularServices: 'Popular Services', trending: 'Trending', results: 'results', noResults: 'No results found', noResultsHint: 'Try searching for a different service',
+          filters: {
+            title: 'Filters', reset: 'Reset', apply: 'Apply filters',
+            sortBy: 'Sort by', sortRelevance: 'Relevance', sortRatingHigh: 'Highest rated', sortPriceLow: 'Lowest price', sortPriceHigh: 'Highest price', sortDistance: 'Nearest', sortNewest: 'Newest',
+            availability: 'Availability', availAny: 'Any', availNow: 'Available now', availToday: 'Today', availWeek: 'This week',
+            rating: 'Rating', ratingAny: 'Any', topRated: 'Top rated',
+            priceRange: 'Price range', priceAny: 'Any', priceBudget: 'Budget', priceMid: 'Mid-range', pricePremium: 'Premium',
+            category: 'Category', catAll: 'All',
+            lowestPrice: 'Lowest price', nearby: 'Near me'
+          }
+        },
         bookings: { tabs: { active: 'Active', completed: 'Completed', cancelled: 'Cancelled' }, emptyTitle: 'No bookings', emptySubtitle: 'Your {{tab}} bookings will appear here.' },
         profile: {
           fallbackName: 'User', logout: 'Sign out', version: 'BRAZOS v1.0.0', languageSection: 'Language',
@@ -512,7 +536,19 @@ export const resources = {
             health: { label: 'Salud', subtitle: 'Bienestar y cuidados' }, chef: { label: 'Chef', subtitle: 'Cocina y eventos' }
           }
         },
-        explore: { searchPlaceholder: 'Buscar servicios, profesionales...', title: 'Explorar profesionales', subtitle: 'Busca por servicio o profesional en tu zona.' },
+        explore: {
+          searchPlaceholder: 'Buscar servicios, profesionales...', title: 'Explorar profesionales', subtitle: 'Busca por servicio o profesional en tu zona.',
+          popularServices: 'Servicios Populares', trending: 'Tendencia', results: 'resultados', noResults: 'Sin resultados', noResultsHint: 'Intenta buscar un servicio diferente',
+          filters: {
+            title: 'Filtros', reset: 'Limpiar', apply: 'Aplicar filtros',
+            sortBy: 'Ordenar por', sortRelevance: 'Relevancia', sortRatingHigh: 'Mejor calificación', sortPriceLow: 'Menor precio', sortPriceHigh: 'Mayor precio', sortDistance: 'Más cercano', sortNewest: 'Más recientes',
+            availability: 'Disponibilidad', availAny: 'Cualquiera', availNow: 'Disponible ahora', availToday: 'Hoy', availWeek: 'Esta semana',
+            rating: 'Calificación', ratingAny: 'Cualquiera', topRated: 'Mejor calificados',
+            priceRange: 'Rango de precio', priceAny: 'Cualquiera', priceBudget: 'Económico', priceMid: 'Intermedio', pricePremium: 'Premium',
+            category: 'Categoría', catAll: 'Todas',
+            lowestPrice: 'Menor precio', nearby: 'Cerca de mí'
+          }
+        },
         bookings: { tabs: { active: 'Activas', completed: 'Completadas', cancelled: 'Canceladas' }, emptyTitle: 'Sin reservas', emptySubtitle: 'Tus reservas {{tab}} aparecerán aquí.' },
         profile: {
           fallbackName: 'Usuario', logout: 'Cerrar sesión', version: 'BRAZOS v1.0.0', languageSection: 'Idioma',
