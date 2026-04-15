@@ -40,6 +40,9 @@ export const resources = {
           featuredTitle: 'Encontre profissionais perto de você', featuredDescription: 'Explore serviços de qualidade com preços transparentes e pagamento seguro.',
           nextBookings: 'Próximas reservas', noBookings: 'Nenhuma reserva agendada', noBookingsDescription: 'Explore profissionais para agendar seu primeiro serviço',
           fallbackName: 'Olá',
+          quickServicesTitle: 'Serviços Populares', seeAll: 'Ver todos',
+          promoAvailNow: 'Disponível Agora', promoAvailNowDesc: 'Profissionais prontos para atender você hoje',
+          promoVerified: 'Profissionais Verificados', promoVerifiedDesc: 'Com verificação e certificação',
           categories: {
             home: { label: 'Casa', subtitle: 'Limpeza, reparos & mais' }, beauty: { label: 'Beleza', subtitle: 'Cabelo, unhas & estética' },
             health: { label: 'Saúde', subtitle: 'Bem-estar & cuidados' }, chef: { label: 'Chef', subtitle: 'Culinária & eventos' }
@@ -246,6 +249,15 @@ export const resources = {
         }
       },
       status: { pending: 'Pendente', confirmed: 'Confirmado', inProgress: 'Em andamento', completed: 'Concluído', cancelled: 'Cancelado' },
+      promos: {
+        welcome: { title: 'Bem-vindo ao BRAZOS!', subtitle: 'Encontre profissionais qualificados perto de você. Agende seu primeiro serviço agora.' },
+        referral: { title: 'Indique e Ganhe', subtitle: 'Convide amigos e ganhe desconto no próximo serviço.' },
+        trending: { title: 'Em Alta Agora', subtitle: 'Confira os serviços mais procurados da semana na sua região.' }
+      },
+      quickServices: {
+        cleaning: 'Limpeza', haircut: 'Corte de Cabelo', massage: 'Massagem',
+        chef: 'Chef em Casa', plumbing: 'Encanamento', nails: 'Manicure'
+      },
       catalog: catalogPtBR
     }
   },
@@ -286,6 +298,9 @@ export const resources = {
           greeting: 'Hi, {{name}}', title: 'What do you need\ntoday?', highlights: 'Highlights', featuredBadge: 'New',
           featuredTitle: 'Find professionals near you', featuredDescription: 'Explore high-quality services with transparent pricing and secure payment.',
           nextBookings: 'Upcoming bookings', noBookings: 'No bookings scheduled', noBookingsDescription: 'Explore professionals to book your first service', fallbackName: 'Hi',
+          quickServicesTitle: 'Popular Services', seeAll: 'See all',
+          promoAvailNow: 'Available Now', promoAvailNowDesc: 'Professionals ready to serve you today',
+          promoVerified: 'Verified Pros', promoVerifiedDesc: 'Background-checked & certified',
           categories: {
             home: { label: 'Home', subtitle: 'Cleaning, repairs & more' }, beauty: { label: 'Beauty', subtitle: 'Hair, nails & aesthetics' },
             health: { label: 'Health', subtitle: 'Wellness & care' }, chef: { label: 'Chef', subtitle: 'Cuisine & events' }
@@ -490,6 +505,15 @@ export const resources = {
           }
         }
       },
+      promos: {
+        welcome: { title: 'Welcome to BRAZOS!', subtitle: 'Find qualified professionals near you. Book your first service now.' },
+        referral: { title: 'Refer & Earn', subtitle: 'Invite friends and get a discount on your next service.' },
+        trending: { title: 'Trending Now', subtitle: 'Check out the most requested services this week in your area.' }
+      },
+      quickServices: {
+        cleaning: 'Cleaning', haircut: 'Haircut', massage: 'Massage',
+        chef: 'Home Chef', plumbing: 'Plumbing', nails: 'Manicure'
+      },
       status: { pending: 'Pending', confirmed: 'Confirmed', inProgress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' },
       catalog: catalogEn
     }
@@ -531,6 +555,9 @@ export const resources = {
           greeting: 'Hola, {{name}}', title: '¿Qué necesitas\nhoy?', highlights: 'Destacados', featuredBadge: 'Nuevo',
           featuredTitle: 'Encuentra profesionales cerca de ti', featuredDescription: 'Explora servicios de calidad con precios transparentes y pago seguro.',
           nextBookings: 'Próximas reservas', noBookings: 'Sin reservas programadas', noBookingsDescription: 'Explora profesionales para reservar tu primer servicio', fallbackName: 'Hola',
+          quickServicesTitle: 'Servicios Populares', seeAll: 'Ver todos',
+          promoAvailNow: 'Disponible Ahora', promoAvailNowDesc: 'Profesionales listos para atenderte hoy',
+          promoVerified: 'Pros Verificados', promoVerifiedDesc: 'Con verificación y certificación',
           categories: {
             home: { label: 'Hogar', subtitle: 'Limpieza, reparaciones y más' }, beauty: { label: 'Belleza', subtitle: 'Cabello, uñas y estética' },
             health: { label: 'Salud', subtitle: 'Bienestar y cuidados' }, chef: { label: 'Chef', subtitle: 'Cocina y eventos' }
@@ -734,6 +761,15 @@ export const resources = {
             dishwashing: { name: 'Lavado de platos', desc: 'Lavado completo de vajilla' }
           }
         }
+      },
+      promos: {
+        welcome: { title: '¡Bienvenido a BRAZOS!', subtitle: 'Encuentra profesionales calificados cerca de ti. Reserva tu primer servicio ahora.' },
+        referral: { title: 'Invita y Gana', subtitle: 'Invita amigos y obtén descuento en tu próximo servicio.' },
+        trending: { title: 'Tendencia Ahora', subtitle: 'Descubre los servicios más solicitados esta semana en tu zona.' }
+      },
+      quickServices: {
+        cleaning: 'Limpieza', haircut: 'Corte de Pelo', massage: 'Masaje',
+        chef: 'Chef en Casa', plumbing: 'Plomería', nails: 'Manicure'
       },
       status: { pending: 'Pendiente', confirmed: 'Confirmado', inProgress: 'En curso', completed: 'Completado', cancelled: 'Cancelado' },
       catalog: catalogEs
