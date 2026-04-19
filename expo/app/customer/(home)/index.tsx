@@ -24,6 +24,7 @@ import {
   TrendingUp,
   Bell,
 } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
 import { useAuthStore } from '@/store/authStore';
 import { colors, spacing, radius, typography, shadow } from '@/constants/theme';
@@ -39,6 +40,7 @@ interface PromoBanner {
   subtitle: string;
   accent: string;
   bg: string;
+  gradient?: readonly [string, string, ...string[]];
   icon: typeof Star;
 }
 
@@ -49,6 +51,7 @@ const promoBanners: PromoBanner[] = [
     subtitle: 'promos.welcome.subtitle',
     accent: colors.accent,
     bg: colors.primary,
+    gradient: ['#145A4A', '#0E3F34', '#0A2D25'] as const,
     icon: Sparkles,
   },
   {
@@ -87,8 +90,8 @@ const quickServices: QuickServiceItem[] = [
 
 function BannerCard({ item, t }: { item: PromoBanner; t: (key: string, opts?: Record<string, string>) => string }) {
   const IconComp = item.icon;
-  return (
-    <View style={[bannerStyles.card, { backgroundColor: item.bg }]}>
+  const content = (
+    <>
       <View style={bannerStyles.cardContent}>
         <View style={[bannerStyles.iconCircle, { backgroundColor: `${item.accent}22` }]}>
           <IconComp size={24} color={item.accent} />
@@ -97,6 +100,25 @@ function BannerCard({ item, t }: { item: PromoBanner; t: (key: string, opts?: Re
         <Text style={[bannerStyles.cardSubtitle, { color: 'rgba(255,255,255,0.7)' }]}>{t(item.subtitle)}</Text>
       </View>
       <View style={[bannerStyles.accentBar, { backgroundColor: item.accent }]} />
+    </>
+  );
+
+  if (item.gradient) {
+    return (
+      <LinearGradient
+        colors={item.gradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={bannerStyles.card}
+      >
+        {content}
+      </LinearGradient>
+    );
+  }
+
+  return (
+    <View style={[bannerStyles.card, { backgroundColor: item.bg }]}>
+      {content}
     </View>
   );
 }
