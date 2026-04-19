@@ -262,11 +262,11 @@ export default function CustomerHomeScreen() {
               onPress={() => router.push('/notifications')}
               testID="notif-btn"
             >
-              <Bell size={20} color={colors.textInverse} />
+              <Bell size={20} color={colors.primary} />
             </Pressable>
           </View>
           <View style={styles.locationRow}>
-            <MapPin size={14} color={colors.accent} />
+            <MapPin size={14} color={colors.primary} />
             {cityName ? (
               <Text style={styles.locationText}>{cityName}</Text>
             ) : locationLoading ? (
@@ -391,12 +391,10 @@ const styles = StyleSheet.create({
   scroll: { flex: 1, backgroundColor: colors.background },
   scrollContent: { paddingBottom: spacing.lg },
   heroSection: {
-    backgroundColor: colors.primary,
+    backgroundColor: 'transparent',
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
-    paddingBottom: spacing.xl,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    paddingBottom: spacing.md,
     gap: spacing.xs,
   },
   heroTop: {
@@ -408,16 +406,18 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: spacing.xs,
   },
-  greeting: { ...typography.captionMedium, color: colors.accent },
-  heroTitle: { ...typography.h1, color: colors.textInverse, fontSize: 26, lineHeight: 32 },
+  greeting: { ...typography.captionMedium, color: colors.primary },
+  heroTitle: { ...typography.h1, color: colors.text, fontSize: 26, lineHeight: 32 },
   notifButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
   },
   locationRow: {
     flexDirection: 'row',
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     ...typography.small,
-    color: 'rgba(255,255,255,0.7)',
+    color: colors.textSecondary,
   },
   locationTextTap: {
     ...typography.small,

@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Home, Scissors, Heart, ChefHat } from 'lucide-react-native';
 import { colors, spacing, typography, shadow } from '@/constants/theme';
 
@@ -16,10 +17,10 @@ interface CategoryItem {
 }
 
 const categories: CategoryItem[] = [
-  { key: 'HOME', icon: Home, color: '#3B82F6', bg: '#EFF6FF', labelKey: 'customer.home.categories.home.label' },
-  { key: 'BEAUTY', icon: Scissors, color: '#EC4899', bg: '#FDF2F8', labelKey: 'customer.home.categories.beauty.label' },
-  { key: 'HEALTH', icon: Heart, color: '#10B981', bg: '#ECFDF5', labelKey: 'customer.home.categories.health.label' },
-  { key: 'CHEF', icon: ChefHat, color: '#F59E0B', bg: '#FFFBEB', labelKey: 'customer.home.categories.chef.label' },
+  { key: 'HOME', icon: Home, color: '#2D6A8F', bg: '#E8F1F7', labelKey: 'customer.home.categories.home.label' },
+  { key: 'BEAUTY', icon: Scissors, color: '#C95858', bg: '#FBEAEA', labelKey: 'customer.home.categories.beauty.label' },
+  { key: 'HEALTH', icon: Heart, color: '#2D8A5A', bg: '#E6F3EC', labelKey: 'customer.home.categories.health.label' },
+  { key: 'CHEF', icon: ChefHat, color: '#C8A84B', bg: '#FAF3DE', labelKey: 'customer.home.categories.chef.label' },
 ];
 
 function CategoryCircle({ item, onPress }: { item: CategoryItem; onPress: () => void }) {
@@ -53,16 +54,21 @@ function CategoryCircle({ item, onPress }: { item: CategoryItem; onPress: () => 
   );
 }
 
+const TAB_BAR_HEIGHT = Platform.OS === 'ios' ? 49 : 56;
+
 export default function FloatingCategoryBar() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const handleCategoryPress = (key: CategoryKey) => {
     console.log('[FloatingCategoryBar] Category pressed:', key);
     router.push({ pathname: '/customer/category-browse', params: { categoryId: key } });
   };
 
+  const bottomOffset = TAB_BAR_HEIGHT + insets.bottom + spacing.md;
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { bottom: bottomOffset }]} pointerEvents="box-none">
       <View style={styles.bar}>
         {categories.map((cat) => (
           <CategoryCircle
@@ -79,12 +85,10 @@ export default function FloatingCategoryBar() {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute' as const,
-    bottom: 0,
     left: 0,
     right: 0,
     alignItems: 'center',
     zIndex: 100,
-    pointerEvents: 'box-none',
   },
   bar: {
     flexDirection: 'row',
