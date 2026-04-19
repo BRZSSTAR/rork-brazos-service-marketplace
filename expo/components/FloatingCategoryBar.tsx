@@ -17,10 +17,10 @@ interface CategoryItem {
 }
 
 const categories: CategoryItem[] = [
-  { key: 'HOME', icon: Home, color: '#2D6A8F', bg: '#E8F1F7', labelKey: 'customer.home.categories.home.label' },
-  { key: 'BEAUTY', icon: Scissors, color: '#C95858', bg: '#FBEAEA', labelKey: 'customer.home.categories.beauty.label' },
-  { key: 'HEALTH', icon: Heart, color: '#2D8A5A', bg: '#E6F3EC', labelKey: 'customer.home.categories.health.label' },
-  { key: 'CHEF', icon: ChefHat, color: '#C8A84B', bg: '#FAF3DE', labelKey: 'customer.home.categories.chef.label' },
+  { key: 'HOME', icon: Home, color: '#2D6A8F', bg: '#2D6A8F', labelKey: 'customer.home.categories.home.label' },
+  { key: 'BEAUTY', icon: Scissors, color: '#C95858', bg: '#C95858', labelKey: 'customer.home.categories.beauty.label' },
+  { key: 'HEALTH', icon: Heart, color: '#2D8A5A', bg: '#2D8A5A', labelKey: 'customer.home.categories.health.label' },
+  { key: 'CHEF', icon: ChefHat, color: '#C8A84B', bg: '#C8A84B', labelKey: 'customer.home.categories.chef.label' },
 ];
 
 function CategoryCircle({ item, onPress }: { item: CategoryItem; onPress: () => void }) {
@@ -44,8 +44,8 @@ function CategoryCircle({ item, onPress }: { item: CategoryItem; onPress: () => 
       testID={`category-float-${item.key.toLowerCase()}`}
       style={styles.circleWrapper}
     >
-      <Animated.View style={[styles.circle, { backgroundColor: item.bg, borderColor: item.color, transform: [{ scale }] }]}>
-        <IconComp size={22} color={item.color} />
+      <Animated.View style={[styles.circle, { backgroundColor: item.bg, borderColor: item.color, transform: [{ scale }], shadowColor: item.color }]}>
+        <IconComp size={24} color={'#FFFFFF'} strokeWidth={2.4} />
       </Animated.View>
       <Text style={[styles.circleLabel, { color: item.color }]} numberOfLines={1}>
         {t(item.labelKey)}
@@ -118,7 +118,14 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
+    borderWidth: 0,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.28,
+    shadowRadius: 6,
+    elevation: 4,
+    ...(Platform.OS === 'web' ? {
+      boxShadow: '0 3px 8px rgba(0,0,0,0.18)',
+    } : {}),
   },
   circleLabel: {
     ...typography.smallMedium,
