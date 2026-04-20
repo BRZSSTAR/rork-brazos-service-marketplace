@@ -53,30 +53,30 @@ export default function BrazosLogo({
           </LinearGradient>
         </Defs>
 
-        {/* outer evergreen ring */}
-        <Circle cx="50" cy="50" r="46" stroke="url(#bz_ever)" strokeWidth={3} />
+        {/* outer evergreen rounded-square badge */}
+        <Path
+          d="M22 6 H78 Q94 6 94 22 V78 Q94 94 78 94 H22 Q6 94 6 78 V22 Q6 6 22 6 Z"
+          fill="url(#bz_ever)"
+        />
 
-        {/* stylized B: two stacked crescents forming a "roof + canopy" */}
+        {/* stylized B — bold geometric, with gold counters */}
         <G>
+          {/* vertical spine */}
+          <Path d="M28 20 H44 V80 H28 Z" fill="url(#bz_canopy)" />
+          {/* upper bowl */}
           <Path
-            d="M28 32 Q50 14 72 32 Q60 34 50 30 Q40 34 28 32 Z"
+            d="M40 20 H58 Q74 20 74 34 Q74 48 58 48 H40 Z M48 30 V38 H57 Q64 38 64 34 Q64 30 57 30 Z"
             fill="url(#bz_canopy)"
+            fillRule="evenodd"
           />
+          {/* lower bowl (slightly larger) */}
           <Path
-            d="M24 52 Q50 30 76 52 Q60 56 50 50 Q40 56 24 52 Z"
-            fill="url(#bz_ever)"
-            opacity={0.95}
-          />
-          <Path
-            d="M30 70 Q50 54 70 70 Q58 72 50 68 Q42 72 30 70 Z"
+            d="M40 44 H60 Q78 44 78 60 Q78 80 60 80 H40 Z M48 54 V70 H59 Q68 70 68 62 Q68 54 59 54 Z"
             fill="url(#bz_canopy)"
-            opacity={0.9}
+            fillRule="evenodd"
           />
-          {/* trunk anchor */}
-          <Path
-            d="M47 68 L53 68 L52 82 L48 82 Z"
-            fill="url(#bz_ever)"
-          />
+          {/* subtle evergreen accent notch connecting the bowls */}
+          <Path d="M44 46 H52 V52 H44 Z" fill="url(#bz_ever)" opacity={0.35} />
         </G>
       </Svg>
 
