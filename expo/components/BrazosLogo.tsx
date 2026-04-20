@@ -13,9 +13,10 @@ interface BrazosLogoProps {
 /**
  * Official BRAZOS brand logo.
  *
- * Mark: two overlapping tree-like "canopy" crescents (for "home service that comes to you")
- * sitting atop a grounded bar — evergreen + gold duotone, rendered with SVG so it scales
- * crisply at any size. Wordmark uses the Inter 700 brand setting: tight, heavy, 0.22em track.
+ * Mark: three stacked "canopy" crescents (home-service that comes to you) rising from a
+ * grounded trunk. The trunk + two canopy leaves form a subtle, implied B in negative space
+ * when viewed at small sizes. Evergreen + gold duotone, SVG for crisp scaling.
+ * Wordmark: Inter 700, tight geometric glyphs, 0.22em track.
  */
 export default function BrazosLogo({
   size = 56,
@@ -51,32 +52,54 @@ export default function BrazosLogo({
             <Stop offset="0" stopColor={ever} />
             <Stop offset="1" stopColor={everDeep} />
           </LinearGradient>
+          <LinearGradient id="bz_b" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={goldLight} stopOpacity={0.95} />
+            <Stop offset="1" stopColor={gold} stopOpacity={0.9} />
+          </LinearGradient>
         </Defs>
 
-        {/* outer evergreen rounded-square badge */}
+        {/* outer evergreen ring */}
+        <Circle cx="50" cy="50" r="46" stroke="url(#bz_ever)" strokeWidth={3} />
+
+        {/* Subtle "B" spine – evergreen vertical anchor that also doubles as the trunk.
+            Paired with the two canopy bowls, the eye reads a soft, implied B. */}
+        <Path d="M36 22 H40 V82 H36 Z" fill="url(#bz_ever)" opacity={0.85} />
+
+        {/* Upper canopy bowl — gold (forms top lobe of the B) */}
         <Path
-          d="M22 6 H78 Q94 6 94 22 V78 Q94 94 78 94 H22 Q6 94 6 78 V22 Q6 6 22 6 Z"
-          fill="url(#bz_ever)"
+          d="M38 24 H54 Q68 24 68 36 Q68 46 54 46 H38 Z"
+          fill="url(#bz_b)"
+          opacity={0.18}
         />
 
-        {/* stylized B — bold geometric, with gold counters */}
+        {/* Lower canopy bowl — gold (forms bottom lobe of the B) */}
+        <Path
+          d="M38 50 H56 Q72 50 72 62 Q72 76 56 76 H38 Z"
+          fill="url(#bz_b)"
+          opacity={0.18}
+        />
+
+        {/* Canopy crescents (primary brand mark — overlapping leaves) */}
         <G>
-          {/* vertical spine */}
-          <Path d="M28 20 H44 V80 H28 Z" fill="url(#bz_canopy)" />
-          {/* upper bowl */}
           <Path
-            d="M40 20 H58 Q74 20 74 34 Q74 48 58 48 H40 Z M48 30 V38 H57 Q64 38 64 34 Q64 30 57 30 Z"
+            d="M28 32 Q50 14 72 32 Q60 34 50 30 Q40 34 28 32 Z"
             fill="url(#bz_canopy)"
-            fillRule="evenodd"
           />
-          {/* lower bowl (slightly larger) */}
           <Path
-            d="M40 44 H60 Q78 44 78 60 Q78 80 60 80 H40 Z M48 54 V70 H59 Q68 70 68 62 Q68 54 59 54 Z"
-            fill="url(#bz_canopy)"
-            fillRule="evenodd"
+            d="M24 52 Q50 30 76 52 Q60 56 50 50 Q40 56 24 52 Z"
+            fill="url(#bz_ever)"
+            opacity={0.95}
           />
-          {/* subtle evergreen accent notch connecting the bowls */}
-          <Path d="M44 46 H52 V52 H44 Z" fill="url(#bz_ever)" opacity={0.35} />
+          <Path
+            d="M30 70 Q50 54 70 70 Q58 72 50 68 Q42 72 30 70 Z"
+            fill="url(#bz_canopy)"
+            opacity={0.9}
+          />
+          {/* trunk anchor */}
+          <Path
+            d="M47 68 L53 68 L52 82 L48 82 Z"
+            fill="url(#bz_ever)"
+          />
         </G>
       </Svg>
 

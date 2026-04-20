@@ -94,6 +94,22 @@ export const resources = {
       },
       onboarding: {
         title: 'Cadastro Profissional',
+        saveLater: 'Salvar',
+        phases: {
+          SIGNUP: { short: 'Cadastro', title: 'Cadastro rápido', subtitle: 'Entre na plataforma em 2 minutos' },
+          ACTIVATION: { short: 'Ativação', title: 'Ative sua conta', subtitle: 'Comece a receber pedidos (5-10 min)' },
+          ENHANCEMENT: { short: 'Destaque', title: 'Destaque seu perfil', subtitle: 'Aumente sua visibilidade e ranking' }
+        },
+        phaseComplete: {
+          signupTitle: 'Você está dentro!',
+          signupSubtitle: 'Cadastro inicial concluído. Agora vamos ativar sua conta para você começar a receber pedidos.',
+          activationTitle: 'Conta ativada!',
+          activationSubtitle: 'Seu perfil está pronto para aparecer para clientes. Continue para destacar ainda mais seu perfil — ou envie para aprovação agora.',
+          continueActivation: 'Ativar agora (5 min)',
+          continueEnhancement: 'Destacar meu perfil',
+          finishLater: 'Terminar depois',
+          submitNow: 'Enviar para aprovação'
+        },
         steps: {
           cpf: 'CPF', category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão',
           account: 'Conta', categories: 'Categorias', questionnaire: 'Perguntas', services: 'Serviços', profile: 'Perfil', location: 'Localização',
@@ -451,6 +467,22 @@ export const resources = {
       },
       onboarding: {
         title: 'Professional Onboarding',
+        saveLater: 'Save',
+        phases: {
+          SIGNUP: { short: 'Sign up', title: 'Quick sign up', subtitle: 'Join the platform in 2 minutes' },
+          ACTIVATION: { short: 'Activate', title: 'Activate your account', subtitle: 'Start receiving orders (5-10 min)' },
+          ENHANCEMENT: { short: 'Stand out', title: 'Stand out', subtitle: 'Boost your visibility & ranking' }
+        },
+        phaseComplete: {
+          signupTitle: "You're in!",
+          signupSubtitle: 'Initial sign up complete. Now let\'s activate your account so you can start receiving orders.',
+          activationTitle: 'Account activated!',
+          activationSubtitle: 'Your profile is ready to be shown to clients. Continue to stand out even more — or submit for approval now.',
+          continueActivation: 'Activate now (5 min)',
+          continueEnhancement: 'Boost my profile',
+          finishLater: 'Finish later',
+          submitNow: 'Submit for approval'
+        },
         steps: {
           cpf: 'CPF', category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review',
           account: 'Account', categories: 'Categories', questionnaire: 'Questions', services: 'Services', profile: 'Profile', location: 'Location',
@@ -808,6 +840,22 @@ export const resources = {
       },
       onboarding: {
         title: 'Registro Profesional',
+        saveLater: 'Guardar',
+        phases: {
+          SIGNUP: { short: 'Registro', title: 'Registro rápido', subtitle: 'Únete en 2 minutos' },
+          ACTIVATION: { short: 'Activa', title: 'Activa tu cuenta', subtitle: 'Empieza a recibir pedidos (5-10 min)' },
+          ENHANCEMENT: { short: 'Destaca', title: 'Destaca tu perfil', subtitle: 'Aumenta visibilidad y ranking' }
+        },
+        phaseComplete: {
+          signupTitle: '¡Estás dentro!',
+          signupSubtitle: 'Registro inicial completado. Ahora activemos tu cuenta para empezar a recibir pedidos.',
+          activationTitle: '¡Cuenta activada!',
+          activationSubtitle: 'Tu perfil está listo para mostrarse a clientes. Continua para destacar aún más o envía para aprobación.',
+          continueActivation: 'Activar ahora (5 min)',
+          continueEnhancement: 'Destacar mi perfil',
+          finishLater: 'Terminar después',
+          submitNow: 'Enviar para aprobación'
+        },
         steps: {
           cpf: 'CPF', category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión',
           account: 'Cuenta', categories: 'Categorías', questionnaire: 'Preguntas', services: 'Servicios', profile: 'Perfil', location: 'Ubicación',
