@@ -17,6 +17,7 @@ import { useAuthStore } from '@/store/authStore';
 import { colors, spacing, radius, typography } from '@/constants/theme';
 import PrimaryButton from '@/components/PrimaryButton';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
+import BrazosLogo from '@/components/BrazosLogo';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function RegisterScreen() {
               <Pressable onPress={() => router.back()} style={styles.backButton}>
                 <ChevronLeft size={24} color={colors.logo} />
               </Pressable>
-              <Text style={styles.logo}>{t('common.appName')}</Text>
+              <BrazosLogo size={52} variant="full" tone="onDark" />
               <Text style={styles.headerSubtitle}>{t('auth.register.headerSubtitle')}</Text>
             </View>
 

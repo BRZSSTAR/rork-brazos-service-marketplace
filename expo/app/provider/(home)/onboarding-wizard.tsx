@@ -8,30 +8,37 @@ import { useProviderStore, DEFAULT_AVAILABILITY } from '@/store/providerStore';
 import { colors, spacing, typography, radius, shadow } from '@/constants/theme';
 import OnboardingStepIndicator from '@/components/onboarding/OnboardingStepIndicator';
 import QualityScoreBar from '@/components/onboarding/QualityScoreBar';
-import ProviderCpfStep from '@/components/onboarding/CpfStep';
+import AccountStep from '@/components/onboarding/AccountStep';
 import MultiCategoryStep from '@/components/onboarding/MultiCategoryStep';
 import QuestionnaireStep from '@/components/onboarding/QuestionnaireStep';
 import ServicesBuilderStep from '@/components/onboarding/ServicesBuilderStep';
 import ProfileProStep from '@/components/onboarding/ProfileProStep';
 import LocationCoverageStep from '@/components/onboarding/LocationCoverageStep';
 import AvailabilityStep from '@/components/onboarding/AvailabilityStep';
+import PayoutStep from '@/components/onboarding/PayoutStep';
+import PoliciesStep from '@/components/onboarding/PoliciesStep';
+import TrustStep from '@/components/onboarding/TrustStep';
 import PrimaryButton from '@/components/PrimaryButton';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
 import { qualityScoreFromDraft } from '@/constants/ranking';
 import type {
+  AccountRegistration,
   BookingModel,
   CategorySelection,
   DayAvailability,
+  PayoutSetup,
+  ProviderPolicies,
   ProviderProfileDraft,
   ProviderService,
   QuestionnaireResponses,
   ServiceCoverage,
+  TrustConsents,
   WeeklyAvailability,
 } from '@/types';
 
 type DayKey = keyof WeeklyAvailability;
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 11;
 
 export default function OnboardingWizardScreen() {
   const router = useRouter();
@@ -40,13 +47,13 @@ export default function OnboardingWizardScreen() {
   const setProviderStatus = useAuthStore((s) => s.setProviderStatus);
   const { onboardingDraft, updateOnboardingDraft, submitOnboarding } = useProviderStore();
 
-  const [currentStep, setCurrentStep] = useState<number>(() =>
-    Math.min(useProviderStore.getState().getOnboardingStep(), TOTAL_STEPS - 1)
-  );
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const [cpf, setCpf] = useState<string>(onboardingDraft?.cpf ?? '');
+  const [account, setAccount] = useState<AccountRegistration>(
+    onboardingDraft?.account ?? { type: 'MEI', cpf: onboardingDraft?.cpf }
+  );
   const [selections, setSelections] = useState<CategorySelection[]>(
     onboardingDraft?.categorySelections ?? []
   );
@@ -68,6 +75,13 @@ export default function OnboardingWizardScreen() {
   const [availability, setAvailability] = useState<WeeklyAvailability>(
     onboardingDraft?.availability ?? DEFAULT_AVAILABILITY
   );
+  const [payout, setPayout] = useState<PayoutSetup>(
+    onboardingDraft?.payout ?? { pixKeyType: 'CPF' }
+  );
+  const [policies, setPolicies] = useState<ProviderPolicies>(
+    onboardingDraft?.policies ?? { cancellation: 'MODERATE', languages: ['PT'] }
+  );
+  const [trust, setTrust] = useState<TrustConsents>(onboardingDraft?.trust ?? {});
 
   const stepLabels = [
     t('onboarding.steps.account'),
@@ -77,22 +91,24 @@ export default function OnboardingWizardScreen() {
     t('onboarding.steps.profile'),
     t('onboarding.steps.location'),
     t('onboarding.steps.availability'),
+    t('onboarding.steps.payout'),
+    t('onboarding.steps.policies'),
+    t('onboarding.steps.trust'),
     t('onboarding.steps.review'),
   ];
 
   const primaryCategory = selections[0]?.category;
+  const effectiveCpf = account.type === 'CPF' ? account.cpf : (account.cnpj ?? account.cpf);
 
   const enabledDaysCount = useMemo(
-    () =>
-      (Object.keys(availability) as DayKey[]).filter((k) => availability[k].enabled)
-        .length,
+    () => (Object.keys(availability) as DayKey[]).filter((k) => availability[k].enabled).length,
     [availability]
   );
 
   const scoreBreakdown = useMemo(
     () =>
       qualityScoreFromDraft({
-        cpf,
+        cpf: account.cpf ?? effectiveCpf,
         categorySelections: selections,
         questionnaire,
         services,
@@ -101,12 +117,13 @@ export default function OnboardingWizardScreen() {
         bookingModel,
         availability,
       }),
-    [cpf, selections, questionnaire, services, profile, coverage, bookingModel, availability]
+    [account, effectiveCpf, selections, questionnaire, services, profile, coverage, bookingModel, availability]
   );
 
   const persistAll = useCallback(() => {
     void updateOnboardingDraft({
-      cpf,
+      cpf: account.cpf,
+      account,
       categorySelections: selections,
       questionnaire,
       services,
@@ -114,11 +131,14 @@ export default function OnboardingWizardScreen() {
       coverage,
       bookingModel,
       availability,
+      payout,
+      policies,
+      trust,
       category: selections[0]?.category,
       subcategory: selections[0]?.subcategoryIds[0],
       selectedServices: selections[0]?.serviceIds,
     });
-  }, [cpf, selections, questionnaire, services, profile, coverage, bookingModel, availability, updateOnboardingDraft]);
+  }, [account, selections, questionnaire, services, profile, coverage, bookingModel, availability, payout, policies, trust, updateOnboardingDraft]);
 
   const goNext = useCallback(() => {
     persistAll();
@@ -126,11 +146,8 @@ export default function OnboardingWizardScreen() {
   }, [persistAll]);
 
   const goBack = useCallback(() => {
-    if (currentStep > 0) {
-      setCurrentStep((s) => s - 1);
-    } else {
-      router.back();
-    }
+    if (currentStep > 0) setCurrentStep((s) => s - 1);
+    else router.back();
   }, [currentStep, router]);
 
   const handleAvailabilityUpdate = useCallback(
@@ -145,7 +162,8 @@ export default function OnboardingWizardScreen() {
     setIsSubmitting(true);
     try {
       await updateOnboardingDraft({
-        cpf,
+        cpf: account.cpf ?? effectiveCpf,
+        account,
         categorySelections: selections,
         questionnaire,
         services,
@@ -153,6 +171,9 @@ export default function OnboardingWizardScreen() {
         coverage,
         bookingModel,
         availability,
+        payout,
+        policies,
+        trust,
         category: selections[0]?.category,
         subcategory: selections[0]?.subcategoryIds[0],
         selectedServices: selections[0]?.serviceIds,
@@ -165,14 +186,13 @@ export default function OnboardingWizardScreen() {
       await submitOnboarding(user.id);
       await setProviderStatus('PENDING_APPROVAL');
       setIsSubmitted(true);
-      console.log('[Onboarding] Submitted');
     } catch (error) {
       console.error('[Onboarding] Submit error:', error);
       Alert.alert('', t('onboarding.submitted.failure'));
     } finally {
       setIsSubmitting(false);
     }
-  }, [user, cpf, selections, questionnaire, services, profile, coverage, bookingModel, availability, updateOnboardingDraft, submitOnboarding, setProviderStatus, t]);
+  }, [user, account, effectiveCpf, selections, questionnaire, services, profile, coverage, bookingModel, availability, payout, policies, trust, updateOnboardingDraft, submitOnboarding, setProviderStatus, t]);
 
   if (isSubmitted) {
     return (
@@ -184,9 +204,7 @@ export default function OnboardingWizardScreen() {
               <CheckCircle size={64} color={colors.accent} />
             </View>
             <Text style={styles.successTitle}>{t('onboarding.submitted.title')}</Text>
-            <Text style={styles.successSubtitle}>
-              {t('onboarding.submitted.subtitle')}
-            </Text>
+            <Text style={styles.successSubtitle}>{t('onboarding.submitted.subtitle')}</Text>
             <View style={styles.successFooter}>
               <PrimaryButton
                 title={t('onboarding.submitted.backToHome')}
@@ -221,14 +239,14 @@ export default function OnboardingWizardScreen() {
 
         <View style={styles.stepContainer}>
           {currentStep === 0 && (
-            <ProviderCpfStep cpf={cpf} onChangeCpf={setCpf} onNext={goNext} />
-          )}
-          {currentStep === 1 && (
-            <MultiCategoryStep
-              selections={selections}
-              onChange={setSelections}
+            <AccountStep
+              account={account}
+              onChange={(patch) => setAccount((a) => ({ ...a, ...patch }))}
               onNext={goNext}
             />
+          )}
+          {currentStep === 1 && (
+            <MultiCategoryStep selections={selections} onChange={setSelections} onNext={goNext} />
           )}
           {currentStep === 2 && (
             <QuestionnaireStep
@@ -270,23 +288,45 @@ export default function OnboardingWizardScreen() {
             />
           )}
           {currentStep === 7 && (
+            <PayoutStep
+              payout={payout}
+              onChange={(patch) => setPayout((p) => ({ ...p, ...patch }))}
+              onNext={goNext}
+            />
+          )}
+          {currentStep === 8 && (
+            <PoliciesStep
+              policies={policies}
+              onChange={(patch) => setPolicies((p) => ({ ...p, ...patch }))}
+              onNext={goNext}
+            />
+          )}
+          {currentStep === 9 && (
+            <TrustStep
+              trust={trust}
+              onChange={(patch) => setTrust((tr) => ({ ...tr, ...patch }))}
+              onNext={goNext}
+            />
+          )}
+          {currentStep === 10 && (
             <ScrollView
               style={styles.reviewContainer}
               contentContainerStyle={styles.reviewContent}
               showsVerticalScrollIndicator={false}
             >
               <Text style={styles.reviewTitle}>{t('onboarding.review.title')}</Text>
-              <Text style={styles.reviewSubtitle}>
-                {t('onboarding.review.subtitle')}
-              </Text>
+              <Text style={styles.reviewSubtitle}>{t('onboarding.review.subtitle')}</Text>
 
               <View style={styles.reviewCard}>
                 <ReviewItem
+                  label={t('onboarding.review.accountLabel')}
+                  value={`${account.type} · ${account.type === 'CPF' ? (account.cpf ?? '—') : (account.razaoSocial ?? account.cnpj ?? '—')}`}
+                  onEdit={() => setCurrentStep(0)}
+                />
+                <Divider />
+                <ReviewItem
                   label={t('onboarding.review.categoriesLabel')}
-                  value={`${selections.length} · ${selections.reduce(
-                    (acc, s) => acc + s.serviceIds.length,
-                    0
-                  )} services`}
+                  value={`${selections.length} · ${selections.reduce((acc, s) => acc + s.serviceIds.length, 0)} services`}
                   onEdit={() => setCurrentStep(1)}
                 />
                 <Divider />
@@ -298,30 +338,19 @@ export default function OnboardingWizardScreen() {
                 <Divider />
                 <ReviewItem
                   label={t('onboarding.review.servicesLabel')}
-                  value={`${services.length} services · ${services.reduce(
-                    (acc, s) => acc + s.addOns.length,
-                    0
-                  )} add-ons`}
+                  value={`${services.length} services · ${services.reduce((acc, s) => acc + s.addOns.length, 0)} add-ons`}
                   onEdit={() => setCurrentStep(3)}
                 />
                 <Divider />
                 <ReviewItem
                   label={t('onboarding.review.profileLabel')}
-                  value={
-                    profile.bio
-                      ? `${(profile.bio ?? '').slice(0, 80)}...`
-                      : t('onboarding.review.incomplete')
-                  }
+                  value={profile.bio ? `${(profile.bio ?? '').slice(0, 80)}...` : t('onboarding.review.incomplete')}
                   onEdit={() => setCurrentStep(4)}
                 />
                 <Divider />
                 <ReviewItem
                   label={t('onboarding.review.coverageLabel')}
-                  value={`${coverage.city ?? '—'} · ${coverage.radiusKm ?? 0}km · ${
-                    bookingModel === 'INSTANT'
-                      ? t('onboarding.coverage.instantTitle')
-                      : t('onboarding.coverage.requestTitle')
-                  }`}
+                  value={`${coverage.city ?? '—'} · ${coverage.radiusKm ?? 0}km · ${bookingModel === 'INSTANT' ? t('onboarding.coverage.instantTitle') : t('onboarding.coverage.requestTitle')}`}
                   onEdit={() => setCurrentStep(5)}
                 />
                 <Divider />
@@ -330,16 +359,30 @@ export default function OnboardingWizardScreen() {
                   value={`${enabledDaysCount} days/week`}
                   onEdit={() => setCurrentStep(6)}
                 />
+                <Divider />
+                <ReviewItem
+                  label={t('onboarding.review.payoutLabel')}
+                  value={payout.pixKey ? `Pix · ${payout.pixKeyType} · ${payout.pixKey.slice(0, 12)}...` : t('onboarding.review.incomplete')}
+                  onEdit={() => setCurrentStep(7)}
+                />
+                <Divider />
+                <ReviewItem
+                  label={t('onboarding.review.policiesLabel')}
+                  value={`${t(`onboarding.policies.cancellation.${policies.cancellation ?? 'MODERATE'}.title`)} · ${(policies.languages ?? ['PT']).join(', ')}`}
+                  onEdit={() => setCurrentStep(8)}
+                />
+                <Divider />
+                <ReviewItem
+                  label={t('onboarding.review.trustLabel')}
+                  value={trust.lgpdAccepted && trust.tosAccepted ? t('onboarding.review.accepted') : t('onboarding.review.incomplete')}
+                  onEdit={() => setCurrentStep(9)}
+                />
               </View>
 
               <View style={styles.scoreCard}>
-                <Text style={styles.scoreLabel}>
-                  {t('onboarding.review.qualityScoreLabel')}
-                </Text>
+                <Text style={styles.scoreLabel}>{t('onboarding.review.qualityScoreLabel')}</Text>
                 <Text style={styles.scoreValue}>{scoreBreakdown.percent}%</Text>
-                <Text style={styles.scoreHint}>
-                  {t('onboarding.review.qualityScoreHint')}
-                </Text>
+                <Text style={styles.scoreHint}>{t('onboarding.review.qualityScoreHint')}</Text>
               </View>
 
               <View style={{ marginTop: spacing.lg }}>
@@ -347,6 +390,7 @@ export default function OnboardingWizardScreen() {
                   title={t('onboarding.review.submit')}
                   onPress={handleSubmit}
                   loading={isSubmitting}
+                  disabled={!trust.lgpdAccepted || !trust.tosAccepted}
                   testID="onboarding-submit"
                 />
               </View>
@@ -375,9 +419,7 @@ function ReviewItem({
     <View style={styles.reviewRow}>
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={styles.reviewRowLabel}>{label}</Text>
-        <Text style={styles.reviewRowValue} numberOfLines={2}>
-          {value}
-        </Text>
+        <Text style={styles.reviewRowValue} numberOfLines={2}>{value}</Text>
       </View>
       <Pressable onPress={onEdit} hitSlop={8} style={styles.editBtn}>
         <Edit3 size={16} color={colors.accent} />
@@ -395,12 +437,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
-  backButton: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  backButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { ...typography.h3, color: colors.text },
   stepContainer: { flex: 1 },
   successContainer: {
@@ -411,12 +448,9 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   successIconWrap: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 100, height: 100, borderRadius: 50,
     backgroundColor: 'rgba(201, 168, 76, 0.15)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'center', justifyContent: 'center',
     marginBottom: spacing.md,
   },
   successTitle: { ...typography.h1, color: colors.textInverse, textAlign: 'center' },
@@ -429,17 +463,8 @@ const styles = StyleSheet.create({
   successFooter: { width: '100%', marginTop: spacing.xl },
   reviewContainer: { flex: 1 },
   reviewContent: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xxl },
-  reviewTitle: {
-    ...typography.h2,
-    color: colors.text,
-    marginTop: spacing.md,
-    marginBottom: spacing.xs,
-  },
-  reviewSubtitle: {
-    ...typography.body,
-    color: colors.textSecondary,
-    marginBottom: spacing.lg,
-  },
+  reviewTitle: { ...typography.h2, color: colors.text, marginTop: spacing.md, marginBottom: spacing.xs },
+  reviewSubtitle: { ...typography.body, color: colors.textSecondary, marginBottom: spacing.lg },
   reviewCard: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
@@ -450,11 +475,7 @@ const styles = StyleSheet.create({
   reviewRowLabel: { ...typography.small, color: colors.textTertiary },
   reviewRowValue: { ...typography.body, color: colors.text },
   editBtn: { padding: spacing.xs },
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.border,
-    marginVertical: spacing.xs,
-  },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: spacing.xs },
   scoreCard: {
     marginTop: spacing.md,
     backgroundColor: colors.primary,
@@ -464,16 +485,6 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   scoreLabel: { ...typography.caption, color: 'rgba(255,255,255,0.7)' },
-  scoreValue: {
-    fontSize: 40,
-    fontWeight: '700' as const,
-    fontFamily: 'Inter_700Bold',
-    color: colors.accent,
-  },
-  scoreHint: {
-    ...typography.small,
-    color: 'rgba(255,255,255,0.6)',
-    textAlign: 'center',
-    marginTop: 4,
-  },
+  scoreValue: { fontSize: 40, fontWeight: '700' as const, fontFamily: 'Inter_700Bold', color: colors.accent },
+  scoreHint: { ...typography.small, color: 'rgba(255,255,255,0.6)', textAlign: 'center', marginTop: 4 },
 });

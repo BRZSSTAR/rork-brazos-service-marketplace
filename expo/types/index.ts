@@ -83,6 +83,48 @@ export interface WeeklyAvailability {
   sunday: DayAvailability;
 }
 
+export type AccountRegistrationType = 'CPF' | 'MEI' | 'CNPJ';
+
+export interface AccountRegistration {
+  type: AccountRegistrationType;
+  cpf?: string;
+  cnpj?: string;
+  razaoSocial?: string;
+  nomeFantasia?: string;
+  inscricaoEstadual?: string;
+  phoneVerified?: boolean;
+}
+
+export type PixKeyType = 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'RANDOM';
+
+export interface PayoutSetup {
+  pixKey?: string;
+  pixKeyType?: PixKeyType;
+  holderName?: string;
+}
+
+export type CancellationPolicy = 'FLEXIBLE' | 'MODERATE' | 'STRICT';
+export type LanguageCode = 'PT' | 'EN' | 'ES';
+
+export interface ProviderPolicies {
+  cancellation?: CancellationPolicy;
+  languages?: LanguageCode[];
+  emergencyAvailable?: boolean;
+  travelFeePerKmCents?: number;
+  freeTravelRadiusKm?: number;
+  referralCode?: string;
+}
+
+export interface TrustConsents {
+  lgpdAccepted?: boolean;
+  tosAccepted?: boolean;
+  contractorAgreementAccepted?: boolean;
+  consentAt?: string;
+  backgroundCheckUri?: string;
+  selfieVerificationUri?: string;
+  liabilityInsurance?: boolean;
+}
+
 export interface ProviderOnboardingDraft {
   cpf?: string;
   category?: ServiceCategory;
@@ -100,6 +142,10 @@ export interface ProviderOnboardingDraft {
   profile?: ProviderProfileDraft;
   coverage?: ServiceCoverage;
   bookingModel?: BookingModel;
+  account?: AccountRegistration;
+  payout?: PayoutSetup;
+  policies?: ProviderPolicies;
+  trust?: TrustConsents;
 }
 
 export interface CategorySelection {

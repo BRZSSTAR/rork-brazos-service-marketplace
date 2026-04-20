@@ -74,7 +74,9 @@ export const useProviderStore = create(
 
     submitOnboarding: async (userId: string) => {
       const draft = get().onboardingDraft;
-      if (!draft?.cpf) {
+      const account = draft?.account;
+      const docId = draft?.cpf ?? account?.cpf ?? account?.cnpj;
+      if (!draft || !docId) {
         throw new Error('Incomplete onboarding data');
       }
 
@@ -93,7 +95,7 @@ export const useProviderStore = create(
       const profile: ProviderProfile = {
         id: generateId(),
         userId,
-        cpf: draft.cpf,
+        cpf: docId,
         category: effectiveCategory,
         subcategory: draft.subcategory ?? primarySelection?.subcategoryIds[0] ?? '',
         selectedServices: draft.selectedServices ?? primarySelection?.serviceIds ?? [],

@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/store/authStore';
 import { colors, typography, spacing } from '@/constants/theme';
+import BrazosLogo from '@/components/BrazosLogo';
 
 export default function IndexScreen() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function IndexScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.brandContainer}>
-        <Text style={styles.logo}>{t('common.appName')}</Text>
+        <BrazosLogo size={72} variant="stacked" tone="onDark" />
         <Text style={styles.tagline}>{t('bootstrap.tagline')}</Text>
       </View>
       <ActivityIndicator size="large" color={colors.accent} style={styles.loader} />

@@ -17,6 +17,7 @@ import { useAuthStore } from '@/store/authStore';
 import { colors, spacing, radius, typography } from '@/constants/theme';
 import PrimaryButton from '@/components/PrimaryButton';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
+import BrazosLogo from '@/components/BrazosLogo';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -58,7 +59,7 @@ export default function LoginScreen() {
             bounces={false}
           >
             <View style={styles.header}>
-              <Text style={styles.logo}>{t('common.appName')}</Text>
+              <BrazosLogo size={64} variant="stacked" tone="onDark" />
               <Text style={styles.headerSubtitle}>{t('auth.tagline')}</Text>
             </View>
 

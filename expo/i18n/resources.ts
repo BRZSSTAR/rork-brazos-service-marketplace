@@ -96,7 +96,54 @@ export const resources = {
         title: 'Cadastro Profissional',
         steps: {
           cpf: 'CPF', category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão',
-          account: 'Conta', categories: 'Categorias', questionnaire: 'Perguntas', services: 'Serviços', profile: 'Perfil', location: 'Localização'
+          account: 'Conta', categories: 'Categorias', questionnaire: 'Perguntas', services: 'Serviços', profile: 'Perfil', location: 'Localização',
+          payout: 'Pagamentos', policies: 'Políticas', trust: 'Confiança'
+        },
+        account: {
+          title: 'Cadastro profissional', subtitle: 'Escolha o tipo de cadastro. Isso define como você emite notas e recebe pagamentos.',
+          types: { CPF: 'CPF', MEI: 'MEI', CNPJ: 'CNPJ' },
+          typesDesc: { CPF: 'Autônomo informal', MEI: 'Microempreendedor', CNPJ: 'Empresa formal' },
+          cpfLabel: 'CPF', cnpjLabel: 'CNPJ',
+          razaoSocialLabel: 'Razão social', razaoSocialPlaceholder: 'Ex: Silva Serviços LTDA',
+          nomeFantasiaLabel: 'Nome fantasia (opcional)', nomeFantasiaPlaceholder: 'Ex: Silva Limpezas',
+          invalidCpf: 'CPF inválido.', invalidCnpj: 'CNPJ inválido.',
+          hint: 'Armazenamos com segurança. Usado apenas para notas fiscais e compliance.'
+        },
+        payout: {
+          title: 'Como você vai receber?', subtitle: 'Configure sua chave Pix para receber repasses automaticamente.',
+          keyTypeLabel: 'Tipo de chave Pix',
+          keyTypes: { CPF: 'CPF', CNPJ: 'CNPJ', EMAIL: 'E-mail', PHONE: 'Telefone', RANDOM: 'Aleatória' },
+          keyLabel: 'Chave Pix', keyPlaceholder: 'CPF, e-mail, telefone ou chave aleatória',
+          holderLabel: 'Nome do titular', holderPlaceholder: 'Nome completo do titular da conta',
+          infoTitle: 'Repasses via Pix', infoBody: 'Os valores dos serviços concluídos são repassados via Pix em até 1 dia útil após a confirmação do cliente.'
+        },
+        policies: {
+          title: 'Políticas & diferenciais', subtitle: 'Configure como você trabalha e o que te destaca.',
+          cancellationTitle: 'Política de cancelamento',
+          cancellation: {
+            FLEXIBLE: { title: 'Flexível', desc: 'Reembolso total até 1h antes do serviço.' },
+            MODERATE: { title: 'Moderada', desc: 'Reembolso total até 24h antes. Após, 50%.' },
+            STRICT: { title: 'Rígida', desc: 'Sem reembolso após confirmação do agendamento.' }
+          },
+          languagesTitle: 'Idiomas que você atende',
+          languages: { PT: 'Português', EN: 'Inglês', ES: 'Espanhol' },
+          emergencyTitle: 'Atendimento de emergência', emergencyDesc: 'Permitir solicitações de última hora (filtro premium).',
+          travelTitle: 'Taxa de deslocamento',
+          freeRadiusLabel: 'Raio grátis (km)', perKmLabel: 'Valor por km',
+          referralTitle: 'Código de indicação', referralPlaceholder: 'Ex: MARIA2025',
+          referralHint: 'Se alguém te indicou, insira o código aqui.'
+        },
+        trust: {
+          title: 'Confiança & verificação', subtitle: 'Esses itens aumentam sua visibilidade e conversão. Envios são opcionais, consentimentos são obrigatórios.',
+          verificationTitle: 'Verificação (opcional, recomendado)',
+          selfieTitle: 'Selfie de verificação', selfieDesc: 'Comparamos com sua foto de perfil para prevenir perfis falsos.', selfieError: 'Não foi possível abrir a câmera.',
+          bgTitle: 'Antecedentes criminais', bgDesc: 'Envie seu atestado — selo de confiança extra no seu perfil.',
+          insuranceTitle: 'Seguro de responsabilidade', insuranceDesc: 'Tenho seguro que cobre danos durante o serviço.',
+          consentsTitle: 'Consentimentos obrigatórios',
+          lgpdTitle: 'LGPD — Lei Geral de Proteção de Dados', lgpdDesc: 'Autorizo o tratamento dos meus dados conforme nossa política de privacidade.',
+          tosTitle: 'Termos de Uso', tosDesc: 'Li e concordo com os Termos de Uso da plataforma.',
+          contractorTitle: 'Contrato do profissional', contractorDesc: 'Aceito o contrato de prestação de serviços autônomos com a BRAZOS.',
+          uploaded: 'Enviado'
         },
         categories: {
           title: 'O que você oferece?', subtitle: 'Selecione suas categorias, especialidades e serviços. Você pode escolher mais de uma.',
@@ -180,8 +227,9 @@ export const resources = {
           areaLabel: 'Área', experienceLabel: 'Experiência', priceLabel: 'Preço/hora',
           availabilityLabel: 'Disponibilidade', yearsUnit: 'anos',
           categoriesLabel: 'Categorias', questionnaireLabel: 'Questionário', profileLabel: 'Perfil', coverageLabel: 'Cobertura',
+          accountLabel: 'Cadastro', payoutLabel: 'Recebimento', policiesLabel: 'Políticas', trustLabel: 'Consentimentos',
           qualityScoreLabel: 'Pontuação do perfil', qualityScoreHint: 'Perfis mais completos recebem mais pedidos.',
-          incomplete: 'Incompleto',
+          incomplete: 'Incompleto', accepted: 'Aceito',
           submit: 'Enviar para aprovação', editing: 'Editar'
         },
         submitted: {
@@ -405,7 +453,54 @@ export const resources = {
         title: 'Professional Onboarding',
         steps: {
           cpf: 'CPF', category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review',
-          account: 'Account', categories: 'Categories', questionnaire: 'Questions', services: 'Services', profile: 'Profile', location: 'Location'
+          account: 'Account', categories: 'Categories', questionnaire: 'Questions', services: 'Services', profile: 'Profile', location: 'Location',
+          payout: 'Payouts', policies: 'Policies', trust: 'Trust'
+        },
+        account: {
+          title: 'Professional registration', subtitle: 'Pick your registration type. This defines how you invoice and get paid.',
+          types: { CPF: 'CPF', MEI: 'MEI', CNPJ: 'CNPJ' },
+          typesDesc: { CPF: 'Independent', MEI: 'Micro-entrepreneur', CNPJ: 'Registered company' },
+          cpfLabel: 'CPF', cnpjLabel: 'CNPJ',
+          razaoSocialLabel: 'Legal name', razaoSocialPlaceholder: 'e.g. Silva Services LTDA',
+          nomeFantasiaLabel: 'Trade name (optional)', nomeFantasiaPlaceholder: 'e.g. Silva Cleaning',
+          invalidCpf: 'Invalid CPF.', invalidCnpj: 'Invalid CNPJ.',
+          hint: 'Stored securely. Used only for tax and compliance.'
+        },
+        payout: {
+          title: 'How will you get paid?', subtitle: 'Set up your Pix key to receive automatic payouts.',
+          keyTypeLabel: 'Pix key type',
+          keyTypes: { CPF: 'CPF', CNPJ: 'CNPJ', EMAIL: 'Email', PHONE: 'Phone', RANDOM: 'Random' },
+          keyLabel: 'Pix key', keyPlaceholder: 'CPF, email, phone or random key',
+          holderLabel: 'Account holder', holderPlaceholder: 'Full name of the account holder',
+          infoTitle: 'Payouts via Pix', infoBody: 'Completed service payments are sent via Pix within 1 business day after client confirmation.'
+        },
+        policies: {
+          title: 'Policies & perks', subtitle: 'Set how you work and what makes you stand out.',
+          cancellationTitle: 'Cancellation policy',
+          cancellation: {
+            FLEXIBLE: { title: 'Flexible', desc: 'Full refund up to 1h before service.' },
+            MODERATE: { title: 'Moderate', desc: 'Full refund up to 24h before. After that, 50%.' },
+            STRICT: { title: 'Strict', desc: 'No refund after booking confirmation.' }
+          },
+          languagesTitle: 'Languages you speak',
+          languages: { PT: 'Portuguese', EN: 'English', ES: 'Spanish' },
+          emergencyTitle: 'Emergency availability', emergencyDesc: 'Accept last-minute requests (premium filter).',
+          travelTitle: 'Travel fee',
+          freeRadiusLabel: 'Free radius (km)', perKmLabel: 'Per km rate',
+          referralTitle: 'Referral code', referralPlaceholder: 'e.g. MARIA2025',
+          referralHint: 'If someone referred you, enter their code here.'
+        },
+        trust: {
+          title: 'Trust & verification', subtitle: 'These items boost your visibility. Uploads are optional, consents are required.',
+          verificationTitle: 'Verification (optional, recommended)',
+          selfieTitle: 'Verification selfie', selfieDesc: 'We compare with your profile photo to prevent fake accounts.', selfieError: 'Could not open the camera.',
+          bgTitle: 'Background check', bgDesc: 'Upload a clean record certificate — extra trust badge on your profile.',
+          insuranceTitle: 'Liability insurance', insuranceDesc: 'I carry insurance that covers damages during service.',
+          consentsTitle: 'Required consents',
+          lgpdTitle: 'LGPD — Brazilian Data Protection Law', lgpdDesc: 'I authorize the processing of my data according to the privacy policy.',
+          tosTitle: 'Terms of Service', tosDesc: 'I have read and agree to the platform Terms of Service.',
+          contractorTitle: 'Contractor agreement', contractorDesc: 'I accept the independent contractor agreement with BRAZOS.',
+          uploaded: 'Uploaded'
         },
         categories: {
           title: 'What do you offer?', subtitle: 'Pick your categories, specialties and services. You can select more than one.',
@@ -489,8 +584,9 @@ export const resources = {
           areaLabel: 'Area', experienceLabel: 'Experience', priceLabel: 'Price/hour',
           availabilityLabel: 'Availability', yearsUnit: 'years',
           categoriesLabel: 'Categories', questionnaireLabel: 'Questionnaire', profileLabel: 'Profile', coverageLabel: 'Coverage',
+          accountLabel: 'Registration', payoutLabel: 'Payout', policiesLabel: 'Policies', trustLabel: 'Consents',
           qualityScoreLabel: 'Profile quality score', qualityScoreHint: 'More complete profiles get more bookings.',
-          incomplete: 'Incomplete',
+          incomplete: 'Incomplete', accepted: 'Accepted',
           submit: 'Submit for approval', editing: 'Edit'
         },
         submitted: {
@@ -714,7 +810,54 @@ export const resources = {
         title: 'Registro Profesional',
         steps: {
           cpf: 'CPF', category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión',
-          account: 'Cuenta', categories: 'Categorías', questionnaire: 'Preguntas', services: 'Servicios', profile: 'Perfil', location: 'Ubicación'
+          account: 'Cuenta', categories: 'Categorías', questionnaire: 'Preguntas', services: 'Servicios', profile: 'Perfil', location: 'Ubicación',
+          payout: 'Pagos', policies: 'Políticas', trust: 'Confianza'
+        },
+        account: {
+          title: 'Registro profesional', subtitle: 'Elige el tipo de registro. Define cómo facturas y recibes pagos.',
+          types: { CPF: 'CPF', MEI: 'MEI', CNPJ: 'CNPJ' },
+          typesDesc: { CPF: 'Independiente', MEI: 'Microemprendedor', CNPJ: 'Empresa registrada' },
+          cpfLabel: 'CPF', cnpjLabel: 'CNPJ',
+          razaoSocialLabel: 'Razón social', razaoSocialPlaceholder: 'Ej: Silva Servicios LTDA',
+          nomeFantasiaLabel: 'Nombre comercial (opcional)', nomeFantasiaPlaceholder: 'Ej: Silva Limpiezas',
+          invalidCpf: 'CPF inválido.', invalidCnpj: 'CNPJ inválido.',
+          hint: 'Se almacena de forma segura. Solo se usa para fines fiscales.'
+        },
+        payout: {
+          title: '¿Cómo cobrarás?', subtitle: 'Configura tu clave Pix para recibir pagos automáticos.',
+          keyTypeLabel: 'Tipo de clave Pix',
+          keyTypes: { CPF: 'CPF', CNPJ: 'CNPJ', EMAIL: 'Correo', PHONE: 'Teléfono', RANDOM: 'Aleatoria' },
+          keyLabel: 'Clave Pix', keyPlaceholder: 'CPF, correo, teléfono o clave aleatoria',
+          holderLabel: 'Titular de la cuenta', holderPlaceholder: 'Nombre completo del titular',
+          infoTitle: 'Pagos vía Pix', infoBody: 'Los pagos de servicios completados se envían vía Pix en hasta 1 día hábil después de la confirmación.'
+        },
+        policies: {
+          title: 'Políticas y diferenciales', subtitle: 'Define cómo trabajas y qué te hace destacar.',
+          cancellationTitle: 'Política de cancelación',
+          cancellation: {
+            FLEXIBLE: { title: 'Flexible', desc: 'Reembolso total hasta 1h antes del servicio.' },
+            MODERATE: { title: 'Moderada', desc: 'Reembolso total hasta 24h antes. Luego, 50%.' },
+            STRICT: { title: 'Estricta', desc: 'Sin reembolso después de la confirmación.' }
+          },
+          languagesTitle: 'Idiomas que hablas',
+          languages: { PT: 'Portugués', EN: 'Inglés', ES: 'Español' },
+          emergencyTitle: 'Disponibilidad de emergencia', emergencyDesc: 'Aceptar solicitudes de última hora (filtro premium).',
+          travelTitle: 'Tarifa de desplazamiento',
+          freeRadiusLabel: 'Radio gratis (km)', perKmLabel: 'Tarifa por km',
+          referralTitle: 'Código de referencia', referralPlaceholder: 'Ej: MARIA2025',
+          referralHint: 'Si alguien te refirió, ingresa su código aquí.'
+        },
+        trust: {
+          title: 'Confianza y verificación', subtitle: 'Estos ítems aumentan tu visibilidad. Los envíos son opcionales, los consentimientos son obligatorios.',
+          verificationTitle: 'Verificación (opcional, recomendado)',
+          selfieTitle: 'Selfie de verificación', selfieDesc: 'Comparamos con tu foto de perfil para prevenir cuentas falsas.', selfieError: 'No se pudo abrir la cámara.',
+          bgTitle: 'Antecedentes penales', bgDesc: 'Sube tu certificado — sello extra de confianza en tu perfil.',
+          insuranceTitle: 'Seguro de responsabilidad', insuranceDesc: 'Tengo seguro que cubre daños durante el servicio.',
+          consentsTitle: 'Consentimientos obligatorios',
+          lgpdTitle: 'LGPD — Ley Brasileña de Protección de Datos', lgpdDesc: 'Autorizo el tratamiento de mis datos según la política de privacidad.',
+          tosTitle: 'Términos de Uso', tosDesc: 'He leído y acepto los Términos de Uso de la plataforma.',
+          contractorTitle: 'Contrato del profesional', contractorDesc: 'Acepto el contrato de prestación de servicios autónomos con BRAZOS.',
+          uploaded: 'Subido'
         },
         categories: {
           title: '¿Qué ofreces?', subtitle: 'Elige tus categorías, especialidades y servicios. Puedes seleccionar más de uno.',
@@ -798,8 +941,9 @@ export const resources = {
           areaLabel: 'Área', experienceLabel: 'Experiencia', priceLabel: 'Precio/hora',
           availabilityLabel: 'Disponibilidad', yearsUnit: 'años',
           categoriesLabel: 'Categorías', questionnaireLabel: 'Cuestionario', profileLabel: 'Perfil', coverageLabel: 'Cobertura',
+          accountLabel: 'Registro', payoutLabel: 'Pagos', policiesLabel: 'Políticas', trustLabel: 'Consentimientos',
           qualityScoreLabel: 'Puntaje de perfil', qualityScoreHint: 'Los perfiles más completos reciben más reservas.',
-          incomplete: 'Incompleto',
+          incomplete: 'Incompleto', accepted: 'Aceptado',
           submit: 'Enviar para aprobación', editing: 'Editar'
         },
         submitted: {

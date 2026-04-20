@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Check, Globe } from 'lucide-react-native';
 import PrimaryButton from '@/components/PrimaryButton';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
+import BrazosLogo from '@/components/BrazosLogo';
 import { colors, radius, shadow, spacing, typography } from '@/constants/theme';
 import { applyAppLanguage } from '@/i18n';
 import { useAuthStore } from '@/store/authStore';
@@ -83,7 +84,7 @@ export default function LanguageScreen() {
         <SafeAreaWrapper backgroundColor="transparent" edges={['top', 'bottom']}>
           <View style={styles.container}>
             <Animated.View style={[styles.headerSection, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-              <Text style={styles.logo}>{t('common.appName')}</Text>
+              <BrazosLogo size={68} variant="stacked" tone="onDark" />
               <View style={styles.globeWrap}>
                 <Globe size={20} color={colors.logo} strokeWidth={1.5} />
               </View>
