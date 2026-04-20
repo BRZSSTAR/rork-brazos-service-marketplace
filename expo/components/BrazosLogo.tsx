@@ -13,10 +13,9 @@ interface BrazosLogoProps {
 /**
  * Official BRAZOS brand logo.
  *
- * Mark: three stacked "canopy" crescents (home-service that comes to you) rising from a
- * grounded trunk. The trunk + two canopy leaves form a subtle, implied B in negative space
- * when viewed at small sizes. Evergreen + gold duotone, SVG for crisp scaling.
- * Wordmark: Inter 700, tight geometric glyphs, 0.22em track.
+ * Mark: two overlapping tree-like "canopy" crescents (for "home service that comes to you")
+ * sitting atop a grounded bar — evergreen + gold duotone, rendered with SVG so it scales
+ * crisply at any size. Wordmark uses the Inter 700 brand setting: tight, heavy, 0.22em track.
  */
 export default function BrazosLogo({
   size = 56,
@@ -52,34 +51,12 @@ export default function BrazosLogo({
             <Stop offset="0" stopColor={ever} />
             <Stop offset="1" stopColor={everDeep} />
           </LinearGradient>
-          <LinearGradient id="bz_b" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor={goldLight} stopOpacity={0.95} />
-            <Stop offset="1" stopColor={gold} stopOpacity={0.9} />
-          </LinearGradient>
         </Defs>
 
         {/* outer evergreen ring */}
         <Circle cx="50" cy="50" r="46" stroke="url(#bz_ever)" strokeWidth={3} />
 
-        {/* Subtle "B" spine – evergreen vertical anchor that also doubles as the trunk.
-            Paired with the two canopy bowls, the eye reads a soft, implied B. */}
-        <Path d="M36 22 H40 V82 H36 Z" fill="url(#bz_ever)" opacity={0.85} />
-
-        {/* Upper canopy bowl — gold (forms top lobe of the B) */}
-        <Path
-          d="M38 24 H54 Q68 24 68 36 Q68 46 54 46 H38 Z"
-          fill="url(#bz_b)"
-          opacity={0.18}
-        />
-
-        {/* Lower canopy bowl — gold (forms bottom lobe of the B) */}
-        <Path
-          d="M38 50 H56 Q72 50 72 62 Q72 76 56 76 H38 Z"
-          fill="url(#bz_b)"
-          opacity={0.18}
-        />
-
-        {/* Canopy crescents (primary brand mark — overlapping leaves) */}
+        {/* stylized B: two stacked crescents forming a "roof + canopy" */}
         <G>
           <Path
             d="M28 32 Q50 14 72 32 Q60 34 50 30 Q40 34 28 32 Z"
