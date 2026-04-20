@@ -94,7 +94,56 @@ export const resources = {
       },
       onboarding: {
         title: 'Cadastro Profissional',
-        steps: { cpf: 'CPF', category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão' },
+        steps: {
+          cpf: 'CPF', category: 'Categoria', details: 'Detalhes', pricing: 'Preço', availability: 'Disponibilidade', review: 'Revisão',
+          account: 'Conta', categories: 'Categorias', questionnaire: 'Perguntas', services: 'Serviços', profile: 'Perfil', location: 'Localização'
+        },
+        categories: {
+          title: 'O que você oferece?', subtitle: 'Selecione suas categorias, especialidades e serviços. Você pode escolher mais de uma.',
+          summary: '{{categories}} categoria(s) · {{services}} serviço(s)',
+          catMeta: '{{subs}} especialidade(s) · {{services}} serviço(s)',
+          tapToPick: 'Toque para escolher especialidades', selectedCount: '{{n}} selecionado(s)',
+          suggestNew: 'Sugerir nova especialidade', suggestPlaceholder: 'Ex: Instalação de painéis solares...', suggestSend: 'Enviar',
+          suggestionSentTitle: 'Sugestão enviada', suggestionSentDesc: 'Nossa equipe revisará sua sugestão em breve.'
+        },
+        questionnaire: {
+          title: 'Conte-nos sobre seu trabalho', subtitle: 'Responda algumas perguntas para que possamos conectá-lo aos clientes certos.'
+        },
+        services: {
+          title: 'Construa seus serviços', subtitle: 'Crie ofertas claras com preço, duração e adicionais.',
+          emptyTitle: 'Nenhum serviço ainda', emptyDesc: 'Adicione pelo menos um serviço para continuar.',
+          addService: 'Adicionar serviço', editorTitle: 'Editar serviço', saveService: 'Salvar serviço',
+          titleLabel: 'Título do serviço', titlePlaceholder: 'Ex: Limpeza pesada residencial',
+          descLabel: 'Descrição', descPlaceholder: 'O que está incluído neste serviço?',
+          subcategoryLabel: 'Especialidade relacionada',
+          pricingLabel: 'Modelo de preço',
+          pricingFixed: 'Fixo', pricingHourly: 'Por hora', pricingStarting: 'A partir de', pricingQuote: 'Sob consulta', pricingQuoteShort: 'Sob consulta',
+          priceLabel: 'Preço (R$)', durationLabel: 'Duração',
+          addOnsTitle: 'Adicionais', addAddOn: 'Adicionar', edit: 'Editar',
+          addOnNamePh: 'Nome do adicional', addOnDescPh: 'Descrição (opcional)',
+          untitled: 'Sem título', titleTooShort: 'Título precisa ter pelo menos 3 caracteres.', noCategoryFirst: 'Selecione ao menos uma categoria primeiro.'
+        },
+        profilePro: {
+          title: 'Perfil profissional', subtitle: 'Sua vitrine para conquistar mais clientes.',
+          photoLabel: 'Toque para adicionar uma foto', photoError: 'Não foi possível selecionar a foto.',
+          bioLabel: 'Biografia', bioPlaceholder: 'Fale sobre sua experiência, estilo de trabalho e diferenciais...',
+          experienceLabel: 'Anos de experiência',
+          portfolioTitle: 'Portfólio', portfolioDesc: 'Mostre seu trabalho com fotos (até 6).', addPhotos: 'Adicionar fotos',
+          certsTitle: 'Certificações e licenças', certsDesc: 'Envie documentos para agilizar sua verificação.',
+          certNamePlaceholder: 'Nome do certificado', uploadDoc: 'Enviar documento'
+        },
+        coverage: {
+          title: 'Cobertura e agendamento', subtitle: 'Onde você atende e como deseja receber pedidos.',
+          baseAddressLabel: 'Endereço base', baseAddressPlaceholder: 'Rua, bairro...',
+          cityLabel: 'Cidade', cityPlaceholder: 'São Paulo', stateLabel: 'UF',
+          useGps: 'Usar minha localização', locating: 'Localizando...',
+          gpsPermission: 'Permissão de localização negada.', gpsError: 'Não foi possível obter sua localização.', gpsUnavailable: 'GPS indisponível.',
+          radiusLabel: 'Raio de atendimento', radiusHint: 'Distância máxima que você está disposto a viajar.',
+          zipLabel: 'CEPs específicos (opcional)', zipPlaceholder: '00000-000',
+          bookingModelLabel: 'Como deseja receber pedidos?', bookingModelHint: 'Você pode alterar depois.',
+          instantTitle: 'Agendamento instantâneo', instantDesc: 'Clientes reservam direto pelo seu calendário.',
+          requestTitle: 'Solicitação com aprovação', requestDesc: 'Você aprova cada pedido antes de confirmar.'
+        },
         cpf: {
           title: 'Informe seu CPF', subtitle: 'Precisamos do seu CPF para cadastro profissional e emissão de notas fiscais.',
           hint: 'Seu CPF é armazenado com segurança e usado apenas para fins fiscais e regulatórios.'
@@ -130,11 +179,14 @@ export const resources = {
           subcategoryLabel: 'Especialidade', servicesLabel: 'Serviços oferecidos',
           areaLabel: 'Área', experienceLabel: 'Experiência', priceLabel: 'Preço/hora',
           availabilityLabel: 'Disponibilidade', yearsUnit: 'anos',
+          categoriesLabel: 'Categorias', questionnaireLabel: 'Questionário', profileLabel: 'Perfil', coverageLabel: 'Cobertura',
+          qualityScoreLabel: 'Pontuação do perfil', qualityScoreHint: 'Perfis mais completos recebem mais pedidos.',
+          incomplete: 'Incompleto',
           submit: 'Enviar para aprovação', editing: 'Editar'
         },
         submitted: {
           title: 'Cadastro enviado!', subtitle: 'Seu perfil profissional foi enviado para análise. Você será notificado quando for aprovado.',
-          backToHome: 'Voltar ao início'
+          backToHome: 'Voltar ao início', failure: 'Não foi possível enviar. Tente novamente.'
         }
       },
       placeholders: {
@@ -351,7 +403,56 @@ export const resources = {
       },
       onboarding: {
         title: 'Professional Onboarding',
-        steps: { cpf: 'CPF', category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review' },
+        steps: {
+          cpf: 'CPF', category: 'Category', details: 'Details', pricing: 'Pricing', availability: 'Availability', review: 'Review',
+          account: 'Account', categories: 'Categories', questionnaire: 'Questions', services: 'Services', profile: 'Profile', location: 'Location'
+        },
+        categories: {
+          title: 'What do you offer?', subtitle: 'Pick your categories, specialties and services. You can select more than one.',
+          summary: '{{categories}} category · {{services}} service(s)',
+          catMeta: '{{subs}} specialty · {{services}} service(s)',
+          tapToPick: 'Tap to choose specialties', selectedCount: '{{n}} selected',
+          suggestNew: 'Suggest new specialty', suggestPlaceholder: 'E.g. Solar panel installation...', suggestSend: 'Send',
+          suggestionSentTitle: 'Suggestion sent', suggestionSentDesc: 'Our team will review your suggestion soon.'
+        },
+        questionnaire: {
+          title: 'Tell us about your work', subtitle: 'Answer a few questions so we can match you with the right clients.'
+        },
+        services: {
+          title: 'Build your services', subtitle: 'Create clear offerings with pricing, duration and add-ons.',
+          emptyTitle: 'No services yet', emptyDesc: 'Add at least one service to continue.',
+          addService: 'Add service', editorTitle: 'Edit service', saveService: 'Save service',
+          titleLabel: 'Service title', titlePlaceholder: 'E.g. Deep home cleaning',
+          descLabel: 'Description', descPlaceholder: 'What’s included in this service?',
+          subcategoryLabel: 'Linked specialty',
+          pricingLabel: 'Pricing model',
+          pricingFixed: 'Fixed', pricingHourly: 'Hourly', pricingStarting: 'Starting at', pricingQuote: 'Custom quote', pricingQuoteShort: 'On request',
+          priceLabel: 'Price (R$)', durationLabel: 'Duration',
+          addOnsTitle: 'Add-ons', addAddOn: 'Add', edit: 'Edit',
+          addOnNamePh: 'Add-on name', addOnDescPh: 'Description (optional)',
+          untitled: 'Untitled', titleTooShort: 'Title needs at least 3 characters.', noCategoryFirst: 'Please select a category first.'
+        },
+        profilePro: {
+          title: 'Professional profile', subtitle: 'Your showcase to win more clients.',
+          photoLabel: 'Tap to add a photo', photoError: 'Could not pick the photo.',
+          bioLabel: 'Bio', bioPlaceholder: 'Tell clients about your experience and what makes you unique...',
+          experienceLabel: 'Years of experience',
+          portfolioTitle: 'Portfolio', portfolioDesc: 'Show your work with photos (up to 6).', addPhotos: 'Add photos',
+          certsTitle: 'Certifications & licenses', certsDesc: 'Upload documents to speed up verification.',
+          certNamePlaceholder: 'Certificate name', uploadDoc: 'Upload document'
+        },
+        coverage: {
+          title: 'Coverage & booking', subtitle: 'Where you work and how you want to receive bookings.',
+          baseAddressLabel: 'Base address', baseAddressPlaceholder: 'Street, neighborhood...',
+          cityLabel: 'City', cityPlaceholder: 'São Paulo', stateLabel: 'State',
+          useGps: 'Use my location', locating: 'Locating...',
+          gpsPermission: 'Location permission denied.', gpsError: 'Could not get your location.', gpsUnavailable: 'GPS unavailable.',
+          radiusLabel: 'Service radius', radiusHint: 'Maximum distance you are willing to travel.',
+          zipLabel: 'Specific ZIPs (optional)', zipPlaceholder: '00000-000',
+          bookingModelLabel: 'How do you want bookings?', bookingModelHint: 'You can change this later.',
+          instantTitle: 'Instant booking', instantDesc: 'Clients book directly from your calendar.',
+          requestTitle: 'Request-based', requestDesc: 'You approve each request before confirming.'
+        },
         cpf: {
           title: 'Enter your CPF', subtitle: 'We need your CPF for professional registration and invoice issuance.',
           hint: 'Your CPF is stored securely and used only for tax and regulatory purposes.'
@@ -387,11 +488,14 @@ export const resources = {
           subcategoryLabel: 'Specialty', servicesLabel: 'Services offered',
           areaLabel: 'Area', experienceLabel: 'Experience', priceLabel: 'Price/hour',
           availabilityLabel: 'Availability', yearsUnit: 'years',
+          categoriesLabel: 'Categories', questionnaireLabel: 'Questionnaire', profileLabel: 'Profile', coverageLabel: 'Coverage',
+          qualityScoreLabel: 'Profile quality score', qualityScoreHint: 'More complete profiles get more bookings.',
+          incomplete: 'Incomplete',
           submit: 'Submit for approval', editing: 'Edit'
         },
         submitted: {
           title: 'Application submitted!', subtitle: 'Your professional profile has been submitted for review. You will be notified when approved.',
-          backToHome: 'Back to home'
+          backToHome: 'Back to home', failure: 'Could not submit. Please try again.'
         }
       },
       placeholders: {
@@ -608,7 +712,56 @@ export const resources = {
       },
       onboarding: {
         title: 'Registro Profesional',
-        steps: { cpf: 'CPF', category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión' },
+        steps: {
+          cpf: 'CPF', category: 'Categoría', details: 'Detalles', pricing: 'Precio', availability: 'Disponibilidad', review: 'Revisión',
+          account: 'Cuenta', categories: 'Categorías', questionnaire: 'Preguntas', services: 'Servicios', profile: 'Perfil', location: 'Ubicación'
+        },
+        categories: {
+          title: '¿Qué ofreces?', subtitle: 'Elige tus categorías, especialidades y servicios. Puedes seleccionar más de uno.',
+          summary: '{{categories}} categoría(s) · {{services}} servicio(s)',
+          catMeta: '{{subs}} especialidad(es) · {{services}} servicio(s)',
+          tapToPick: 'Toca para elegir especialidades', selectedCount: '{{n}} seleccionado(s)',
+          suggestNew: 'Sugerir nueva especialidad', suggestPlaceholder: 'Ej: Instalación de paneles solares...', suggestSend: 'Enviar',
+          suggestionSentTitle: 'Sugerencia enviada', suggestionSentDesc: 'Nuestro equipo revisará tu sugerencia pronto.'
+        },
+        questionnaire: {
+          title: 'Cuéntanos sobre tu trabajo', subtitle: 'Responde unas preguntas para conectarte con los clientes correctos.'
+        },
+        services: {
+          title: 'Crea tus servicios', subtitle: 'Crea ofertas claras con precio, duración y extras.',
+          emptyTitle: 'Sin servicios aún', emptyDesc: 'Agrega al menos un servicio para continuar.',
+          addService: 'Agregar servicio', editorTitle: 'Editar servicio', saveService: 'Guardar servicio',
+          titleLabel: 'Título del servicio', titlePlaceholder: 'Ej: Limpieza profunda del hogar',
+          descLabel: 'Descripción', descPlaceholder: '¿Qué incluye este servicio?',
+          subcategoryLabel: 'Especialidad vinculada',
+          pricingLabel: 'Modelo de precio',
+          pricingFixed: 'Fijo', pricingHourly: 'Por hora', pricingStarting: 'Desde', pricingQuote: 'Cotización', pricingQuoteShort: 'A consultar',
+          priceLabel: 'Precio (R$)', durationLabel: 'Duración',
+          addOnsTitle: 'Extras', addAddOn: 'Agregar', edit: 'Editar',
+          addOnNamePh: 'Nombre del extra', addOnDescPh: 'Descripción (opcional)',
+          untitled: 'Sin título', titleTooShort: 'El título debe tener al menos 3 caracteres.', noCategoryFirst: 'Selecciona primero una categoría.'
+        },
+        profilePro: {
+          title: 'Perfil profesional', subtitle: 'Tu vitrina para ganar más clientes.',
+          photoLabel: 'Toca para agregar una foto', photoError: 'No se pudo seleccionar la foto.',
+          bioLabel: 'Biografía', bioPlaceholder: 'Cuéntale a los clientes sobre tu experiencia y diferenciales...',
+          experienceLabel: 'Años de experiencia',
+          portfolioTitle: 'Portafolio', portfolioDesc: 'Muestra tu trabajo con fotos (hasta 6).', addPhotos: 'Agregar fotos',
+          certsTitle: 'Certificaciones y licencias', certsDesc: 'Sube documentos para agilizar la verificación.',
+          certNamePlaceholder: 'Nombre del certificado', uploadDoc: 'Subir documento'
+        },
+        coverage: {
+          title: 'Cobertura y reservas', subtitle: 'Dónde atiendes y cómo quieres recibir pedidos.',
+          baseAddressLabel: 'Dirección base', baseAddressPlaceholder: 'Calle, colonia...',
+          cityLabel: 'Ciudad', cityPlaceholder: 'São Paulo', stateLabel: 'Estado',
+          useGps: 'Usar mi ubicación', locating: 'Localizando...',
+          gpsPermission: 'Permiso de ubicación denegado.', gpsError: 'No se pudo obtener tu ubicación.', gpsUnavailable: 'GPS no disponible.',
+          radiusLabel: 'Radio de servicio', radiusHint: 'Distancia máxima que estás dispuesto a viajar.',
+          zipLabel: 'Códigos postales (opcional)', zipPlaceholder: '00000-000',
+          bookingModelLabel: '¿Cómo quieres recibir reservas?', bookingModelHint: 'Puedes cambiarlo luego.',
+          instantTitle: 'Reserva instantánea', instantDesc: 'Los clientes reservan directamente desde tu calendario.',
+          requestTitle: 'Solicitud con aprobación', requestDesc: 'Apruebas cada solicitud antes de confirmar.'
+        },
         cpf: {
           title: 'Ingresa tu CPF', subtitle: 'Necesitamos tu CPF para el registro profesional y la emisión de facturas.',
           hint: 'Tu CPF se almacena de forma segura y se usa solo con fines fiscales y regulatorios.'
@@ -644,11 +797,14 @@ export const resources = {
           subcategoryLabel: 'Especialidad', servicesLabel: 'Servicios ofrecidos',
           areaLabel: 'Área', experienceLabel: 'Experiencia', priceLabel: 'Precio/hora',
           availabilityLabel: 'Disponibilidad', yearsUnit: 'años',
+          categoriesLabel: 'Categorías', questionnaireLabel: 'Cuestionario', profileLabel: 'Perfil', coverageLabel: 'Cobertura',
+          qualityScoreLabel: 'Puntaje de perfil', qualityScoreHint: 'Los perfiles más completos reciben más reservas.',
+          incomplete: 'Incompleto',
           submit: 'Enviar para aprobación', editing: 'Editar'
         },
         submitted: {
           title: '¡Solicitud enviada!', subtitle: 'Tu perfil profesional ha sido enviado para revisión. Serás notificado cuando sea aprobado.',
-          backToHome: 'Volver al inicio'
+          backToHome: 'Volver al inicio', failure: 'No se pudo enviar. Inténtalo de nuevo.'
         }
       },
       placeholders: {

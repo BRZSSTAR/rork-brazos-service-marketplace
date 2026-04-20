@@ -74,22 +74,34 @@ export const useProviderStore = create(
 
     submitOnboarding: async (userId: string) => {
       const draft = get().onboardingDraft;
-      if (!draft?.cpf || !draft?.category || !draft?.serviceTitle || !draft?.description || !draft?.pricePerHourCents) {
+      if (!draft?.cpf) {
         throw new Error('Incomplete onboarding data');
       }
+
+      const primarySelection = draft.categorySelections?.[0];
+      const effectiveCategory = draft.category ?? primarySelection?.category;
+      if (!effectiveCategory) {
+        throw new Error('No category selected');
+      }
+
+      const primaryService = draft.services?.[0];
+      const fallbackTitle = draft.serviceTitle ?? primaryService?.title ?? 'Service';
+      const fallbackDescription = draft.description ?? primaryService?.description ?? draft.profile?.bio ?? '';
+      const fallbackPrice = draft.pricePerHourCents
+        ?? (primaryService && primaryService.pricingModel === 'HOURLY' ? primaryService.priceCents : primaryService?.priceCents ?? 0);
 
       const profile: ProviderProfile = {
         id: generateId(),
         userId,
         cpf: draft.cpf,
-        category: draft.category,
-        subcategory: draft.subcategory ?? '',
-        selectedServices: draft.selectedServices ?? [],
-        serviceTitle: draft.serviceTitle,
-        description: draft.description,
-        pricePerHourCents: draft.pricePerHourCents,
-        serviceArea: draft.serviceArea ?? '',
-        yearsExperience: draft.yearsExperience ?? 0,
+        category: effectiveCategory,
+        subcategory: draft.subcategory ?? primarySelection?.subcategoryIds[0] ?? '',
+        selectedServices: draft.selectedServices ?? primarySelection?.serviceIds ?? [],
+        serviceTitle: fallbackTitle,
+        description: fallbackDescription,
+        pricePerHourCents: fallbackPrice,
+        serviceArea: draft.serviceArea ?? draft.coverage?.city ?? '',
+        yearsExperience: draft.yearsExperience ?? draft.profile?.yearsExperience ?? 0,
         availability: draft.availability ?? DEFAULT_AVAILABILITY,
         addOns: [],
         status: 'PENDING_APPROVAL',
@@ -120,11 +132,15 @@ export const useProviderStore = create(
       const draft = get().onboardingDraft;
       if (!draft) return 0;
       if (!draft.cpf) return 0;
-      if (!draft.category) return 1;
-      if (!draft.serviceTitle || !draft.description) return 2;
-      if (!draft.pricePerHourCents) return 3;
-      if (!draft.availability) return 4;
-      return 5;
+      if (!draft.categorySelections || draft.categorySelections.length === 0) {
+        if (!draft.category) return 1;
+      }
+      if (!draft.questionnaire || Object.keys(draft.questionnaire).length === 0) return 2;
+      if (!draft.services || draft.services.length === 0) return 3;
+      if (!draft.profile || !draft.profile.bio) return 4;
+      if (!draft.coverage || !draft.coverage.city) return 5;
+      if (!draft.availability) return 6;
+      return 7;
     },
   }))
 );
