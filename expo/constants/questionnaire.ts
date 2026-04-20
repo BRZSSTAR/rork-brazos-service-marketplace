@@ -48,17 +48,6 @@ const BASE_SECTION: QuestionnaireSection = {
       ],
     },
     {
-      id: 'work_mode',
-      type: 'multi',
-      label: 'Where do you work?',
-      required: true,
-      options: [
-        { id: 'customer_home', label: 'At customer location' },
-        { id: 'my_studio', label: 'At my studio / shop' },
-        { id: 'remote', label: 'Remote / online' },
-      ],
-    },
-    {
       id: 'has_team',
       type: 'boolean',
       label: 'Do you work with a team?',
