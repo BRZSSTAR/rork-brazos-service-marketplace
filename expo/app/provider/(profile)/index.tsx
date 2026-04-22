@@ -12,7 +12,14 @@ import {
   Shield,
   Languages,
   ArrowRightLeft,
+  Crown,
+  Rocket,
+  Sparkles,
+  Zap,
 } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useSubscriptionStore } from '@/store/subscriptionStore';
+import { getTierById } from '@/constants/subscription';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/i18n';
@@ -31,6 +38,11 @@ export default function ProviderProfileScreen() {
   const setLocale = useAuthStore((s) => s.setLocale);
   const appLocale = useAuthStore((s) => s.appLocale);
   const setActiveMode = useAuthStore((s) => s.setActiveMode);
+  const tierId = useSubscriptionStore((s) => s.tierId);
+  const activePromotions = useSubscriptionStore((s) => s.activePromotions);
+  const tier = getTierById(tierId);
+  const TierIcon = tierId === 'ELITE' ? Crown : tierId === 'PRO' ? Rocket : Sparkles;
+  const hasActivePromo = activePromotions.length > 0;
 
   const currentLocale: Locale = appLocale;
   const menuLabels = [
@@ -73,6 +85,77 @@ export default function ProviderProfileScreen() {
           </View>
         </View>
       </View>
+
+      <Pressable
+        style={styles.planCard}
+        onPress={() => router.push('/provider/(profile)/subscription')}
+        testID="provider-plan-card"
+      >
+        <LinearGradient
+          colors={tier.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.planGradient}
+        >
+          <View style={styles.planHeader}>
+            <View style={styles.planIconWrap}>
+              <TierIcon size={20} color={colors.accent} />
+            </View>
+            <View style={styles.planInfo}>
+              <Text style={styles.planLabel}>PLANO ATUAL</Text>
+              <Text style={styles.planName}>{tier.name}</Text>
+            </View>
+            <ChevronRight size={18} color="rgba(255,255,255,0.6)" />
+          </View>
+          <View style={styles.planStatsRow}>
+            <View style={styles.planStat}>
+              <Text style={styles.planStatValue}>{tier.commissionPercent}%</Text>
+              <Text style={styles.planStatLabel}>comissão</Text>
+            </View>
+            <View style={styles.planDivider} />
+            <View style={styles.planStat}>
+              <Text style={styles.planStatValue}>
+                {tier.monthlyFeeCents === 0 ? 'R$ 0' : `R$ ${(tier.monthlyFeeCents / 100).toFixed(0)}`}
+              </Text>
+              <Text style={styles.planStatLabel}>por mês</Text>
+            </View>
+            {tierId !== 'ELITE' && (
+              <>
+                <View style={styles.planDivider} />
+                <View style={styles.planUpgradeBtn}>
+                  <Text style={styles.planUpgradeBtnText}>Upgrade</Text>
+                </View>
+              </>
+            )}
+          </View>
+        </LinearGradient>
+      </Pressable>
+
+      <Pressable
+        style={styles.promoteCard}
+        onPress={() => router.push('/provider/(profile)/promote')}
+        testID="provider-promote-card"
+      >
+        <View style={[styles.promoteIconWrap, hasActivePromo && styles.promoteIconActive]}>
+          <Zap size={18} color={hasActivePromo ? colors.success : colors.accent} fill={hasActivePromo ? colors.success : 'transparent'} />
+        </View>
+        <View style={styles.promoteInfo}>
+          <View style={styles.promoteTitleRow}>
+            <Text style={styles.promoteTitle}>Impulsionar perfil</Text>
+            {hasActivePromo && (
+              <View style={styles.promoteActivePill}>
+                <Text style={styles.promoteActivePillText}>ATIVO</Text>
+              </View>
+            )}
+          </View>
+          <Text style={styles.promoteSubtitle}>
+            {hasActivePromo
+              ? `${activePromotions.length} impulso${activePromotions.length > 1 ? 's' : ''} ativo${activePromotions.length > 1 ? 's' : ''}`
+              : 'A partir de R$ 3/dia — apareça no topo'}
+          </Text>
+        </View>
+        <ChevronRight size={18} color={colors.textTertiary} />
+      </Pressable>
 
       <Pressable
         style={styles.switchCard}
@@ -173,6 +256,72 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs - 2,
   },
   roleBadgeText: { ...typography.smallMedium, color: colors.accentDark },
+  planCard: {
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.sm,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+    ...shadow.md,
+  },
+  planGradient: { padding: spacing.md, gap: spacing.md },
+  planHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  planIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(201,168,76,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  planInfo: { flex: 1, gap: 2 },
+  planLabel: { ...typography.small, color: 'rgba(255,255,255,0.6)', fontSize: 10, letterSpacing: 1, fontWeight: '700' as const },
+  planName: { ...typography.h3, color: colors.textInverse },
+  planStatsRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  planStat: { gap: 2 },
+  planStatValue: { ...typography.h3, color: colors.accent },
+  planStatLabel: { ...typography.small, color: 'rgba(255,255,255,0.6)' },
+  planDivider: { width: 1, height: 24, backgroundColor: 'rgba(255,255,255,0.2)' },
+  planUpgradeBtn: {
+    marginLeft: 'auto',
+    backgroundColor: colors.accent,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: radius.full,
+  },
+  planUpgradeBtnText: { ...typography.smallMedium, color: colors.primary, fontWeight: '700' as const },
+  promoteCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+    padding: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...shadow.sm,
+  },
+  promoteIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.accent + '20',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  promoteIconActive: { backgroundColor: colors.successLight },
+  promoteInfo: { flex: 1, gap: 2 },
+  promoteTitleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  promoteTitle: { ...typography.bodyMedium, color: colors.text },
+  promoteActivePill: {
+    backgroundColor: colors.success + '20',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: radius.full,
+  },
+  promoteActivePillText: { fontSize: 9, fontWeight: '700' as const, color: colors.success, letterSpacing: 0.8 },
+  promoteSubtitle: { ...typography.small, color: colors.textSecondary },
   switchCard: {
     flexDirection: 'row',
     alignItems: 'center',

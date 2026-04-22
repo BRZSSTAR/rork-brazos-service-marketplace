@@ -18,6 +18,7 @@ import { useProviderStore } from "@/store/providerStore";
 import { useOrderStore } from "@/store/orderStore";
 import { useNotificationStore } from "@/store/notificationStore";
 import { useChatStore } from "@/store/chatStore";
+import { useSubscriptionStore } from "@/store/subscriptionStore";
 import { colors } from "@/constants/theme";
 
 void SplashScreen.preventAutoHideAsync();
@@ -70,6 +71,7 @@ export default function RootLayout() {
   const hydrateOrders = useOrderStore((s) => s.hydrate);
   const hydrateNotifications = useNotificationStore((s) => s.hydrate);
   const hydrateChats = useChatStore((s) => s.hydrate);
+  const hydrateSubscription = useSubscriptionStore((s) => s.hydrate);
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -85,7 +87,8 @@ export default function RootLayout() {
     void hydrateOrders();
     void hydrateNotifications();
     void hydrateChats();
-  }, [loadStoredAuth, hydrateBooking, hydrateProvider, hydrateOrders, hydrateNotifications, hydrateChats]);
+    void hydrateSubscription();
+  }, [loadStoredAuth, hydrateBooking, hydrateProvider, hydrateOrders, hydrateNotifications, hydrateChats, hydrateSubscription]);
 
   useEffect(() => {
     if (!fontsLoaded || isLoading) {
