@@ -18,6 +18,7 @@ export default function ProviderProfileStack() {
       <Stack.Screen name="index" options={{ title: t('navigation.providerProfile.root') }} />
       <Stack.Screen name="subscription" options={{ title: 'Planos & Comissão' }} />
       <Stack.Screen name="promote" options={{ title: 'Impulsionar perfil' }} />
+      <Stack.Screen name="share" options={{ title: 'Compartilhar perfil' }} />
     </Stack>
   );
 }

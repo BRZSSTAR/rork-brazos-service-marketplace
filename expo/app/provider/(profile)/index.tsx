@@ -16,6 +16,7 @@ import {
   Rocket,
   Sparkles,
   Zap,
+  QrCode,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSubscriptionStore } from '@/store/subscriptionStore';
@@ -128,6 +129,28 @@ export default function ProviderProfileScreen() {
               </>
             )}
           </View>
+        </LinearGradient>
+      </Pressable>
+
+      <Pressable
+        style={styles.shareCard}
+        onPress={() => router.push('/provider/(profile)/share')}
+        testID="provider-share-card"
+      >
+        <LinearGradient
+          colors={[colors.primary, colors.primaryDeep]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.shareGradient}
+        >
+          <View style={styles.shareIconWrap}>
+            <QrCode size={22} color={colors.accent} />
+          </View>
+          <View style={styles.shareInfo}>
+            <Text style={styles.shareTitle}>Meu QR Code</Text>
+            <Text style={styles.shareSubtitle}>Compartilhe e receba reservas direto pelo app</Text>
+          </View>
+          <ChevronRight size={18} color="rgba(255,255,255,0.6)" />
         </LinearGradient>
       </Pressable>
 
@@ -289,6 +312,32 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
   },
   planUpgradeBtnText: { ...typography.smallMedium, color: colors.primary, fontWeight: '700' as const },
+  shareCard: {
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.sm,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+    ...shadow.md,
+  },
+  shareGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    padding: spacing.md,
+  },
+  shareIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(201,168,76,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(201,168,76,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  shareInfo: { flex: 1, gap: 2 },
+  shareTitle: { ...typography.bodyMedium, color: colors.logo },
+  shareSubtitle: { ...typography.small, color: 'rgba(255,255,255,0.65)' },
   promoteCard: {
     flexDirection: 'row',
     alignItems: 'center',

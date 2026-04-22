@@ -41,6 +41,7 @@ function RootLayoutNav() {
       <Stack.Screen name="register" />
       <Stack.Screen name="customer" options={{ headerShown: false }} />
       <Stack.Screen name="provider" options={{ headerShown: false }} />
+      <Stack.Screen name="p/[providerId]" options={{ headerShown: false }} />
       <Stack.Screen
         name="chat"
         options={{
