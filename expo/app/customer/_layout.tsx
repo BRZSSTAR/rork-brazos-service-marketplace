@@ -4,7 +4,6 @@ import { Tabs } from 'expo-router';
 import { Home, Search, Calendar, User } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { colors } from '@/constants/theme';
-import FloatingCategoryBar from '@/components/FloatingCategoryBar';
 
 export default function CustomerTabLayout() {
   const { t } = useTranslation();
@@ -67,7 +66,6 @@ export default function CustomerTabLayout() {
           }}
         />
       </Tabs>
-      <FloatingCategoryBar />
     </View>
   );
 }

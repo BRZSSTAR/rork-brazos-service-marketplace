@@ -23,16 +23,17 @@ import {
   Gift,
   TrendingUp,
   Bell,
+  Settings,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
+import FloatingCategoryBar from '@/components/FloatingCategoryBar';
 import { useAuthStore } from '@/store/authStore';
 import { colors, spacing, radius, typography, shadow } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BANNER_WIDTH = SCREEN_WIDTH - spacing.lg * 2;
 const BANNER_HEIGHT = 160;
-const FLOATING_BAR_HEIGHT = 82;
 
 interface PromoBanner {
   id: string;
@@ -281,13 +282,22 @@ export default function CustomerHomeScreen() {
               <Text style={styles.greeting}>{t('customer.home.greeting', { name: firstName })}</Text>
               <Text style={styles.heroTitle}>{t('customer.home.title')}</Text>
             </View>
-            <Pressable
-              style={styles.notifButton}
-              onPress={() => router.push('/notifications')}
-              testID="notif-btn"
-            >
-              <Bell size={20} color={colors.primary} />
-            </Pressable>
+            <View style={styles.heroActions}>
+              <Pressable
+                style={styles.heroIconBtn}
+                onPress={() => router.push('/customer/(profile)')}
+                testID="settings-btn"
+              >
+                <Settings size={20} color={colors.primary} />
+              </Pressable>
+              <Pressable
+                style={styles.heroIconBtn}
+                onPress={() => router.push('/notifications')}
+                testID="notif-btn"
+              >
+                <Bell size={20} color={colors.primary} />
+              </Pressable>
+            </View>
           </View>
           <View style={styles.locationRow}>
             <MapPin size={14} color={colors.primary} />
@@ -304,6 +314,8 @@ export default function CustomerHomeScreen() {
             )}
           </View>
         </View>
+
+        <FloatingCategoryBar />
 
         <View style={bannerStyles.container}>
           <FlatList
@@ -405,7 +417,6 @@ export default function CustomerHomeScreen() {
           </View>
         </View>
 
-        <View style={{ height: FLOATING_BAR_HEIGHT }} />
       </ScrollView>
     </SafeAreaWrapper>
   );
@@ -432,14 +443,17 @@ const styles = StyleSheet.create({
   },
   greeting: { ...typography.captionMedium, color: colors.primary },
   heroTitle: { ...typography.h1, color: colors.text, fontSize: 26, lineHeight: 32 },
-  notifButton: {
+  heroActions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  heroIconBtn: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: spacing.md,
     borderWidth: 1,
     borderColor: colors.borderLight,
   },

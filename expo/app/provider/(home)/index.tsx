@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { TrendingUp, Star, Calendar, Clock, Home, Scissors, Heart, ChefHat } from 'lucide-react-native';
+import { TrendingUp, Star, Calendar, Clock, Home, Scissors, Heart, ChefHat, Settings } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import SafeAreaWrapper from '@/components/SafeAreaWrapper';
@@ -81,11 +81,20 @@ export default function ProviderHomeScreen() {
               <Text style={styles.greeting}>{t('provider.home.greeting', { name: firstName })}</Text>
               <Text style={styles.heroTitle}>{t('provider.home.title')}</Text>
             </View>
-            {profile && CategoryIcon && (
-              <View style={[styles.categoryBadge, { backgroundColor: categoryColor + '20' }]}>
-                <CategoryIcon size={18} color={categoryColor} />
-              </View>
-            )}
+            <View style={styles.heroActions}>
+              {profile && CategoryIcon && (
+                <View style={[styles.categoryBadge, { backgroundColor: categoryColor + '20' }]}>
+                  <CategoryIcon size={18} color={categoryColor} />
+                </View>
+              )}
+              <Pressable
+                style={styles.settingsBtn}
+                onPress={() => router.push('/provider/(profile)')}
+                testID="provider-settings-btn"
+              >
+                <Settings size={20} color={colors.textInverse} />
+              </Pressable>
+            </View>
           </View>
           {pendingOrders.length > 0 && (
             <Pressable
@@ -197,10 +206,23 @@ const styles = StyleSheet.create({
   },
   greeting: { ...typography.captionMedium, color: colors.accent },
   heroTitle: { ...typography.h1, color: colors.textInverse, fontSize: 24, lineHeight: 30 },
+  heroActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
   categoryBadge: {
     width: 40,
     height: 40,
     borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settingsBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
   },
