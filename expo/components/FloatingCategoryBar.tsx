@@ -1,40 +1,68 @@
 import React, { useRef } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated, Platform } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Animated, Dimensions, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Home, Scissors, Heart, ChefHat } from 'lucide-react-native';
 import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
-import { colors, spacing, typography, shadow } from '@/constants/theme';
+import { colors, spacing, radius, typography, shadow } from '@/constants/theme';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const PILL_GAP = 12;
+const PILL_WIDTH = (SCREEN_WIDTH - spacing.lg * 2 - PILL_GAP) / 2;
+const PILL_HEIGHT = 88;
 
 type CategoryKey = 'HOME' | 'BEAUTY' | 'HEALTH' | 'CHEF';
 
 interface CategoryItem {
   key: CategoryKey;
   icon: typeof Home;
-  color: string;
-  bg: string;
-  glowColor: string;
+  gradientColors: readonly [string, string];
+  iconBg: string;
   labelKey: string;
 }
 
 const categories: CategoryItem[] = [
-  { key: 'HOME', icon: Home, color: '#2D6A8F', bg: '#2D6A8F', glowColor: 'rgba(45,106,143,0.3)', labelKey: 'customer.home.categories.home.label' },
-  { key: 'BEAUTY', icon: Scissors, color: '#C95858', bg: '#C95858', glowColor: 'rgba(201,88,88,0.3)', labelKey: 'customer.home.categories.beauty.label' },
-  { key: 'HEALTH', icon: Heart, color: '#2D8A5A', bg: '#2D8A5A', glowColor: 'rgba(45,138,90,0.3)', labelKey: 'customer.home.categories.health.label' },
-  { key: 'CHEF', icon: ChefHat, color: '#C8A84B', bg: '#C8A84B', glowColor: 'rgba(200,168,75,0.3)', labelKey: 'customer.home.categories.chef.label' },
+  {
+    key: 'HOME',
+    icon: Home,
+    gradientColors: ['#2D6A8F', '#1B4F6E'] as const,
+    iconBg: 'rgba(255,255,255,0.2)',
+    labelKey: 'customer.home.categories.home.label',
+  },
+  {
+    key: 'BEAUTY',
+    icon: Scissors,
+    gradientColors: ['#C95858', '#A34343'] as const,
+    iconBg: 'rgba(255,255,255,0.2)',
+    labelKey: 'customer.home.categories.beauty.label',
+  },
+  {
+    key: 'HEALTH',
+    icon: Heart,
+    gradientColors: ['#2D8A5A', '#1B6B42'] as const,
+    iconBg: 'rgba(255,255,255,0.2)',
+    labelKey: 'customer.home.categories.health.label',
+  },
+  {
+    key: 'CHEF',
+    icon: ChefHat,
+    gradientColors: ['#C8A84B', '#A8893D'] as const,
+    iconBg: 'rgba(255,255,255,0.2)',
+    labelKey: 'customer.home.categories.chef.label',
+  },
 ];
 
-function CategoryCircle({ item, onPress }: { item: CategoryItem; onPress: () => void }) {
+function PillCard({ item, onPress }: { item: CategoryItem; onPress: () => void }) {
   const scale = useRef(new Animated.Value(1)).current;
   const { t } = useTranslation();
   const IconComp = item.icon;
 
   const handlePressIn = () => {
-    Animated.spring(scale, { toValue: 0.88, useNativeDriver: true, speed: 50, bounciness: 4 }).start();
+    Animated.spring(scale, { toValue: 0.94, useNativeDriver: true, speed: 60, bounciness: 3 }).start();
   };
 
   const handlePressOut = () => {
-    Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 50, bounciness: 4 }).start();
+    Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 60, bounciness: 3 }).start();
   };
 
   return (
@@ -42,15 +70,32 @@ function CategoryCircle({ item, onPress }: { item: CategoryItem; onPress: () => 
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      testID={`category-float-${item.key.toLowerCase()}`}
-      style={styles.circleWrapper}
+      testID={`category-pill-${item.key.toLowerCase()}`}
     >
-      <Animated.View style={[styles.circle, { backgroundColor: item.bg, borderColor: item.color, transform: [{ scale }] }]}>
-        <IconComp size={24} color={'#FFFFFF'} strokeWidth={2.4} />
+      <Animated.View
+        style={[
+          styles.pill,
+          {
+            width: PILL_WIDTH,
+            height: PILL_HEIGHT,
+            transform: [{ scale }],
+          },
+        ]}
+      >
+        <View style={styles.pillGradientBg}>
+          <View style={[styles.pillGradient, { backgroundColor: item.gradientColors[0] }]} />
+          <View style={[styles.pillGradientBottom, { backgroundColor: item.gradientColors[1] }]} />
+        </View>
+        <View style={styles.pillContent}>
+          <View style={[styles.pillIconWrap, { backgroundColor: item.iconBg }]}>
+            <IconComp size={28} color="#FFFFFF" strokeWidth={2.2} />
+          </View>
+          <Text style={styles.pillLabel} numberOfLines={1}>
+            {t(item.labelKey)}
+          </Text>
+        </View>
+        <View style={styles.pillShine} pointerEvents="none" />
       </Animated.View>
-      <Text style={[styles.circleLabel, { color: colors.text }]} numberOfLines={1}>
-        {t(item.labelKey)}
-      </Text>
     </Pressable>
   );
 }
@@ -62,14 +107,10 @@ export default function FloatingCategoryBar() {
     router.push({ pathname: '/customer/category-browse', params: { categoryId: key } });
   };
 
-  const barContent = (
-    <View style={styles.bar}>
+  const gridContent = (
+    <View style={styles.grid}>
       {categories.map((cat) => (
-        <CategoryCircle
-          key={cat.key}
-          item={cat}
-          onPress={() => handleCategoryPress(cat.key)}
-        />
+        <PillCard key={cat.key} item={cat} onPress={() => handleCategoryPress(cat.key)} />
       ))}
     </View>
   );
@@ -80,12 +121,12 @@ export default function FloatingCategoryBar() {
     return (
       <View style={styles.container}>
         <GlassView
-          style={styles.glassBar}
+          style={styles.glassWrapper}
           glassEffectStyle="clear"
-          tintColor="rgba(255,255,255,0.15)"
+          tintColor="rgba(255,255,255,0.08)"
           isInteractive
         >
-          {barContent}
+          {gridContent}
         </GlassView>
       </View>
     );
@@ -93,8 +134,8 @@ export default function FloatingCategoryBar() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.fallbackBar}>
-        {barContent}
+      <View style={styles.fallbackWrapper}>
+        {gridContent}
       </View>
     </View>
   );
@@ -103,60 +144,103 @@ export default function FloatingCategoryBar() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: spacing.lg,
-    marginTop: -spacing.md,
-    marginBottom: spacing.lg,
+    marginTop: -spacing.sm,
+    marginBottom: spacing.md,
     zIndex: 10,
   },
-  bar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    paddingVertical: spacing.md,
-  },
-  glassBar: {
-    borderRadius: 24,
+  glassWrapper: {
+    borderRadius: radius.xl,
     overflow: 'hidden',
+    padding: spacing.md,
   },
-  fallbackBar: {
-    backgroundColor: 'rgba(255,255,255,0.92)',
-    borderRadius: 24,
+  fallbackWrapper: {
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    borderRadius: radius.xl,
+    padding: spacing.md,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.6)',
+    borderColor: 'rgba(255,255,255,0.7)',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
+        shadowOpacity: 0.06,
+        shadowRadius: 16,
       },
       android: {
-        elevation: 4,
+        elevation: 3,
       },
       default: {},
     }),
   },
-  circleWrapper: {
-    alignItems: 'center',
-    gap: 8,
-    width: 68,
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: PILL_GAP,
   },
-  circle: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+  pill: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.18,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 6,
+      },
+      default: {},
+    }),
+  },
+  pillGradientBg: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  pillGradient: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  pillGradientBottom: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '50%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  pillContent: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 0,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.22,
-    shadowRadius: 8,
-    elevation: 6,
+    gap: spacing.sm,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.sm,
   },
-  circleLabel: {
-    fontSize: 11,
+  pillIconWrap: {
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
+  },
+  pillLabel: {
+    ...typography.captionMedium,
+    color: '#FFFFFF',
+    fontSize: 13,
     fontWeight: '600' as const,
-    fontFamily: 'Inter_600SemiBold',
-    lineHeight: 14,
+    letterSpacing: 0.3,
     textAlign: 'center' as const,
+  },
+  pillShine: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '50%',
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });
