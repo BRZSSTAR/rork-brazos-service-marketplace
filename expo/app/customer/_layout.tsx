@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Home, Search, Calendar, User } from 'lucide-react-native';
+import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
 import { colors } from '@/constants/theme';
 
@@ -16,10 +17,17 @@ export default function CustomerTabLayout() {
           headerShown: false,
           tabBarActiveTintColor: colors.accent,
           tabBarInactiveTintColor: colors.textTertiary,
+          tabBarBackground: () => (
+            <BlurView
+              tint="light"
+              intensity={85}
+              style={StyleSheet.absoluteFill}
+            />
+          ),
           tabBarStyle: {
-            backgroundColor: colors.surface,
-            borderTopColor: colors.borderLight,
-            borderTopWidth: 1,
+            backgroundColor: 'rgba(255,255,255,0.55)',
+            borderTopColor: 'rgba(229,231,235,0.3)',
+            borderTopWidth: Platform.OS === 'web' ? 0 : StyleSheet.hairlineWidth,
             ...(Platform.OS === 'web'
               ? {}
               : {
@@ -28,7 +36,7 @@ export default function CustomerTabLayout() {
                   shadowOpacity: 0.04,
                   shadowRadius: 8,
                 }),
-            elevation: 8,
+            elevation: 0,
           },
           tabBarLabelStyle: {
             fontFamily: 'Inter_500Medium',

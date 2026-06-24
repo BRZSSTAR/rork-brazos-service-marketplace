@@ -18,10 +18,10 @@ const categoryIcons: Record<ServiceCategory, typeof Home> = {
 };
 
 const categoryColors: Record<ServiceCategory, string> = {
-  HOME: '#3B82F6',
-  BEAUTY: '#EC4899',
-  HEALTH: '#10B981',
-  CHEF: '#F59E0B',
+  HOME: '#2D6A8F',
+  BEAUTY: '#C95858',
+  HEALTH: '#2D8A5A',
+  CHEF: '#C8A84B',
 };
 
 function formatPrice(cents: number): string {

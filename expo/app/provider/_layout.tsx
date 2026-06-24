@@ -1,9 +1,10 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { Home, Inbox, Calendar, Wallet, User } from 'lucide-react-native';
+import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
 import { colors } from '@/constants/theme';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export default function ProviderTabLayout() {
   const { t } = useTranslation();
@@ -15,10 +16,17 @@ export default function ProviderTabLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textTertiary,
+        tabBarBackground: () => (
+          <BlurView
+            tint="light"
+            intensity={85}
+            style={StyleSheet.absoluteFill}
+          />
+        ),
         tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.borderLight,
-          borderTopWidth: 1,
+          backgroundColor: 'rgba(255,255,255,0.55)',
+          borderTopColor: 'rgba(229,231,235,0.3)',
+          borderTopWidth: Platform.OS === 'web' ? 0 : StyleSheet.hairlineWidth,
           ...(Platform.OS === 'web'
             ? {}
             : {
@@ -27,7 +35,7 @@ export default function ProviderTabLayout() {
                 shadowOpacity: 0.04,
                 shadowRadius: 8,
               }),
-          elevation: 8,
+          elevation: 0,
         },
         tabBarLabelStyle: {
           fontFamily: 'Inter_500Medium',
